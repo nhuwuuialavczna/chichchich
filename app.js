@@ -82,13 +82,19 @@ io.on("connection", function(socket){
 
 });
 
-app.get('/download', function (req, res) {
+app.get('/download', function(req, res){
     var fileName = req.query.name;
-    var file = fs.readFileSync(__dirname + '/uploads/' + fileName, 'binary');
-    res.setHeader('Content-Length', file.length);
-    res.write(file, 'binary');
-    res.end();
+    var file = __dirname + '/uploads/'+fileName;
+    res.download(file); // Set disposition and send it.
 });
+
+// app.get('/download', function (req, res) {
+//
+//     var file = fs.readFileSync(__dirname + '/uploads/' + fileName, 'binary');
+//     res.setHeader('Content-Length', file.length);
+//     res.write(file, 'binary');
+//     res.end();
+// });
 
 /**
  * Upload photos route.
@@ -118,7 +124,7 @@ app.post('/upload_photos', function (req, res) {
         type = fileType(buffer);
 
         // Check the file type, must be either png,jpg or jpeg
-        if (type !== null && (type.ext === 'png' || type.ext === 'jpg' || type.ext === 'jpeg')) {
+        if (type !== null) {
             // Assign new file name
             filename = file.name;
 

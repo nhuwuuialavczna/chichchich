@@ -37,11 +37,11 @@ $(document).ready(function(){
 
   $("#txtMessage").focusin(function(){
     socket.emit("toi-dang-go-chu");
-  })
+  });
 
   $("#txtMessage").focusout(function(){
     socket.emit("toi-stop-go-chu");
-  })
+  });
 
   $("#btnRegister").click(function(){
     socket.emit("client-send-Username", $("#txtUsername").val());

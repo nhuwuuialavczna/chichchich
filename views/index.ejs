@@ -31,9 +31,9 @@
                 </div>
             </div>
             <div class="col-md-7">
-                <div  id="right">
+                <div id="right">
                     <div class="row">
-                        <div class="col-md-6"  align="left" id="thongbao"></div>
+                        <div class="col-md-6" align="left" id="thongbao"></div>
                         <div class="col-md-6" align="right" id="sayHi">
                             Hello <span id="currentUser">Teo</span>
                             <input type="button" class="btn btn-danger" id="btnLogout" value="Logout">
@@ -55,10 +55,11 @@
                     <div class="form-group">
                         <label for="photos-input">Gửi file</label>
                         <input id="photos-input" type="file" name="photos[]" multiple="multiple">
-                        <p class="help-block">File sẽ được gửi đi ngay lập tức sau khi nhấn nút gửi. Dữ liệu của file dưới 1GB</p>
+                        <p class="help-block">File sẽ được gửi đi ngay lập tức sau khi nhấn nút gửi. Dữ liệu của file
+                            dưới 1GB</p>
                     </div>
                     <input type="hidden" name="csrf_token" value="just_a_text_field"/>
-                    <input class="btn btn-default" type="submit" name="Photo Uploads" value="Gửi file"/>
+                    <input class="btn btn-default" type="submit" name="Photo Uploads" value="Send luôn"/>
                 </form>
                 <br/>
                 <!-- Progress Bar -->
@@ -131,9 +132,9 @@
                 var img = data[i];
 
                 if (img.status) {
-                    html += '<div class="col-xs-12 col-md-12"><a href="#" class="thumbnail"><img src="' + img.publicPath + '" alt="' + img.filename + '"></a></div>';
+                    html += '<div class="col-xs-12 col-md-12"><a href="/download?name="' + img.filename + ' class="thumbnail"><img src="' + img.publicPath + '" alt="' + img.filename + '"></a></div>';
                 } else {
-                    html += '<div class="col-xs-12 col-md-12"><a href="#" class="thumbnail">Invalid file type - ' + img.filename + '</a></div>';
+                    html += '<div class="col-xs-12 col-md-12"><a href="/download?name="' + img.filename + ' class="thumbnail">' + img.filename + '</a></div>';
                 }
             }
 
@@ -147,6 +148,7 @@
     $('#photos-input').on('change', function () {
         $('.progress-bar').width('0%');
     });
+
 
     // On form submit, handle the file uploads.
     $('#upload-photos').on('submit', function (event) {
@@ -169,6 +171,7 @@
         // Append the files to the formData.
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
+            socket.emit("user-send-message",'<a href="/download?name='+file.name+'" class="thumbnail">'+file.name+'</a>');
             formData.append('photos[]', file, file.name);
         }
 
