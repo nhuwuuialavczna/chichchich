@@ -78,7 +78,12 @@ io.on("connection", function(socket){
     socket.on("toi-stop-go-chu", function(){
         io.sockets.emit("ai-do-STOP-go-chu");
     });
-
+    socket.on('disconnect', function () {
+        mangUsers.splice(
+            mangUsers.indexOf(socket.Username), 1
+        );
+        socket.broadcast.emit("server-send-danhsach-Users",mangUsers);
+    });
 
 });
 
