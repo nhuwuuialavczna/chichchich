@@ -1,6 +1,8 @@
 var socket = io("/");
 // var socket = io("https://chichchich.herokuapp.com/");
 
+
+
 socket.on("server-send-dki-thatbai", function () {
     alert("Sai Username (co nguoi da dang ki roi!!!)");
 });
@@ -34,7 +36,13 @@ socket.on("ai-do-STOP-go-chu", function () {
 $(document).ready(function () {
     $("#loginForm").show();
     $("#chatForm").hide();
-
+    $('#photos-input').on('change', function() {
+        var size = this.files[0].size;
+        if(size > 300000000){
+            alert('Không ổn rồi. Đã bảo là không được hơn 300MB');
+            $('#photos-input').val('');
+        }
+    });
     $("#txtMessage").focusin(function () {
         socket.emit("toi-dang-go-chu");
     });

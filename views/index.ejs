@@ -46,8 +46,6 @@
                     <div style="height: auto" id="listMessages">
 
                     </div>
-
-
                 </div>
             </div>
             <div class="col-md-3">
@@ -75,7 +73,14 @@
                     </div>
                 </div>
                 <div id="album" class="row"></div>
-                <br/><br/>
+                <hr/>
+                <div id="yeucau" class="row">
+                    <p>Tao khuyến cáo tụi bây đừng có upload xàm xàm nha. Bố cho tự động xóa file sau 1 thời gian rồi. Up chỉ tốn mất thời gian.</p>
+                    <p>Không nên up trên 300MB nha. T chặn rồi. Up bằng niềm tin đấy. Không up hình ảnh 18+ nha. Mắc công t lên server down về xem tốn time tao. Có thì gửi qua fb tao</p>
+                    <p>Trang web là để gửi file. Fb hiện đang không cho nên fai làm cái này. Cùi cùi nhưng gủi dc là dc rồi, đừng ý kiến sao web cùi.</p>
+                    <p>Thằng nào muốn làm web như này thì học kĩ javascript rồi liên lạc bố</p>
+                    <p>Công nghệ: NodeJS socket io</p>
+                </div>
             </div>
         </div>
 
@@ -133,10 +138,11 @@
                 var img = data[i];
 
                 if (img.status) {
-                    html += '<div class="col-xs-12 col-md-12"><a href="/download?name="' + img.filename + ' class="thumbnail"><img src="' + img.publicPath + '" alt="' + img.filename + '"></a></div>';
+                    html += '<div class="col-xs-12 col-md-12"><a href="/download?name=' + img.filename + '" class="thumbnail"><img src="' + img.publicPath + '" alt="' + img.filename + '"></a></div>';
                 } else {
-                    html += '<div class="col-xs-12 col-md-12"><a href="/download?name="' + img.filename + ' class="thumbnail">' + img.filename + '</a></div>';
+                    html += '<div class="col-xs-12 col-md-12"><a href="/download?name=' + img.filename + '" class="thumbnail">' + img.filename + '</a></div>';
                 }
+                socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + img.filename + '</a>');
             }
 
             $('#album').html(html);
@@ -172,7 +178,7 @@
         // Append the files to the formData.
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
-            socket.emit("user-send-message", '<a href="/download?name=' + file.name + '" class="thumbnail">' + file.name + '</a>');
+
             formData.append('photos[]', file, file.name);
         }
 
