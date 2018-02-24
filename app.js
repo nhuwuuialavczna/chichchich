@@ -71,7 +71,7 @@ io.on("connection", function(socket){
     });
 
     socket.on("toi-dang-go-chu", function(){
-        var s = socket.Username + " dang go chu";
+        var s = socket.Username + " đang nhập gì đó";
         io.sockets.emit("ai-do-dang-go-chu", s);
     });
 
