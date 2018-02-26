@@ -70,6 +70,10 @@ io.on("connection", function(socket){
         io.sockets.emit("server-send-mesage", {un:socket.Username, nd:data} );
     });
 
+    socket.on("user-send-message-sendfile", function(data){
+        io.broadcast.emit("server-send-mesage", {un:socket.Username, nd:data} );
+    });
+
     socket.on("toi-dang-go-chu", function(){
         var s = socket.Username + " đang nhập gì đó";
         io.sockets.emit("ai-do-dang-go-chu", s);

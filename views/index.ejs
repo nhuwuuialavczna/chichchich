@@ -61,6 +61,7 @@
                     <input class="btn btn-default" type="submit" name="Photo Uploads" value="Send luôn"/>
                 </form>
                 <br/>
+
                 <!-- Progress Bar -->
                 <div class="row">
                     <div class="col-md-12">
@@ -75,9 +76,12 @@
                 <div id="album" class="row"></div>
                 <hr/>
                 <div id="yeucau" class="row">
-                    <p>Tao khuyến cáo tụi bây đừng có upload xàm xàm nha. Bố cho tự động xóa file sau 1 thời gian rồi. Up chỉ tốn mất thời gian.</p>
-                    <p>Không nên up trên 300MB nha. T chặn rồi. Up bằng niềm tin đấy. Không up hình ảnh 18+ nha. Mắc công t lên server down về xem tốn time tao. Có thì gửi qua fb tao</p>
-                    <p>Trang web là để gửi file. Fb hiện đang không cho nên fai làm cái này. Cùi cùi nhưng gủi dc là dc rồi, đừng ý kiến sao web cùi.</p>
+                    <p>Tao khuyến cáo tụi bây đừng có upload xàm xàm nha. Bố cho tự động xóa file sau 1 thời gian rồi.
+                        Up chỉ tốn mất thời gian.</p>
+                    <p>Không nên up trên 300MB nha. T chặn rồi. Up bằng niềm tin đấy. Không up hình ảnh 18+ nha. Mắc
+                        công t lên server down về xem tốn time tao. Có thì gửi qua fb tao</p>
+                    <p>Trang web là để gửi file. Fb hiện đang không cho nên fai làm cái này. Cùi cùi nhưng gủi dc là dc
+                        rồi, đừng ý kiến sao web cùi.</p>
                     <p>Thằng nào muốn làm web như này thì học kĩ javascript rồi liên lạc bố</p>
                     <p>Công nghệ: NodeJS socket io</p>
                 </div>
@@ -131,22 +135,51 @@
      *
      * @param data
      */
+    function getPhanMoRong(fileName) {
+        var ext = fileName.split('.');
+        return ext[ext.length - 1];
+    }
+
     function handleSuccess(data) {
         if (data.length > 0) {
             var html = '';
             for (var i = 0; i < data.length; i++) {
                 var img = data[i];
-
-                if (img.status) {
-                    html += '<div class="col-xs-12 col-md-12"><a href="/download?name=' + img.filename + '" class="thumbnail"><img src="' + img.publicPath + '" alt="' + img.filename + '"></a></div>';
-                } else {
-                    html += '<div class="col-xs-12 col-md-12"><a href="/download?name=' + img.filename + '" class="thumbnail">' + img.filename + '</a></div>';
+                var fileName = img.filename;
+                var pmr = getPhanMoRong(fileName)
+//
+                if (pmr === 'jpg' || pmr === 'png' || pmr === 'ico' || pmr === 'gif') {
+                    html += '<div class="col-xs-12 col-md-12"><img width="100%" src="' + img.publicPath + '" alt="' + img.filename + '">';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<img width="100%" src="' + img.publicPath + '" alt="' + img.filename + '">' + '</a>');
                 }
-                socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + img.filename + '</a>');
+                else if (pmr === 'mp3') {
+                    html += '<audio controls><source src="' + img.publicPath + '" type="audio/mpeg"></audio>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<audio controls><source src="' + img.publicPath + '" type="audio/mpeg"></audio>' + '</a>');
+                } else if (pmr === 'ogg') {
+                    html += '<audio controls><source src="' + img.publicPath + '" type="audio/ogg"></audio>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<audio controls><source src="' + img.publicPath + '" type="audio/ogg"></audio>' + '</a>');
+                } else if (pmr === 'mp4') {
+                    html += '<video width="100%" controls><source src="' + img.publicPath + '" type="video/mp4"></video>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<video width="100%" controls><source src="' + img.publicPath + '" type="video/mp4"></video>' + '</a>');
+                } else if (pmr === 'ogg') {
+                    html += '<video width="100%" controls><source src="' + img.publicPath + '" type="video/ogg"></video>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<video width="100%" controls><source src="' + img.publicPath + '" type="video/ogg"></video>' + '</a>');
+                } else if (pmr === 'pdf') {
+                    html += '<object width="400" height="400" data="' + img.publicPath + '"></object>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<object width="400" height="400" data="' + img.publicPath + '"></object>' + '</a>');
+                } else if (pmr === 'swf') {
+                    html += '<object width="400" height="400" data="' + img.publicPath + '"></object>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<object width="400" height="400" data="' + img.publicPath + '"></object>' + '</a>');
+                }else if (pmr === 'exe' || pmr === 'zip' || pmr==='rar') {
+                    html += img.filename;
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' +  img.filename  + '</a>');
+                }else {
+                    html += 'File không đúng định dạng. Mời đọc điều khoản gửi file';
+                    socket.emit("user-send-message-sendfile", 'Đã gửi file không đúng định dạng');
+                }
             }
-
             $('#album').html(html);
-        } else {
+        } else {//jpg, png, ico, gif,mp3,oog,mp4,exe,zip,rar,pdf,swf
             alert('No images were uploaded.')
         }
     }
