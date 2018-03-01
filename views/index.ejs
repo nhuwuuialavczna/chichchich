@@ -14,12 +14,13 @@
     <script src="/public/xuly.js"></script>
     <link rel="stylesheet" type="text/css" href="/public/layout.css"/>
 </head>
-<body>
+<body id="body">
 <br><br>
 <div class="container">
     <div id="wrapper" class="col-md-12">
         <div id="loginForm">
             <h3>NHẬP TÊN CỦA MÀY VÀO ?</h3>
+            <audio style="display: none" id="audio" src="/uploads/beep-08b.mp3"></audio>
             <input class="form-control" type="text" id="txtUsername"/><br>
             <input class="btn btn-default" type="button" value="Register" id="btnRegister"/>
         </div>
@@ -181,7 +182,7 @@
             }
             $('#album').html(html);
         } else {//jpg, png, ico, gif,mp3,oog,mp4,exe,zip,rar,pdf,swf
-            alert('No images were uploaded.')
+            alert('No images were uploaded.');
         }
     }
 
@@ -198,7 +199,6 @@
         // Get the files from input, create new FormData.
         var files = $('#photos-input').get(0).files,
             formData = new FormData();
-
         if (files.length === 0) {
             alert('Select atleast 1 file to upload.');
             return false;
@@ -212,10 +212,8 @@
         // Append the files to the formData.
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
-
             formData.append('photos[]', file, file.name);
         }
-
         // Note: We are only appending the file inputs to the FormData.
         uploadFiles(formData);
     });
