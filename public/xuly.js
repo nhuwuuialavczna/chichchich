@@ -29,9 +29,7 @@ socket.on("server-send-mesage", function (data) {
             body: data.un +":" + data.nd// Nội dung thông báo
         }
     );
-    // notify.on('click',function () {
-    //     alert('zvx');
-    // });
+
 
     $("#listMessages").prepend("<div class='ms'>" + data.un + ":" + data.nd + "</div>");
 });
