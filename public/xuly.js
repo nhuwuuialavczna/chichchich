@@ -22,13 +22,14 @@ socket.on("server-send-dki-thanhcong", function (data) {
 socket.on("server-send-mesage", function (data) {
     if (!document.hasFocus()) {
         $('#audio').get(0).play();
+        var notify = new Notification(
+            'Có tin nhắn mới đến từ chichchich', // Tiêu đề thông báo
+            {
+                body: data.un +":" + data.nd// Nội dung thông báo
+            }
+        );
     }
-   var notify = new Notification(
-        'Có tin nhắn mới đến từ chichchich', // Tiêu đề thông báo
-        {
-            body: data.un +":" + data.nd// Nội dung thông báo
-        }
-    );
+
 
 
     $("#listMessages").prepend("<div class='ms'>" + data.un + ":" + data.nd + "</div>");
