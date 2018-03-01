@@ -22,16 +22,20 @@ socket.on("server-send-dki-thanhcong", function (data) {
 socket.on("server-send-mesage", function (data) {
     if (!document.hasFocus()) {
         $('#audio').get(0).play();
+        var noiDung;
+        if (data.nd.indexOf('<a href=')!==-1) {
+            noiDung = "Đường dẫn đến file"
+        } else {
+            noiDung = data.nd;
+        }
+
         var notify = new Notification(
-            'Có tin nhắn mới đến từ chichchich', // Tiêu đề thông báo
+            data.un, // Tiêu đề thông báo
             {
-                body: data.un +":" + data.nd// Nội dung thông báo
+                body: noiDung// Nội dung thông báo
             }
         );
     }
-
-
-
     $("#listMessages").prepend("<div class='ms'>" + data.un + ":" + data.nd + "</div>");
 });
 
