@@ -43,7 +43,7 @@ socket.on("server-send-mesage", function (data) {
     }
     var currentUser = $('#currentUser').html();
     if(currentUser === data.un){
-        $("#listMessages").prepend("<div style='color: red' class='ms'>" + data.un + ":" + data.nd + "</div>");
+        $("#listMessages").prepend("<div style='color: red; border: 2px solid green;float: right;margin: 5px 5px 5px 5px' class='ms'>" + data.un + ":" + data.nd + "</div><br>");
     }else{
         $("#listMessages").prepend("<div class='ms'>" + data.un + ":" + data.nd + "</div>");
     }
