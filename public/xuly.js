@@ -8,8 +8,13 @@ socket.on("server-send-dki-thatbai", function () {
 
 socket.on("server-send-danhsach-Users", function (data) {
     $("#boxContent").html("");
+    var current = $("#currentUser").html();
     data.forEach(function (i) {
-        $("#boxContent").append("<div class='user'>" + i + "</div>");
+       if(current === i){
+           $("#boxContent").append("<div style='color: red' class='user'>" + i + "</div>");
+       }else{
+           $("#boxContent").append("<div class='user'>" + i + "</div>");
+       }
     });
 });
 
@@ -36,7 +41,13 @@ socket.on("server-send-mesage", function (data) {
             }
         );
     }
-    $("#listMessages").prepend("<div class='ms'>" + data.un + ":" + data.nd + "</div>");
+    var currentUser = $('#currentUser').html();
+    if(currentUser === data.un){
+        $("#listMessages").prepend("<div style='color: red' class='ms'>" + data.un + ":" + data.nd + "</div>");
+    }else{
+        $("#listMessages").prepend("<div class='ms'>" + data.un + ":" + data.nd + "</div>");
+    }
+
 });
 
 socket.on("ai-do-dang-go-chu", function (data) {
@@ -56,8 +67,8 @@ $(document).ready(function () {
     $("#chatForm").hide();
     $('#photos-input').on('change', function () {
         var size = this.files[0].size;
-        if (size > 300000000) {
-            alert('Không ổn rồi. Đã bảo là không được hơn 300MB');
+        if (size > 500000000) {
+            alert('Không ổn rồi. Đã bảo là không được hơn 500MB');
             $('#photos-input').val('');
         }
     });
