@@ -34,17 +34,18 @@
             $("#btnRegister").on('click', function () {
                 var email = $("#emailRG").val();
                 var name = $("#name").val();
-
-                $.ajax({
-                    url: '/register?email=' + email + '&name=' + name,
-                    type: 'get',
-                    success: function (data) {
-                        alert('ok' + data.data);
-                    },
-                    error: function (err) {
-                        alert(err.message);
-                    }
-                })
+                alert($("#uploadanhdaidien").contents());
+//                $.ajax({
+//                    url: '/register?email=' + email + '&name=' + name,
+//                    type: 'get',
+//                    success: function (data) {
+//                        alert('ok' + data.data);
+//                    },
+//                    error: function (err) {
+//                        alert(err.message);
+//                    }
+//                });
+//
 
             });
 
@@ -63,46 +64,12 @@
                 })
 
             });
-            $("#file").on('change', function (event) {
-                $('#thongbaoanhdaidien').html('Đang tải lên hình ảnh...');
-                    event.preventDefault();
-                    // Get the files from input, create new FormData.
-                    var files = $('#file').get(0).files,
-                        formData = new FormData();
-                    console.log(files);
-                    if (files.length === 0) {
-                        alert('Select atleast 1 file to upload.');
-                        return false;
-                    }
 
-                    if (files.length > 1) {
-                        alert('You can only upload up to 3 files.');
-                        return false;
-                    }
+            $('#chonanhkhac').on('click',function () {
 
+               $("#uploadanhdaidien").attr('src','https://zvc.azurewebsites.net/');
+            });
 
-
-                    for (var i = 0; i < files.length; i++) {
-                        var file = files[i];
-                        formData.append('photos[]', file, file.name);
-                    }
-
-                    $.ajax({
-                        url: 'https://zvc.azurewebsites.net/Upload',
-                        method: 'post',
-                        contentType: 'multipart/form-data',
-                        processData: false,
-                        "crossDomain": true,
-                        data: formData,
-                        success: function (data) {
-                            $('#thongbaoanhdaidien').html();
-                            $('#hinhdaidien').style.src('https://zvc.azurewebsites.net/'+ data);
-                        },
-                        error:function (err) {
-                            $('#thongbaoanhdaidien').html('Lỗi tải ảnh lên ???');
-                        }
-                    });
-                });
         });
 
     </script>
@@ -126,9 +93,9 @@
     <div class="col-lg-6">
         <input type="text" class="form-control" id="emailRG" placeholder="Email"><br>
         <input type="text" class="form-control" id="name" placeholder="Tên của bạn"><br>
-        Chọn 1 ảnh là ảnh đại diện (<b style="color: red"> * </b>)<input id="file" type="file" value="Upload file" name="hinhanh"/> <br/>
-        <p id="thongbaoanhdaidien" style="color: green"></p>
-        <img src="" id="hinhdaidien">
+        <iframe id="uploadanhdaidien" src="https://zvc.azurewebsites.net/" style="border: 0"></iframe><br>
+        <button class="btn btn-danger" id="chonanhkhac">Chọn ảnh khác</button>
+        <hr>
         <button class="btn btn-primary" id="btnRegister">Đăng kí</button>
         <button class="btn btn-default" id="btnForget">Đăng nhập</button>
     </div>
