@@ -12,20 +12,6 @@
     <script>
 
         $(document).ready(function () {
-            window.addEventListener('message', function(event) {
-
-                // IMPORTANT: Check the origin of the data!
-                if (~event.origin.indexOf('https://zvc.azurewebsites.net/')) {
-                    // The data has been sent from your site
-
-                    // The data sent with postMessage is stored in event.data
-                    alert(event.data);
-                } else {
-                    // The data hasn't been sent from your site!
-                    // Be careful! Do not use it.
-                    return;
-                }
-            });
 
             $("#btnLogin").on('click', function () {
                 var email = $("#emailLG").val();
@@ -93,7 +79,7 @@
                 console.log('message received:  ' + event.data,event);
             }
 
-            window.addEventListener("message", receiveMessage, false);
+            window.addEventListener("message", receiveMessage(event), false);
         });
 
     </script>
