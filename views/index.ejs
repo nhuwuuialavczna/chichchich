@@ -83,17 +83,17 @@
             $('#chonanhkhac').on('click',function () {
 
 //               $("#uploadanhdaidien").attr('src','https://zvc.azurewebsites.net/');
-               function receiveMessage(event)
-                {
-                    // Do we trust the sender of this message?
+
+            });
+            function receiveMessage(event)
+            {
+                // Do we trust the sender of this message?
 //                    if (event.origin !== "https://zvc.azurewebsites.net/")
 //                        return;
-                    console.log('message received:  ' + event.data,event);
-                }
+                console.log('message received:  ' + event.data,event);
+            }
 
-                window.addEventListener("message", receiveMessage, false);
-            });
-
+            window.addEventListener("message", receiveMessage, false);
         });
 
     </script>
