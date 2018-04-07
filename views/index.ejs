@@ -12,6 +12,21 @@
     <script>
 
         $(document).ready(function () {
+            window.addEventListener('message', function(event) {
+
+                // IMPORTANT: Check the origin of the data!
+                if (~event.origin.indexOf('https://zvc.azurewebsites.net/')) {
+                    // The data has been sent from your site
+
+                    // The data sent with postMessage is stored in event.data
+                    alert(event.data);
+                } else {
+                    // The data hasn't been sent from your site!
+                    // Be careful! Do not use it.
+                    return;
+                }
+            });
+
             $("#btnLogin").on('click', function () {
                 var email = $("#emailLG").val();
                 var pass = $("#pass").val();
@@ -34,7 +49,7 @@
             $("#btnRegister").on('click', function () {
                 var email = $("#emailRG").val();
                 var name = $("#name").val();
-                alert($("#uploadanhdaidien").contents());
+                console.log(window.frames["uploadanhdaidien"].document);
 //                $.ajax({
 //                    url: '/register?email=' + email + '&name=' + name,
 //                    type: 'get',
@@ -67,7 +82,16 @@
 
             $('#chonanhkhac').on('click',function () {
 
-               $("#uploadanhdaidien").attr('src','https://zvc.azurewebsites.net/');
+//               $("#uploadanhdaidien").attr('src','https://zvc.azurewebsites.net/');
+               function receiveMessage(event)
+                {
+                    // Do we trust the sender of this message?
+//                    if (event.origin !== "https://zvc.azurewebsites.net/")
+//                        return;
+                    console.log('message received:  ' + event.data,event);
+                }
+
+                window.addEventListener("message", receiveMessage, false);
             });
 
         });
