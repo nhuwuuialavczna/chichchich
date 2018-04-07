@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Solo cùng bolero</title>
+    <meta name="description" content="Node.js image upload using express, jQuery using ajax."/>
+    <script src="/public/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/public/xuly.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/layout.css"/>
+</head>
+<body id="body">
+<br><br>
+<div class="container">
+    <div id="wrapper" class="col-md-12">
+        <div id="loginForm">
+            <h3>NHẬP TÊN CỦA MÀY VÀO ?</h3>
+            <audio style="display: none" id="audio" src="/uploads/beep-08b.mp3"></audio>
+            <input class="form-control" type="text" id="txtUsername"/><br>
+            <input class="btn btn-default" type="button" value="Register" id="btnRegister"/>
+        </div>
+        <div id="chatForm">
+            <div class="col-md-2 ">
+                <div id="left" class="panel panel-default">
+                    <div id="boxTitle" class="panel-heading">Bọn ngu</div>
+                    <div class="panel-body" id="boxContent"></div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="right">
+                    <div class="row">
+                        <div class="col-md-12" align="right" id="sayHi">
+                            Hello <span id="currentUser">Teo</span>
+                            <input type="button" class="btn btn-danger" id="btnLogout" value="Logout">
+                        </div>
+                    </div>
+                    <hr>
+                    <input class="form-control" type="text" id="txtMessage"/><br>
+                    <input type="button" class="btn btn-success" style="display: none" id="btnSendMessage" value="Gửi"/>
+                    <div class="col-md-6" align="left" id="thongbao"></div>
+                    <hr>
+                    <div style="height: auto" id="listMessages">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <!-- Photos upload Form -->
+                <form id="upload-photos" method="post" action="/upload_photos" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="photos-input">Gửi file</label>
+                        <input id="photos-input" type="file" name="photos[]" multiple="multiple">
+                        <p class="help-block">File sẽ được gửi đi ngay lập tức sau khi nhấn nút gửi. Dữ liệu của file
+                            dưới 500MB</p>
+                    </div>
+                    <input type="hidden" name="csrf_token" value="just_a_text_field"/>
+                    <input class="btn btn-default" type="submit" name="Photo Uploads" value="Send luôn"/>
+                </form>
+                <br/>
+
+                <!-- Progress Bar -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0"
+                                 aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                <span class="sr-only"></span>
+                            </div>
+                        </div>
+                        <div><p id="hienthiphantram"></p></div>
+                    </div>
+                </div>
+                <div id="album" class="row"></div>
+                <hr/>
+                <div id="yeucau" class="row">
+                    <p>- Đứa nào không phận sự thì biến mẹ đi nhen. Thằng nào gửi ảnh sex hay tào lao mía lao thì bỏ nhen. Được thì inbox riêng đây là chốn công
+                    cộng nha. </p>
+                    <p>- Tao mới nâng cấp lên 500MB luôn đó. Nghiêm cấm spam dưới mọi hình thức nha. Hệ thống không đủ bộ nhớ để lưu các file đã được gửi</p>
+                    <p>- Hi vọng tụi bây dùng nó cho mục đích gửi file thôi nha. Thân. Có thắc mắc hay ức chế gì hoặc góp ý cứ liên hệ: <a href="https://www.facebook.com/profile.php?id=100009115420843">Facebook</a></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script>
+    /**
+     * Upload the photos using ajax request.
+     *
+     * @param formData
+     */
+    function uploadFiles(formData) {
+        $.ajax({
+            url: '/upload_photos',
+            method: 'post',
+            data: formData,
+            processData: false,
+            contentType: false,
+            xhr: function () {
+                var xhr = new XMLHttpRequest();
+
+                // Add progress event listener to the upload.
+                xhr.upload.addEventListener('progress', function (event) {
+                    var progressBar = $('.progress-bar');
+
+                    if (event.lengthComputable) {
+                        var percent = (event.loaded / event.total) * 100;
+                        progressBar.width(percent + '%');
+                        $('#hienthiphantram').html(percent+'%');
+                        if (percent === 100) {
+                            progressBar.removeClass('active');
+                        }
+                    }
+                });
+
+                return xhr;
+            }
+        }).done(handleSuccess).fail(function (xhr, status) {
+            alert(status);
+        });
+    }
+
+    /**
+     * Handle the upload response data from server and display them.
+     *
+     * @param data
+     */
+    function getPhanMoRong(fileName) {
+        var ext = fileName.split('.');
+        return ext[ext.length - 1];
+    }
+
+    function handleSuccess(data) {
+        if (data.length > 0) {
+            var html = '';
+            for (var i = 0; i < data.length; i++) {
+                var img = data[i];
+                var fileName = img.filename;
+                var pmr = getPhanMoRong(fileName)
+//
+                if (pmr === 'jpg' || pmr === 'png' || pmr === 'ico' || pmr === 'gif') {
+                    html += '<div class="col-xs-12 col-md-12"><img width="100%" src="' + img.publicPath + '" alt="' + img.filename + '">';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<img width="100%" src="' + img.publicPath + '" alt="' + img.filename + '">' + '</a>');
+                }
+                else if (pmr === 'mp3') {
+                    html += '<audio controls><source src="' + img.publicPath + '" type="audio/mpeg"></audio>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<audio controls><source src="' + img.publicPath + '" type="audio/mpeg"></audio>' + '</a>');
+                } else if (pmr === 'ogg') {
+                    html += '<audio controls><source src="' + img.publicPath + '" type="audio/ogg"></audio>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<audio controls><source src="' + img.publicPath + '" type="audio/ogg"></audio>' + '</a>');
+                } else if (pmr === 'mp4') {
+                    html += '<video width="100%" controls><source src="' + img.publicPath + '" type="video/mp4"></video>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<video width="100%" controls><source src="' + img.publicPath + '" type="video/mp4"></video>' + '</a>');
+                } else if (pmr === 'ogg') {
+                    html += '<video width="100%" controls><source src="' + img.publicPath + '" type="video/ogg"></video>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<video width="100%" controls><source src="' + img.publicPath + '" type="video/ogg"></video>' + '</a>');
+                } else if (pmr === 'pdf') {
+                    html += '<object width="400" height="400" data="' + img.publicPath + '"></object>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<object width="400" height="400" data="' + img.publicPath + '"></object>' + '</a>');
+                } else if (pmr === 'swf') {
+                    html += '<object width="400" height="400" data="' + img.publicPath + '"></object>';
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<object width="400" height="400" data="' + img.publicPath + '"></object>' + '</a>');
+                }else if (pmr === 'exe' || pmr === 'zip' || pmr==='rar') {
+                    html += img.filename;
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' +  img.filename  + '</a>');
+                }else {
+                    html += 'File không đúng định dạng. Mời đọc điều khoản gửi file';
+                    socket.emit("user-send-message-sendfile", 'Đã gửi file không đúng định dạng');
+                }
+            }
+            $('#album').html(html);
+        } else {//jpg, png, ico, gif,mp3,oog,mp4,exe,zip,rar,pdf,swf
+            alert('No images were uploaded.');
+        }
+    }
+
+    // Set the progress bar to 0 when a file(s) is selected.
+    $('#photos-input').on('change', function () {
+        $('.progress-bar').width('0%');
+    });
+
+
+    // On form submit, handle the file uploads.
+    $('#upload-photos').on('submit', function (event) {
+        event.preventDefault();
+
+        // Get the files from input, create new FormData.
+        var files = $('#photos-input').get(0).files,
+            formData = new FormData();
+        if (files.length === 0) {
+            alert('Select atleast 1 file to upload.');
+            return false;
+        }
+
+        if (files.length > 1) {
+            alert('You can only upload up to 3 files.');
+            return false;
+        }
+
+        // Append the files to the formData.
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            formData.append('photos[]', file, file.name);
+        }
+        // Note: We are only appending the file inputs to the FormData.
+        uploadFiles(formData);
+    });
+
+
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+</body>
+</html>

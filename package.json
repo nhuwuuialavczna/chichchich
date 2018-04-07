@@ -16,13 +16,17 @@
     "url": "https://github.com/tamilps2/ajax-image-upload-with-node-js"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "express-json-promise": "^0.1.2",
+    "express-session": "^1.15.6",
     "file-type": "^3.9.0",
     "formidable": "^1.1.1",
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "path": "^0.12.7",
+    "pg": "^7.4.1",
     "read-chunk": "^2.1.0",
     "socket.io": "^2.0.4",
     "underscore": "^1.8.3"

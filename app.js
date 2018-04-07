@@ -2,7 +2,9 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var formidable = require('formidable');
+var cookieParser = require('cookie-parser');
 var readChunk = require('read-chunk');
+var session = require('express-session');
 var fileType = require('file-type');
 var _ = require('underscore');
 var app = express();
@@ -13,11 +15,21 @@ var mangUsers=[];
 app.set('port', (process.env.PORT || 3000));
 app.set('view engine', 'ejs');
 app.set('view options', {layout: false});
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 // Tell express to serve static files from the following directories
 // app.use(express.static('public'));
 app.use('/public', express.static('public'));
 app.use('/uploads', express.static('uploads'));
-app.get('/', function (req, res) {
+app.use(session({secret: "Shh, its a secret!"}));
+var indexRouter = require('./routes/index');
+var postRouter = require('./routes/post');
+
+app.use('/', indexRouter);
+app.use('/post', postRouter);
+
+
+app.get('/message', function (req, res) {
     // Don't bother about this :)
     var filesPath = path.join(__dirname, 'uploads/');
     fs.readdir(filesPath, function (err, files) {
@@ -42,7 +54,7 @@ app.get('/', function (req, res) {
             });
         });
     });
-    res.render('index');
+    res.render('message');
 });
 
 io.on("connection", function(socket){

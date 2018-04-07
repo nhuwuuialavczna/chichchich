@@ -10,11 +10,11 @@ socket.on("server-send-danhsach-Users", function (data) {
     $("#boxContent").html("");
     var current = $("#currentUser").html();
     data.forEach(function (i) {
-       if(current === i){
-           $("#boxContent").append("<div style='color: red' class='user'>" + i + "</div>");
-       }else{
-           $("#boxContent").append("<div class='user'>" + i + "</div>");
-       }
+        if (current === i) {
+            $("#boxContent").append("<div style='color: red' class='user'>" + i + "</div>");
+        } else {
+            $("#boxContent").append("<div class='user'>" + i + "</div>");
+        }
     });
 });
 
@@ -28,7 +28,7 @@ socket.on("server-send-mesage", function (data) {
     if (!document.hasFocus()) {
         $('#audio').get(0).play();
         var noiDung;
-        if (data.nd.indexOf('<a href=')!==-1) {
+        if (data.nd.indexOf('<a href=') !== -1) {
             noiDung = "Đường dẫn đến file"
         } else {
             noiDung = data.nd;
@@ -42,10 +42,10 @@ socket.on("server-send-mesage", function (data) {
         );
     }
     var currentUser = $('#currentUser').html();
-    if(currentUser === data.un){
-        $("#listMessages").prepend("<div style='color: red; border: 2px solid green;float: right;margin: 5px 5px 5px 5px' class='ms'>" + data.un + ":" + data.nd + "</div><br>");
-    }else{
-        $("#listMessages").prepend("<div class='ms'>" + data.un + ":" + data.nd + "</div>");
+    if (currentUser === data.un) {
+        $("#listMessages").prepend("<div class='ms' style='text-align: right;color: red'>"+data.nd + ":" + data.un + "</div>");
+    } else {
+        $("#listMessages").prepend("<div class='ms' style='text-align: left;color: blue'>" + data.un + ":" + data.nd + "</div>");
     }
 
 });
@@ -61,8 +61,7 @@ socket.on("ai-do-STOP-go-chu", function () {
 
 $(document).ready(function () {
 
-    Notification.requestPermission(function (p) {
-    });
+    Notification.requestPermission(function (p) {});
     $("#loginForm").show();
     $("#chatForm").hide();
     $('#photos-input').on('change', function () {
