@@ -35,20 +35,41 @@
             $("#btnRegister").on('click', function () {
                 var email = $("#emailRG").val();
                 var name = $("#name").val();
-                console.log(window.frames["uploadanhdaidien"].document);
-//                $.ajax({
-//                    url: '/register?email=' + email + '&name=' + name,
-//                    type: 'get',
-//                    success: function (data) {
-//                        alert('ok' + data.data);
-//                    },
-//                    error: function (err) {
-//                        alert(err.message);
-//                    }
-//                });
-//
+                var duongDan = $("#duongdan").val();
 
+                $.ajax({
+                    url: '/register?email=' + email + '&name=' + name+'&duongdan='+duongDan,
+                    type: 'get',
+                    success: function (data) {
+                        alert('ok' + data.data);
+                    },
+                    error: function (err) {
+                        alert(err.message);
+                    }
+                });
             });
+
+            $('#upload').on('change',function () {
+                var file_data = $("#upload").prop("files")[0];
+                var form_data = new FormData();
+                var fileName = Date.now() + file_data.name;
+                form_data.append('imgUploader', file_data);
+
+                $.ajax({
+                    url: "https://uploadserver.azurewebsites.net/api/Upload/",
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    type: 'post',
+                    success: function(data){
+                        $('#duongdan').val('https://uploadserver.azurewebsites.net/img?fileName='+data);
+                        $('#hienthi').attr('src','https://uploadserver.azurewebsites.net/img?fileName='+data);
+                    }
+                });
+            });
+
+
+
 
             $("#btnForget").on('click', function () {
                 var email = $("#email").val();
@@ -57,29 +78,17 @@
                     url: '/forget?email=' + email,
                     type: 'get',
                     success: function (data) {
-                        alert(data.data);
+                        alert(data);
                     },
                     error: function (err) {
-                        alert(err.message);
+                        alert(err.message+"");
                     }
                 })
 
             });
 
-            $('#chonanhkhac').on('click',function () {
 
-//               $("#uploadanhdaidien").attr('src','https://zvc.azurewebsites.net/');
 
-            });
-            function receiveMessage(event)
-            {
-                // Do we trust the sender of this message?
-//                    if (event.origin !== "https://zvc.azurewebsites.net/")
-//                        return;
-                console.log('message received:  ' + event.data,event);
-            }
-
-            window.addEventListener("message", receiveMessage(event), false);
         });
 
     </script>
@@ -103,14 +112,14 @@
     <div class="col-lg-6">
         <input type="text" class="form-control" id="emailRG" placeholder="Email"><br>
         <input type="text" class="form-control" id="name" placeholder="Tên của bạn"><br>
-        <iframe id="uploadanhdaidien" src="https://zvc.azurewebsites.net/" style="border: 0"></iframe><br>
-        <button class="btn btn-danger" id="chonanhkhac">Chọn ảnh khác</button>
+
+        <input type="file" id="upload" value="Chọn ảnh đại diện">
+        <p style="display: none" id="duongdan"></p>
+        <img src="" id="hienthi">
         <hr>
         <button class="btn btn-primary" id="btnRegister">Đăng kí</button>
         <button class="btn btn-default" id="btnForget">Đăng nhập</button>
     </div>
-
-
 </div>
 </body>
 </html>
