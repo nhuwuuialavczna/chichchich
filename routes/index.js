@@ -24,7 +24,7 @@ router.get('/login', function (req, res, next) {
     var email = req.query.email;
     var ps = req.query.pass;
 
-    var acc = new account(email, ps, '', '', '', '', '', '',);
+    var acc = new account(email, ps, '', '', '', '', '', '',0);
 
     console.log(email);
     console.log(ps);
