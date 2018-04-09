@@ -79,7 +79,7 @@ app.get('/message', function (req, res) {
             });
         });
     });
-    res.render('message');
+    res.render('message', {title: 'Trang chủ',User:req.session.acc});
 });
 
 io.on("connection", function(socket){

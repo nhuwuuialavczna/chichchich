@@ -9,10 +9,12 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
+    <!--<script src="/public/xuly.js"></script>-->
     <script>
-
+            <%console.log(listUser);%>
+            var socket = io("/");
         $(document).ready(function () {
-
             $("#btnLogin").on('click', function () {
                 var email = $("#emailLG").val();
                 var pass = $("#pass").val();
@@ -23,37 +25,77 @@
                     success: function (data) {
                         console.dir(data);
                         if (data.data === 'ok') {
+                            alert(data.name);
+                            socket.emit("client-send-Username", data.name);
                             window.location.href = '/';
                         }else{
                             $('#thongbaodangnhap').html('Sai thông tin hoặc chưa xác nhận mail.');
                         }
                     },
                     error: function (err) {
-                        alert(err);
+                        $('#thongbaodangnhap').html('Xảy ra lỗi nghiêm trọng');
                     }
                 })
 
             });
 
             $("#btnRegister").on('click', function () {
+                var listEmail = [];
+
+                <%for(var i=0;i<listUser.length;i++){%>
+                 listEmail.push('<%=listUser[i].email%>');
+                <%}%>
+
+                var thongBaoDangKi = $("#thongbaodangki");
+                thongBaoDangKi.html('Đợi xíu ba ơi...');
                 var email = $("#emailRG").val();
                 var name = $("#name").val();
                 var duongDan = $("#duongdan").val();
-                var thongBaoDangKi = $("#thongbaodangki");
-                thongBaoDangKi.html('Đợi xíu ba ơi...');
+                var pass = $("#p").val();
+                var re_pass = $("#rep").val();
                 if(duongDan===''){
                     thongBaoDangKi.html('Chưa chọn hình kìa cha nội');
-                }else{
+                    return;
+                }
+                if(pass===''){
+                    thongBaoDangKi.html('Không được bỏ trống mật khẩu');
+                    return;
+                }
+
+                if(pass.length <5){
+                    thongBaoDangKi.html('Mật khẩu phải từ 6 kí tự');
+                    return;
+                }
+
+                if(pass !== re_pass){
+                    thongBaoDangKi.html('Nhập lại mật khẩu không đúng');
+                    return;
+                }
+                if(listEmail.indexOf(email) !== -1){
+                    thongBaoDangKi.html('Email này đã tồn tại');
+                    return;
+                }
+
+                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (!filter.test(email)) {
+                    thongBaoDangKi.html('Địa chỉ email không hợp lệ');
+                    return false;
+                }
+                else{
                     $.ajax({
-                        url: '/register?email=' + email + '&name=' + name + '&duongdan=' + duongDan,
+                        url: '/register?email=' + email + '&name=' + name + '&duongdan=' + duongDan+'&password='+pass,
                         type: 'get',
                         success: function (data) {
                             if (data.data === 'ok') {
-                                thongBaoDangKi.html('Vào mail xác nhận mới đăng nhập được');
+                                alert(data.name);
+                                socket.emit("client-send-Username", data.name);
+                                window.location.href = '/';
                             }
                         },
                         error: function (err) {
-                            alert(err.message);
+                            if (err) {
+                                thongBaoDangKi.html('Tài khoản đã tồn tại');
+                            }
                         }
                     });
                 }
@@ -73,7 +115,7 @@
                     data: form_data,
                     type: 'post',
                     success: function (data) {
-                        $('#duongdan').val('https://uploadserver.azurewebsites.net/img?fileName=' + data);
+                        $('#duongdan').val(data);
                         $('#hienthi').attr('src', 'https://uploadserver.azurewebsites.net/img?fileName=' + data);
                     }, error: function (err) {
                         $('#hienthi').attr('alt', 'Có lỗi xảy ra !');
@@ -113,7 +155,7 @@
 <div class="container">
 
     <div class="col-lg-6">
-        <input type="text" class="form-control" id="emailLG" placeholder="Email" required><br>
+        <input type="email" class="form-control" id="emailLG" placeholder="Email" required><br>
         <input type="text" class="form-control" id="pass" placeholder="Mật khẩu" required><br>
         <p id="thongbaodangnhap"></p>
         <button id="btnLogin" class="btn btn-success">Đăng nhập</button>
@@ -121,8 +163,10 @@
 
 
     <div class="col-lg-6">
-        <input type="text" class="form-control" id="emailRG" placeholder="Email"><br>
-        <input type="text" class="form-control" id="name" placeholder="Tên của bạn"><br>
+        <input type="email" class="form-control" id="emailRG" placeholder="Email" required><br>
+        <input type="password" placeholder="Mật khẩu" id="p" required>
+        <input type="password" placeholder="Nhập lại mật khẩu" id="rep" required>
+        <input type="text" class="form-control" id="name" placeholder="Tên của bạn" required><br>
 
         <input type="file" id="upload" value="Chọn ảnh đại diện">
         <p style="display: none" id="duongdan"></p>
@@ -130,7 +174,7 @@
         <hr>
         <p id="thongbaodangki"></p>
         <button class="btn btn-primary" id="btnRegister">Đăng kí</button>
-        <button class="btn btn-default" id="btnForget">Quên mật khẩu</button>
+        <!--<button class="btn btn-default" id="btnForget">Quên mật khẩu</button>-->
     </div>
 </div>
 </body>

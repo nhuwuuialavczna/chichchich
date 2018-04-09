@@ -4,26 +4,132 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Solo cùng bolero</title>
+    <title>Cộng đồng trao đổi kinh nghiệm quay tay</title>
     <meta name="description" content="Node.js image upload using express, jQuery using ajax."/>
     <script src="/public/jquery-3.2.1.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/public/xuly.js"></script>
+    <!--<script src="/public/xuly.js"></script>-->
     <link rel="stylesheet" type="text/css" href="/public/layout.css"/>
+    <script>
+
+        var socket = io("/");
+        // var socket = io("https://chichchich.herokuapp.com/");
+
+
+        socket.on("server-send-dki-thatbai", function () {
+            alert("Sai Username (co nguoi da dang ki roi!!!)");
+        });
+
+        socket.on("server-send-danhsach-Users", function (data) {
+            $("#boxContent").html("");
+            var current = $("#currentUser").html();
+            data.forEach(function (i) {
+                if (current === i) {
+                    $("#boxContent").append("<div style='color: red' class='user'>" + i + "</div>");
+                } else {
+                    $("#boxContent").append("<div class='user'>" + i + "</div>");
+                }
+            });
+        });
+
+        socket.on("server-send-dki-thanhcong", function (data) {
+            $("#currentUser").html(data);
+        });
+
+        socket.on("server-send-mesage", function (data) {
+            if (!document.hasFocus()) {
+                $('#audio').get(0).play();
+                var noiDung;
+                if (data.nd.indexOf('<a href=') !== -1) {
+                    noiDung = "Đường dẫn đến file"
+                } else {
+                    noiDung = data.nd;
+                }
+
+                var notify = new Notification(
+                    data.un, // Tiêu đề thông báo
+                    {
+                        body: noiDung// Nội dung thông báo
+                    }
+                );
+            }
+            var currentUser = $('#currentUser').html();
+            if (currentUser === data.un) {
+                $("#listMessages").prepend("<div class='ms' style='text-align: right;color: red'>" + data.nd + ":" + data.un + "</div>");
+            } else {
+                $("#listMessages").prepend("<div class='ms' style='text-align: left;color: blue'>" + data.un + ":" + data.nd + "</div>");
+            }
+
+        });
+
+        socket.on("ai-do-dang-go-chu", function (data) {
+            $("#thongbao").html("<span class='glyphicon glyphicon-pencil'></span>" + data);
+        });
+
+        socket.on("ai-do-STOP-go-chu", function () {
+            $("#thongbao").html("");
+        });
+
+
+        $(document).ready(function () {
+
+            Notification.requestPermission(function (p) {
+            });
+            $('#photos-input').on('change', function () {
+                var size = this.files[0].size;
+                if (size > 500000000) {
+                    alert('Không ổn rồi. Đã bảo là không được hơn 500MB');
+                    $('#photos-input').val('');
+                }
+            });
+            $("#txtMessage").focusin(function () {
+                socket.emit("toi-dang-go-chu");
+            });
+
+            $("#txtMessage").focusout(function () {
+                socket.emit("toi-stop-go-chu");
+            });
+
+            // $("#btnRegister").click(function () {
+
+            socket.emit("client-send-Username", '<%= User.name %>');
+            // });
+
+            $("#btnLogout").click(function () {
+                socket.emit("logout");
+                window.location.href = "/";
+            });
+
+            $("#btnSendMessage").click(function () {
+                var ms = $("#txtMessage");
+                if (ms.val().length === 0) {
+                    $("#thongbao").html('Chưa nhập nội dung kìa óc chó !')
+                } else {
+                    socket.emit("user-send-message", ms.val());
+                    ms.val('');
+                }
+
+            });
+
+            $("#txtMessage").keyup(function (e) {
+                if (e.keyCode === 13) {
+                    $("#btnSendMessage").click();
+                }
+            });
+        });
+
+
+    </script>
+
 </head>
 <body id="body">
 <br><br>
 <div class="container">
     <div id="wrapper" class="col-md-12">
-        <div id="loginForm">
-            <h3>NHẬP TÊN CỦA MÀY VÀO ?</h3>
-            <audio style="display: none" id="audio" src="/uploads/beep-08b.mp3"></audio>
-            <input class="form-control" type="text" id="txtUsername"/><br>
-            <input class="btn btn-default" type="button" value="Register" id="btnRegister"/>
-        </div>
+        <audio style="display: none" id="audio" src="/uploads/beep-08b.mp3"></audio>
         <div id="chatForm">
             <div class="col-md-2 ">
                 <div id="left" class="panel panel-default">
@@ -78,10 +184,14 @@
                 <div id="album" class="row"></div>
                 <hr/>
                 <div id="yeucau" class="row">
-                    <p>- Đứa nào không phận sự thì biến mẹ đi nhen. Thằng nào gửi ảnh sex hay tào lao mía lao thì bỏ nhen. Được thì inbox riêng đây là chốn công
-                    cộng nha. </p>
-                    <p>- Tao mới nâng cấp lên 500MB luôn đó. Nghiêm cấm spam dưới mọi hình thức nha. Hệ thống không đủ bộ nhớ để lưu các file đã được gửi</p>
-                    <p>- Hi vọng tụi bây dùng nó cho mục đích gửi file thôi nha. Thân. Có thắc mắc hay ức chế gì hoặc góp ý cứ liên hệ: <a href="https://www.facebook.com/profile.php?id=100009115420843">Facebook</a></p>
+                    <p>- Đứa nào không phận sự thì biến mẹ đi nhen. Thằng nào gửi ảnh sex hay tào lao mía lao thì bỏ
+                        nhen. Được thì inbox riêng đây là chốn công
+                        cộng nha. </p>
+                    <p>- Tao mới nâng cấp lên 500MB luôn đó. Nghiêm cấm spam dưới mọi hình thức nha. Hệ thống không đủ
+                        bộ nhớ để lưu các file đã được gửi</p>
+                    <p>- Hi vọng tụi bây dùng nó cho mục đích gửi file thôi nha. Thân. Có thắc mắc hay ức chế gì hoặc
+                        góp ý cứ liên hệ: <a href="https://www.facebook.com/profile.php?id=100009115420843">Facebook</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -114,7 +224,7 @@
                     if (event.lengthComputable) {
                         var percent = (event.loaded / event.total) * 100;
                         progressBar.width(percent + '%');
-                        $('#hienthiphantram').html(percent+'%');
+                        $('#hienthiphantram').html(percent + '%');
                         if (percent === 100) {
                             progressBar.removeClass('active');
                         }
@@ -168,10 +278,10 @@
                 } else if (pmr === 'swf') {
                     html += '<object width="400" height="400" data="' + img.publicPath + '"></object>';
                     socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + '<object width="400" height="400" data="' + img.publicPath + '"></object>' + '</a>');
-                }else if (pmr === 'exe' || pmr === 'zip' || pmr==='rar') {
+                } else if (pmr === 'exe' || pmr === 'zip' || pmr === 'rar') {
                     html += img.filename;
-                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' +  img.filename  + '</a>');
-                }else {
+                    socket.emit("user-send-message", '<a href="/download?name=' + img.filename + '" class="thumbnail">' + img.filename + '</a>');
+                } else {
                     html += 'File không đúng định dạng. Mời đọc điều khoản gửi file';
                     socket.emit("user-send-message-sendfile", 'Đã gửi file không đúng định dạng');
                 }

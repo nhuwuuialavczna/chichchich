@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.3",
-    "ejs": "^2.5.7",
+    "ejs": "^2.5.8",
     "express": "^4.16.2",
     "express-json-promise": "^0.1.2",
     "express-session": "^1.15.6",

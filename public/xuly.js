@@ -20,8 +20,6 @@ socket.on("server-send-danhsach-Users", function (data) {
 
 socket.on("server-send-dki-thanhcong", function (data) {
     $("#currentUser").html(data);
-    $("#loginForm").hide(2000);
-    $("#chatForm").show(1000);
 });
 
 socket.on("server-send-mesage", function (data) {
@@ -62,8 +60,6 @@ socket.on("ai-do-STOP-go-chu", function () {
 $(document).ready(function () {
 
     Notification.requestPermission(function (p) {});
-    $("#loginForm").show();
-    $("#chatForm").hide();
     $('#photos-input').on('change', function () {
         var size = this.files[0].size;
         if (size > 500000000) {
@@ -79,9 +75,10 @@ $(document).ready(function () {
         socket.emit("toi-stop-go-chu");
     });
 
-    $("#btnRegister").click(function () {
-        socket.emit("client-send-Username", $("#txtUsername").val());
-    });
+    // $("#btnRegister").click(function () {
+
+        socket.emit("client-send-Username", '');
+    // });
 
     $("#btnLogout").click(function () {
         socket.emit("logout");
