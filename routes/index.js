@@ -12,7 +12,6 @@ const pool = new Pool({
     port: 5432, ssl: true
 
 });
-/* GET home page. */
 router.get('/', function (req, res, next) {
     if (!req.session.acc) {
         res.render('index', {title: 'Trang chủ'});
@@ -22,31 +21,31 @@ router.get('/', function (req, res, next) {
 
 
 router.get('/login', function (req, res, next) {
-    var email = req.query.email;
-    var ps = req.query.pass;
-
-    var acc = tools.account(email, ps, '', '', '', '', '', '',);
-
-    console.log(email);
-    console.log(ps);
-    var isLogin = false;
-    // tại đây kiểm tra trong database rồi trả về kết quả
-    pool.query('SELECT * from account', (err, data) => {
-        if (data === undefined) {
-            res.json({data: 'fail'});
-            return;
-        } else {
-            var rows = data.rows;
-            var checkaccout = tools.checkaccout(rows, acc);
-            if (checkaccout !== -1) {
-                req.session.acc = rows[checkaccout];
-                res.json({data: 'ok'});
-            } else {
-                res.json({data: 'fail'});
-            }
-        }
-        // pool.end();
-    });
+    // var email = req.query.email;
+    // var ps = req.query.pass;
+    //
+    // var acc = tools.account(email, ps, '', '', '', '', '', '',);
+    //
+    // console.log(email);
+    // console.log(ps);
+    // var isLogin = false;
+    // // tại đây kiểm tra trong database rồi trả về kết quả
+    // pool.query('SELECT * from account', (err, data) => {
+    //     if (data === undefined) {
+    //         res.json({data: 'fail'});
+    //         return;
+    //     } else {
+    //         var rows = data.rows;
+    //         var checkaccout = tools.checkaccout(rows, acc);
+    //         if (checkaccout !== -1) {
+    //             req.session.acc = rows[checkaccout];
+    //             res.json({data: 'ok'});
+    //         } else {
+    //             res.json({data: 'fail'});
+    //         }
+    //     }
+    //     // pool.end();
+    // });
     // console.log('o ngoai'+isLogin);
 
 });
