@@ -16,13 +16,16 @@
             $("#btnLogin").on('click', function () {
                 var email = $("#emailLG").val();
                 var pass = $("#pass").val();
-
+                $('#thongbaodangnhap').html('Đang đăng nhập...');
                 $.ajax({
                     url: '/login?email=' + email + '&pass=' + pass,
                     type: 'get',
                     success: function (data) {
+                        console.dir(data);
                         if (data.data === 'ok') {
                             window.location.href = '/';
+                        }else{
+                            $('#thongbaodangnhap').html('Sai thông tin hoặc chưa xác nhận mail.');
                         }
                     },
                     error: function (err) {
@@ -36,39 +39,47 @@
                 var email = $("#emailRG").val();
                 var name = $("#name").val();
                 var duongDan = $("#duongdan").val();
+                var thongBaoDangKi = $("#thongbaodangki");
+                thongBaoDangKi.html('Đợi xíu ba ơi...');
+                if(duongDan===''){
+                    thongBaoDangKi.html('Chưa chọn hình kìa cha nội');
+                }else{
+                    $.ajax({
+                        url: '/register?email=' + email + '&name=' + name + '&duongdan=' + duongDan,
+                        type: 'get',
+                        success: function (data) {
+                            if (data.data === 'ok') {
+                                thongBaoDangKi.html('Vào mail xác nhận mới đăng nhập được');
+                            }
+                        },
+                        error: function (err) {
+                            alert(err.message);
+                        }
+                    });
+                }
 
-                $.ajax({
-                    url: '/register?email=' + email + '&name=' + name+'&duongdan='+duongDan,
-                    type: 'get',
-                    success: function (data) {
-                        alert('ok' + data.data);
-                    },
-                    error: function (err) {
-                        alert(err.message);
-                    }
-                });
             });
 
-            $('#upload').on('change',function () {
+            $('#upload').on('change', function () {
                 var file_data = $("#upload").prop("files")[0];
                 var form_data = new FormData();
                 var fileName = Date.now() + file_data.name;
                 form_data.append('imgUploader', file_data);
-
+                $('#hienthi').attr('alt', 'Đang tải ảnh lên. Từ từ đã');
                 $.ajax({
                     url: "https://uploadserver.azurewebsites.net/api/Upload/",
                     contentType: false,
                     processData: false,
                     data: form_data,
                     type: 'post',
-                    success: function(data){
-                        $('#duongdan').val('https://uploadserver.azurewebsites.net/img?fileName='+data);
-                        $('#hienthi').attr('src','https://uploadserver.azurewebsites.net/img?fileName='+data);
+                    success: function (data) {
+                        $('#duongdan').val('https://uploadserver.azurewebsites.net/img?fileName=' + data);
+                        $('#hienthi').attr('src', 'https://uploadserver.azurewebsites.net/img?fileName=' + data);
+                    }, error: function (err) {
+                        $('#hienthi').attr('alt', 'Có lỗi xảy ra !');
                     }
                 });
             });
-
-
 
 
             $("#btnForget").on('click', function () {
@@ -81,12 +92,11 @@
                         alert(data);
                     },
                     error: function (err) {
-                        alert(err.message+"");
+                        alert(err.message + "");
                     }
                 })
 
             });
-
 
 
         });
@@ -105,6 +115,7 @@
     <div class="col-lg-6">
         <input type="text" class="form-control" id="emailLG" placeholder="Email" required><br>
         <input type="text" class="form-control" id="pass" placeholder="Mật khẩu" required><br>
+        <p id="thongbaodangnhap"></p>
         <button id="btnLogin" class="btn btn-success">Đăng nhập</button>
     </div>
 
@@ -117,8 +128,9 @@
         <p style="display: none" id="duongdan"></p>
         <img src="" id="hienthi">
         <hr>
+        <p id="thongbaodangki"></p>
         <button class="btn btn-primary" id="btnRegister">Đăng kí</button>
-        <button class="btn btn-default" id="btnForget">Đăng nhập</button>
+        <button class="btn btn-default" id="btnForget">Quên mật khẩu</button>
     </div>
 </div>
 </body>
