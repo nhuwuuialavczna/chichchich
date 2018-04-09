@@ -68,7 +68,7 @@ function account(email, password, name, ip, hinhanh, banbe, baiviet, filedaup, d
 function  checkaccout(list,account) {
     for(var i=0;i<list.length;i++){
         var accc = list[i];
-        if(this.equals(accc)){
+        if(account.equals(accc)){
             return i;
         }
     }
