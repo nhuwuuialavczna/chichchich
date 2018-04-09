@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const {Pool, Client} = require('pg');
-var nodemailer = require('nodemailer');
+// var nodemailer = require('nodemailer');
 
 
 const pool = new Pool({
