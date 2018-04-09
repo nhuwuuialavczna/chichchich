@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const {Pool, Client} = require('pg');
-// var nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer');
 
 
 const pool = new Pool({
@@ -21,31 +21,31 @@ router.get('/', function (req, res, next) {
 
 
 router.get('/login', function (req, res, next) {
-    // var email = req.query.email;
-    // var ps = req.query.pass;
-    //
-    // var acc = tools.account(email, ps, '', '', '', '', '', '',);
-    //
-    // console.log(email);
-    // console.log(ps);
-    // var isLogin = false;
-    // // tại đây kiểm tra trong database rồi trả về kết quả
-    // pool.query('SELECT * from account', (err, data) => {
-    //     if (data === undefined) {
-    //         res.json({data: 'fail'});
-    //         return;
-    //     } else {
-    //         var rows = data.rows;
-    //         var checkaccout = tools.checkaccout(rows, acc);
-    //         if (checkaccout !== -1) {
-    //             req.session.acc = rows[checkaccout];
-    //             res.json({data: 'ok'});
-    //         } else {
-    //             res.json({data: 'fail'});
-    //         }
-    //     }
-    //     // pool.end();
-    // });
+    var email = req.query.email;
+    var ps = req.query.pass;
+
+    var acc = new account(email, ps, '', '', '', '', '', '',);
+
+    console.log(email);
+    console.log(ps);
+    var isLogin = false;
+    // tại đây kiểm tra trong database rồi trả về kết quả
+    pool.query('SELECT * from account', (err, data) => {
+        if (data === undefined) {
+            res.json({data: 'fail'});
+            return;
+        } else {
+            var rows = data.rows;
+            var checkaccout = checkaccout(rows, acc);
+            if (checkaccout !== -1) {
+                req.session.acc = rows[checkaccout];
+                res.json({data: 'ok'});
+            } else {
+                res.json({data: 'fail'});
+            }
+        }
+        // pool.end();
+    });
     // console.log('o ngoai'+isLogin);
 
 });
