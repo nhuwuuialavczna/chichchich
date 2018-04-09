@@ -5,11 +5,201 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/public/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src="/socket.io/socket.io.js"></script>
     <!--<script src="/public/xuly.js"></script>-->
-    <title><%=title%></title>
+    <script>
+        $(document).ready(function () {
+            $('#batcuthugi').on('change', function () {
+                var ds = $('#duongdan').val();
+                if (ds.split(':').length < 2) {
+                    $('#tb1').html('');
+                    var file_data = $("#batcuthugi").prop("files")[0];
+                    var phanMoRong = getPhanMoRong(file_data.name);
+                    if (phanMoRong === 'jpg' || phanMoRong === 'png' || phanMoRong === 'gif' || phanMoRong === 'mp3' || phanMoRong === 'mp4') {
+                        var form_data = new FormData();
+                        var fileName = Date.now() + file_data.name;
+                        form_data.append('imgUploader', file_data);
+                        $('#tb1').append('Uploading...');
+                        $.ajax({
+                            url: "https://uploadserver.azurewebsites.net/api/Upload/",
+                            contentType: false,
+                            processData: false,
+                            data: form_data,
+                            type: 'post',
+                            success: function (data) {
+
+                                if (ds === '') {
+                                    $('#duongdan').val(data);
+                                } else {
+                                    $('#duongdan').val(ds + ':' + data);
+                                }
+                                $('#tb1').html('');
+                                if (phanMoRong === 'jpg' || phanMoRong === 'png' || phanMoRong === 'gif') {
+                                    $('#hienthi').append('<div class="col-sm-6"><img style="width:80px;" src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '"></div>');
+                                }
+                                if (phanMoRong === 'mp3') {
+                                    $('#hienthi').append('<div class="col-sm-6"><audio style="width:160px" controls><source src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '" type="audio/mpeg"></audio></div>');
+                                }
+                                if (phanMoRong === 'mp4') {
+                                    $('#hienthi').append('<div class="col-sm-6"><video style="width:160px" controls><source src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '" type="video/mp4"></video></div>');
+                                }
+                            }, error: function (err) {
+                            }
+                        });
+                    } else {
+                        $('#tb1').html('Không hỗ trợ');
+                    }
+                } else {
+                    $('#tb1').html('Quá số lượng');
+                }
+            });
+
+            $('#tepdinhkem').on('change', function () {
+                $('#tb2').html('');
+                var file_data = $("#tepdinhkem").prop("files")[0];
+                var ds = $('#dinhkem').val();
+                if (ds.split(':').length < 2) {
+
+
+                    var phanMoRong = getPhanMoRong(file_data.name);
+                    if (phanMoRong === 'zip' || phanMoRong === 'rar' || phanMoRong === 'java' || phanMoRong === 'war' || phanMoRong === 'doc' || phanMoRong === 'pdf') {
+                        var form_data = new FormData();
+                        var fileName = file_data.name;
+                        form_data.append('imgUploader', file_data);
+                        $('#tb2').append('Uploading...');
+                        $.ajax({
+                            url: "https://uploadserver.azurewebsites.net/api/Upload/",
+                            contentType: false,
+                            processData: false,
+                            data: form_data,
+                            type: 'post',
+                            success: function (data) {
+                                if (ds === '') {
+                                    $('#dinhkem').val(data);
+                                } else {
+                                    $('#dinhkem').val(ds + ':' + data);
+                                }
+                                $('#tb2').html('');
+                                $('#hienthidinhkem').append('<p>' + fileName + '</p>');
+
+                            }, error: function (err) {
+                            }
+                        });
+                    } else {
+                        $('#tb2').html('Không hỗ trợ');
+                    }
+                } else {
+                    $('#tb2').html('Quá số lượng');
+                }
+            });
+
+            function getPhanMoRong(data) {
+                var a = data.split('.');
+                return a[a.length - 1];
+            }
+
+        });
+    </script>
+    <style>
+        input {
+            border-bottom: 10px;
+        }
+    </style>
+    <title>Đăng nhập</title>
 </head>
-<body>
-    Trang này đang được xây dựng. <a href="/message">Bấm vào đây để vào chat</a>
+<body style="font-family: monospace">
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Trang chủ</a></li>
+                <% if(User !== undefined){ %>
+                <li><a href="/message">Chat công cộng</a></li>
+                <li><a href="/livecode">Live code</a></li>
+                <!--<li><a href="/game">Phòng game</a></li>-->
+                <li><a href="/dieukhoan">Hướng dẫn</a></li>
+                <li><a href="/lienhe">Liên hệ</a></li>
+
+                <% } %>
+            </ul>
+            <% if(User !== undefined){ %>
+            <form id="formtimkiem" class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Tìm bất cứ thứ gì">
+                </div>
+                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Profile <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Trang cá nhân</a></li>
+                        <li><a href="#">Đổi mật khẩu</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Đăng xuất</a></li>
+                    </ul>
+                </li>
+                <li><button class="btn btn-lg btn-primary">Đăng bài</button></li>
+                <% } %>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="media" style="border: 2px solid green;border-spacing: 3px">
+        <div class="media-left media-middle">
+            <a href="#">
+                <img style="width: 100px" class="media-object" src="<%= User.hinhanh %>">
+            </a>
+        </div>
+        <div class="media-body">
+            <div class="col-sm-5">
+                <h3 class="media-heading">Bạn muốn nói gì ?</h3>
+                <form id="form" action="/post/add">
+                    <textarea name="status" style=" resize: none;" id="status" cols="30" rows="7"
+                              onresize="return false" class="form-control"></textarea>
+                    <input style="display: none" name="duongdan" id="duongdan">
+                    <input style="display: none" name="dinhkem" id="dinhkem">
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Đăng</button>
+                    <button type="reset" class="btn btn-primary">Hủy</button>
+                </form>
+            </div>
+            <div class="col-sm-4">
+                <p>Ảnh & video (Max 2):<span style="color: red" id="tb1"></span></p>
+                <input type="file" id="batcuthugi">
+                <div id="hienthi"></div>
+
+            </div>
+            <div class="col-sm-3">
+                <p>Tệp(Max 2):<span style="color: red" id="tb2"></span></p>
+                <input type="file" id="tepdinhkem">
+                <div id="hienthidinhkem"></div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>

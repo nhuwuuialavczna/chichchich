@@ -134,14 +134,6 @@ app.get('/download', function(req, res){
     res.download(file); // Set disposition and send it.
 });
 
-// app.get('/download', function (req, res) {
-//
-//     var file = fs.readFileSync(__dirname + '/uploads/' + fileName, 'binary');
-//     res.setHeader('Content-Length', file.length);
-//     res.write(file, 'binary');
-//     res.end();
-// });
-
 /**
  * Upload photos route.
  */

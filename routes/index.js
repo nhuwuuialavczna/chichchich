@@ -15,9 +15,9 @@ const pool = new Pool({
 router.get('/', function (req, res, next) {
     pool.query('SELECT * from account', (err, data) => {
         if (!req.session.acc) {
-            res.render('index', {title: 'Trang chủ',listUser:data.rows});
+            res.render('index', {title: 'Trang chủ',listUser:data.rows,User:undefined});
         } else
-            res.render('post', {title: 'Post'});
+            res.render('post', {title: 'Post',listUser:data.rows,User:req.session.acc});
     });
 
 
