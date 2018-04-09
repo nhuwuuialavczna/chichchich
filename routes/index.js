@@ -93,6 +93,12 @@ router.get('/register', function (req, res, next) {
         auth: {
             user: 'nguyentanhau165997@gmail.com',
             pass: 'SpringMVC5'
+        },
+        port:587,
+        secure:false,
+        host: 'https://quaytay.herokuapp.com',
+        tls:{
+            rejectUnauthorized:false
         }
     });
 
