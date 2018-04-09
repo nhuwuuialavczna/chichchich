@@ -88,16 +88,11 @@ router.get('/register', function (req, res, next) {
         }
         pool.end();
     });
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
+    var smtpTransport = mailer.createTransport("SMTP",{
+        service: "Gmail",
         auth: {
-            user: 'nguyentanhau165997@gmail.com',
-            pass: 'SpringMVC5'
-        },
-        secure:false,
-        host: 'mai.gmail.com',
-        tls:{
-            rejectUnauthorized:false
+            user: "nguyentanhau165997@gmail.com",
+            pass: "SpringMVC5"
         }
     });
 
