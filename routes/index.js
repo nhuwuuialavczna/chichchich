@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const {Pool, Client} = require('pg');
-var nodemailer = require('nodemailer');
+// var nodemailer = require('nodemailer');
 var tools = require('./account');
 
 
@@ -65,47 +65,47 @@ router.get('/register', function (req, res, next) {
         }
         pool.end();
     });
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'nguyentanhau165997@gmail.com',
-            pass: 'SpringMVC5'
-        }
-    });
-
-    var mailOptions = {
-        from: 'nguyentanhau165997@gmail.com',
-        to: email,
-        subject: 'Hình như mày mới đăng kí tài khoản ở web của tao',
-        html: '<script>window.onload = function() {' +
-        'var form = document.getElementsByName("form");' +
-        'form.onsubmit = function(){' +
-        'var pass = document.getElementsByName("p");  ' +
-        'var re_pass = document.getElementById("rep");' +
-        'if(pass!==re_pass){' +
-        'document.getElementsByName("err").html("Nhập lại mật khẩu không đúng");' +
-        'return false;' +
-        '}' +
-        'return true;' +
-        '}' +
-        '}</script>' +
-        '<b>Nhập mật khẩu của mày ở đây nha</b><br>' +
-        '<form id="form" action="https://quaytay.herokuapp.com/xacnhan" method="get">' +
-        '<input type="password" name="p" placeholder="Mật khẩu" required id="p">' +
-        '<input type="text" name="email" value="'+email+'">' +
-        '<input type="password" name="rep" placeholder="Nhập lại mật khẩu" required id="rep">' +
-        '<p id="err"></p>' +
-        '<input type="submit" value="Xác nhận">' +
-        '</form>'
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
+    // var transporter = nodemailer.createTransport({
+    //     service: 'gmail',
+    //     auth: {
+    //         user: 'nguyentanhau165997@gmail.com',
+    //         pass: 'SpringMVC5'
+    //     }
+    // });
+    //
+    // var mailOptions = {
+    //     from: 'nguyentanhau165997@gmail.com',
+    //     to: email,
+    //     subject: 'Hình như mày mới đăng kí tài khoản ở web của tao',
+    //     html: '<script>window.onload = function() {' +
+    //     'var form = document.getElementsByName("form");' +
+    //     'form.onsubmit = function(){' +
+    //     'var pass = document.getElementsByName("p");  ' +
+    //     'var re_pass = document.getElementById("rep");' +
+    //     'if(pass!==re_pass){' +
+    //     'document.getElementsByName("err").html("Nhập lại mật khẩu không đúng");' +
+    //     'return false;' +
+    //     '}' +
+    //     'return true;' +
+    //     '}' +
+    //     '}</script>' +
+    //     '<b>Nhập mật khẩu của mày ở đây nha</b><br>' +
+    //     '<form id="form" action="https://quaytay.herokuapp.com/xacnhan" method="get">' +
+    //     '<input type="password" name="p" placeholder="Mật khẩu" required id="p">' +
+    //     '<input type="text" name="email" value="'+email+'">' +
+    //     '<input type="password" name="rep" placeholder="Nhập lại mật khẩu" required id="rep">' +
+    //     '<p id="err"></p>' +
+    //     '<input type="submit" value="Xác nhận">' +
+    //     '</form>'
+    // };
+    //
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //     if (error) {
+    //         console.log(error);
+    //     } else {
+    //         console.log('Email sent: ' + info.response);
+    //     }
+    // });
     res.json({data: 'ok'});
 });
 
