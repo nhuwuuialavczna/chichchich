@@ -94,7 +94,6 @@ router.get('/register', function (req, res, next) {
             user: 'nguyentanhau165997@gmail.com',
             pass: 'SpringMVC5'
         },
-        port:587,
         secure:false,
         host: 'mai.gmail.com',
         tls:{
