@@ -96,7 +96,7 @@ router.get('/register', function (req, res, next) {
         },
         port:587,
         secure:false,
-        host: 'https://quaytay.herokuapp.com',
+        host: 'mai.gmail.com',
         tls:{
             rejectUnauthorized:false
         }
