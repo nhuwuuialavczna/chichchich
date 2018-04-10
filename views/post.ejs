@@ -290,10 +290,10 @@
                     <% }else{ %>
                     <% var doDaiDinhKem = dinhKem.split(':'); %>
                     <% if(doDaiDinhKem.length === 1){ %>
-                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[0]%>"><%=doDaiDinhKem[0].split('_')[doDaiDinhKem.split('_').length-1]%></a>
+                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[0]%>"><%=doDaiDinhKem[0].split('_')[doDaiDinhKem[0].split('_').length-1]%></a>
                     <% }else{ %>
-                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[0]%>"><%=doDaiDinhKem[0].split('_')[doDaiDinhKem.split('_').length-1]%></a>
-                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[1]%>"><%=doDaiDinhKem[1].split('_')[doDaiDinhKem.split('_').length-1]%></a>
+                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[0]%>"><%=doDaiDinhKem[0].split('_')[doDaiDinhKem[0].split('_').length-1]%></a>
+                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[1]%>"><%=doDaiDinhKem[1].split('_')[doDaiDinhKem[1].split('_').length-1]%></a>
                     <% } %>
                     <% } %>
                 </div>
