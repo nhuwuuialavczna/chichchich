@@ -28,3 +28,13 @@ ul.nav.navbar-nav > li > a:hover{
     width: 100%;
     overflow-wrap: normal;
 }
+
+.navbar{
+    left: 0;
+    max-width: 100%;
+    overflow: visible;
+    position: fixed !important;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}

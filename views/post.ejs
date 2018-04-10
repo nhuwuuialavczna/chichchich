@@ -103,6 +103,7 @@
                 var noidung = $('#noidung').val();
                 var duongdan = $('#duongdan').val();
                 var dinhkem = $('#dinhkem').val();
+
                 $.ajax({
                     url: "post/add?noidung=" + noidung + "&duongdan=" + duongdan + "&dinhkem=" + dinhkem,
                     contentType: false,
@@ -120,7 +121,6 @@
                 var a = data.split('.');
                 return a[a.length - 1];
             }
-
         });
     </script>
     <style>
@@ -131,7 +131,7 @@
     <title>Đăng nhập</title>
 </head>
 <body>
-
+<br><br><br>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -220,66 +220,89 @@
         </div>
     </div>
     <br>
-    <div class="row status-box">
-        <div class="col-sm-8">
-            <h2><a style="color: #ff1a7d" href="/account?email=<%= User.email %>"><img style="width: 50px" src="<%= User.hinhanh %>"> Nguyễn
-                    tấn hậu</a></h2>
-            <i class="fa fa-calendar-check-o"></i> 4/10/2018 - 12:45 PM |
-            <a><i class="fa fa-diamond"></i> 5</a>
-            <hr>
-            <p> hzx jvczxv bjchzx bvchzj xvzhxvb zxbv zxvzxh jvzx hvjzxv hzxv jzxvhjv hzx vzxvx zhgvzxh gjzxj vz xjvc
-                cxzv zxvzx vczxvz xvzxv zzzzzzzz zzzzzzzz zzzz zzzz zzzzz zzz zzzz zzz z zzzzz zzzzz zz zzz zzzzz z zzz
-                zzzzzz zzzz zzzz zzz zzzz zzzzzz zzzz zzz z zzzzz zzz z zzzzz zzzz zzz zzzzz z zzz zz zzzzz z</p>
-            <br>
-            <img class="col-sm-6"
-                 src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg">
-            <img class="col-sm-6"
-                 src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg">
-            <br><br>
-            <div class="col-sm-12">
+    <% Post.forEach(function (data, index) { %>
+    <div class="box">
+        <div class="status-box row">
+            <div class="col-sm-8">
+                <h2><a style="color: #ff1a7d" href="/account?email=<%= data.email %>"><img style="width: 50px"
+                                                                                           src="<%= getHinhOfBaiViet(listUser, data.email) %>"><%= data.tenbaiviet %>
+                    </a></h2>
+                <i class="fa fa-calendar-check-o"></i> <%= data.thoigian %> |
+                <a><i class="fa fa-diamond"></i> <%= data.danhgia %></a>
                 <hr>
-                <div class="box_binhluan">
-                    <div class="col-sm-1"><img style="width: 70px" class="col-sm-6"
-                              src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg"></div>
-                    <div class="col-sm-11">
-
-                        <a style=" color: #ff1a7d" href="/account?email=<%= User.email %>"><%= User.name %></a>
-                            <p>zxvc z  xvcx zvz xvcz xvczx vzxvcv zvz xhk vjfka  sj fkas d jfkasd l asj dhfa sk jnhabs kjfbk jh bkj njnh</p>
-
-                    </div>
-                </div>
-
-                <div class="box_binhluan">
-                    <div class="col-sm-1"><img style="width: 70px" class="col-sm-6"
-                                               src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg"></div>
-                    <div class="col-sm-11">
-
-                        <a style=" color: #ff1a7d" href="/account?email=<%= User.email %>"><%= User.name %></a>
-                        <p>zxvc z  xvcx zvz xvcz xvczx vzxvcv zvz xhk vjfka  sj fkas d jfkasd l asj dhfa sk jnhabs kjfbk jh bkj njnh</p>
-
-                    </div>
-                </div>
-                <div class="addbinhluan">
-                    <div class="col-sm-1"><img style="width: 70px" class="col-sm-6"
-                                               src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg"></div>
-                    <div class="col-sm-11">
-           <input type="text" class="form-control" placeholder="Nhập bình luận của bạn...">
-                    </div>
-                </div>
-            </div>
-            <hr>
-        </div>
-
-        <div class="col-sm-4">
-            <h3>Tệp đính kèm</h3>
-            <div>
-                <a><i class="fa fa-file-zip-o"></i> hau.zip</a>
+                <p> <%= data.noidung %></p>
                 <br>
-                <a><i class="fa fa-file-pdf-o"></i> hau.pdf</a>
+                <% var cd = data.hinhanh; %>
+                <% if(cd === '' || cd === undefined){ %>
+                <% }else{ %>
+                <% var doDai = cd.split(':'); %>
+                <% if(doDai.length == 1){ %>
+                    <img class="col-sm-6" src="https://uploadserver.azurewebsites.net/img?fileName=<%=doDai[0]%>">
+                <% }else{ %>
+                    <img class="col-sm-6" src="https://uploadserver.azurewebsites.net/img?fileName=<%=doDai[0]%>">
+                    <img class="col-sm-6" src="https://uploadserver.azurewebsites.net/img?fileName=<%=doDai[1]%>">
+                <% } %>
+                <% } %>
+                <br><br>
+                <div class="col-sm-12">
+                    <hr>
+                    <div class="box_binhluan">
+                        <div class="col-sm-1"><img style="width: 70px" class="col-sm-6"
+                                                   src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg"></div>
+                        <div class="col-sm-11">
+
+                            <a style=" color: #ff1a7d" href="/account?email=<%= User.email %>"><%= User.name %></a>
+                            <p>zxvc z xvcx zvz xvcz xvczx vzxvcv zvz xhk vjfka sj fkas d jfkasd l asj dhfa sk jnhabs
+                                kjfbk
+                                jh bkj njnh</p>
+
+                        </div>
+                    </div>
+
+                    <div class="box_binhluan">
+                        <div class="col-sm-1"><img style="width: 70px" class="col-sm-6"  src="https://uploadserver.azurewebsites.net/img?fileName=<%=User.hinhanh%>"></div>
+                        <div class="col-sm-11">
+                            <a style=" color: #ff1a7d" href="/account?email=<%= User.email %>"><%= User.name %></a>
+                            <p>zxvc z xvcx zvz xvcz xvczx vzxvcv zvz xhk vjfka sj fkas d jfkasd l asj dhfa sk jnhabs
+                                kjfbk
+                                jh bkj njnh
+                            </p>
+                        </div>
+                    </div>
+                    <div class="addbinhluan">
+                        <div class="col-sm-1"><img style="width: 70px" class="col-sm-6" src="<%%>"></div>
+                        <div class="col-sm-11">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Nhập bình luận của bạn...">
+                                <span class="input-group-btn"><button class="btn btn-default" type="button">Go!</button> </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>Tệp đính kèm</h3>
+                <div>
+                    <% var dinhKem = data.dinhkem; %>
+                    <% if(dinhKem === '' || dinhKem === undefined){ %>
+                    <% }else{ %>
+                    <% var doDaiDinhKem = dinhKem.split(':'); %>
+                    <% if(doDaiDinhKem.length === 1){ %>
+                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[0]%>"><%=doDaiDinhKem[0].split('_')[doDaiDinhKem.split('_').length-1]%></a>
+                    <% }else{ %>
+                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[0]%>"><%=doDaiDinhKem[0].split('_')[doDaiDinhKem.split('_').length-1]%></a>
+                    <i class="fa fa-file"></i> <a class="col-sm-6" href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[1]%>"><%=doDaiDinhKem[1].split('_')[doDaiDinhKem.split('_').length-1]%></a>
+                    <% } %>
+                    <% } %>
+                </div>
             </div>
         </div>
+
+        <br>
     </div>
-    <br>
+    <% }); %>
 </div>
 </body>
 </html>

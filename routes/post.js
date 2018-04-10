@@ -31,11 +31,10 @@ router.get('/add', function (req, res, next) {
         }
     });
 
-    res.json({data: 'ok'});
+    res.render('post', {title: 'Post', listUser: listAccount, User: req.session.acc, Post: listPost});
 });
 
 router.get('/', function (req, res, next) {
-    console.dir(getAllPost());
     res.send('respond with a resource');
 });
 
@@ -51,11 +50,17 @@ function Post(mabaiviet, tenbaiviet, thoigian, danhgia, hinhanh, email, noidung,
 }
 
 function getAllPost() {
-    pool.query('SELECT * from account', (err, data) => {
+    pool.query('SELECT * from baiviet', (err, data) => {
         if (err) return undefined;
         return data.rows;
     });
 }
 
+function getAllAccount() {
+    pool.query('SELECT * from account', (err, data) => {
+        if (err) return undefined;
+        return data.rows;
+    });
+}
 
 module.exports = router;
