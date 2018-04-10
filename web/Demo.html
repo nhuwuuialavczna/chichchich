@@ -4,48 +4,20 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="xuli.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            console.log(window.outerHeight);
+           $('.gui').on('click',function () {
+               console.dir(this.id);
+           }) ;
+        });
+
+    </script>
 </head>
 <body>
-<form action="" id="form">
-    <input type="text" id="username"><br>
-    <input type="text" id="pass"><br>
-    <input type="text" id="re_pass"><br>
-    <input type="text" id="email"><br>
-    <input type="submit" value="Ok">
-</form>
-<hr>
-<hr>
-<div id="div1">
-    <p class="p">Thẻ p trong thẻ div 1</p>
-    <h3 id="h3">Thẻ h3 trong thẻ div 1</h3>
-</div>
-<hr>
-<hr>
-
-<div id="div2">
-    <p class="p">Thẻ p trong thẻ div 2</p>
-    <h3 id="h3">Thẻ h3 trong thẻ div 2</h3>
-</div>
-<button id="btnClick">Nút trong div2</button>
-<hr>
-<hr>
-<div id="div3">
-    <select name="select1" id="select1">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-    </select>
-</div>
-<hr>
-<hr>
-<div id="div4">
-    <select name="select1" id="select2">
-        <option value="1 trong select 2">1</option>
-        <option value="2 trong select 2">2</option>
-        <option value="3">3</option>
-    </select>
-</div>
-
+<button class="gui" id="gui1">Gửi 1</button>
+<button class="gui" id="gui2">Gửi 2</button>
+<button class="gui" id="gui3">Gửi 3</button>
 </body>
 </html>

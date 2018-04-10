@@ -29,13 +29,31 @@ router.get('/add', function (req, res, next) {
             res.json({data: 'fail'});
             return;
         }
+        res.json({data: 'ok'});
     });
 
-    res.render('post', {title: 'Post', listUser: listAccount, User: req.session.acc, Post: listPost});
 });
 
-router.get('/', function (req, res, next) {
-    res.send('respond with a resource');
+router.get('/addbinhluan', function (req, res, next) {
+    var maBinhLuan = Date.now();
+    var noidung = req.query.noidung;
+    var mabaiviet = req.query.mabaiviet;
+    var date = new Date();
+    var email = req.session.acc.email;
+    var thoiGian = date.getHours()+":"+date.getMinutes()+" - " +date.getDay()+":"+ date.getMonth() + ":"+date.getYear();
+    var sql = "insert into binhluanbaiviet values('"+maBinhLuan+"','"+noidung+"','"+mabaiviet+"','"+email+"','"+thoiGian+"')";
+
+    pool.query(sql, (err, data) => {
+        if(err) {
+            console.log(err);
+            res.json({data: 'fail'});
+            return;
+        }
+        console.log('vcxzvczxcvzx');
+        res.json({data: 'ok'});
+    });
+
+
 });
 
 function Post(mabaiviet, tenbaiviet, thoigian, danhgia, hinhanh, email, noidung, dinhkem) {

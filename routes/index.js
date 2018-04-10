@@ -20,25 +20,48 @@ router.get('/', function (req, res, next) {
             pool.query('SELECT * from baiviet', (err, data) => {
                 if (!req.session.acc) {
                     res.render('index', {title: 'Trang chủ', listUser: data.rows, User: undefined});
-                } else
-                    res.render('post', {
-                        title: 'Post',
-                        listUser: dataAcc.rows,
-                        User: req.session.acc,
-                        Post: data.rows,
-                        getHinhOfBaiViet: getHinhOfBaiViet,
-
+                } else {
+                    pool.query('SELECT * from binhluanbaiviet', (err, dsBinhLuan) => {
+                        res.render('post', {
+                            title: 'Post',
+                            listUser: dataAcc.rows,
+                            User: req.session.acc,
+                            Post: data.rows,
+                            getUserOfBaiVietVaBinhLuan: getUserOfBaiVietVaBinhLuan,
+                            getDSBinhLuan:getDSBinhLuan(data.rows,dsBinhLuan.rows)
+                        });
                     });
+                }
             });
         }
     });
 });
 
-function getHinhOfBaiViet(rowsAcc, email) {
+
+function getDSBinhLuan(dsPost, dsBinhLuan) {
+    var list = [];
+    for (var i = 0; i < dsPost.length; i++) {
+        var post = dsPost[i];
+        list[post.mabaiviet] = getBinhLuanTheoMa(dsBinhLuan,post.mabaiviet);
+    }
+    return list;
+}
+
+function getBinhLuanTheoMa(dsBinhLuan,maBaiViet) {
+    var ds = [];
+    dsBinhLuan.forEach(function (data) {
+       if(data.mabaiviet === maBaiViet){
+           ds.push(data);
+       }
+    });
+    return ds;
+}
+
+function getUserOfBaiVietVaBinhLuan(rowsAcc, email) {
     for (var i = 0; i < rowsAcc.length; i++) {
         var acc = rowsAcc[i];
         if (acc.email === email) {
-            return acc.hinhanh;
+            return acc;
         }
     }
     return undefined;
