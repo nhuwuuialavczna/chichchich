@@ -11,24 +11,32 @@ const pool = new Pool({
 });
 /* GET users listing. */
 router.get('/add', function (req, res, next) {
-    console.dir(req.query);
-    pool.query('SELECT * from account', (err, data) => {
-        if (!req.session.acc) {
-            res.render('index', {title: 'Trang chủ', listUser: data.rows, User: undefined});
-        } else
-            res.render('post', {title: 'Post', listUser: data.rows, User: req.session.acc});
+    var queries = req.query;
+    var user = req.session.acc;
+    var mabaiviet = Date.now();
+    var tenbaiviet = user.name;
+    var thoigian = new Date().getDate();
+    var danhgia = 0;
+    var hinhanh = queries.duongdan; // là hình ảnh
+    var dinhkem = queries.dinhkem; // tệp đính kèm
+    var email = user.email;
+    var noidung = queries.noidung;
+
+    var sql = "insert into baiviet values('" + mabaiviet + "','" + tenbaiviet + "','" + thoigian + "','" + danhgia + "','" + hinhanh + "','" + email + "','" + noidung + "','" + dinhkem + "')";
+
+    pool.query(sql, (err, data) => {
+        if(err) {
+            res.json({data: 'fail'});
+            return;
+        }
     });
 
-    res.send('respond with a resource');
+    res.json({data: 'ok'});
 });
 
 router.get('/', function (req, res, next) {
-    pool.query('SELECT * from account', (err, data) => {
-        if (!req.session.acc) {
-            res.render('index', {title: 'Trang chủ', listUser: data.rows, User: undefined});
-        } else
-            res.render('post', {title: 'Post', listUser: data.rows, User: req.session.acc});
-    });
+    console.dir(getAllPost());
+    res.send('respond with a resource');
 });
 
 function Post(mabaiviet, tenbaiviet, thoigian, danhgia, hinhanh, email, noidung, dinhkem) {
@@ -41,5 +49,13 @@ function Post(mabaiviet, tenbaiviet, thoigian, danhgia, hinhanh, email, noidung,
     this.noidung = noidung;
     this.dinhkem = dinhkem;
 }
+
+function getAllPost() {
+    pool.query('SELECT * from account', (err, data) => {
+        if (err) return undefined;
+        return data.rows;
+    });
+}
+
 
 module.exports = router;

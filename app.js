@@ -24,9 +24,13 @@ app.use('/uploads', express.static('uploads'));
 app.use(session({secret: "Shh, its a secret!"}));
 var indexRouter = require('./routes/index');
 var postRouter = require('./routes/post');
+var accountRouter = require('./routes/account');
+
 
 app.use('/', indexRouter);
 app.use('/post', postRouter);
+app.use('/account', accountRouter);
+
 app.use(function(req, res, next) {
     var oneof = false;
     if(req.headers.origin) {

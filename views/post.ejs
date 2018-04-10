@@ -9,8 +9,9 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="/public/assets/css/post.css">
     <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--<script src="/public/xuly.js"></script>-->
     <script>
         $(document).ready(function () {
@@ -98,6 +99,23 @@
                 }
             });
 
+            $("#dang").on('click', function () {
+                var noidung = $('#noidung').val();
+                var duongdan = $('#duongdan').val();
+                var dinhkem = $('#dinhkem').val();
+                $.ajax({
+                    url: "post/add?noidung=" + noidung + "&duongdan=" + duongdan + "&dinhkem=" + dinhkem,
+                    contentType: false,
+                    processData: false,
+                    type: 'get',
+                    success: function (data) {
+                        alert(data);
+                    }, error: function (err) {
+
+                    }
+                });
+            });
+
             function getPhanMoRong(data) {
                 var a = data.split('.');
                 return a[a.length - 1];
@@ -112,7 +130,7 @@
     </style>
     <title>Đăng nhập</title>
 </head>
-<body style="font-family: monospace">
+<body>
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -159,47 +177,109 @@
                         <li><a href="#">Đăng xuất</a></li>
                     </ul>
                 </li>
-                <li><button class="btn btn-lg btn-primary">Đăng bài</button></li>
+                <li>
+                    <button class="btn btn-lg btn-primary">Đăng bài</button>
+                </li>
                 <% } %>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
 <div class="container">
-    <div class="media" style="border: 2px solid green;border-spacing: 3px">
-        <div class="media-left media-middle">
-            <a href="#">
-                <img style="width: 100px" class="media-object" src="<%= User.hinhanh %>">
-            </a>
-        </div>
-        <div class="media-body">
-            <div class="col-sm-5">
-                <h3 class="media-heading">Bạn muốn nói gì ?</h3>
-                <form id="form" action="/post/add">
-                    <textarea name="status" style=" resize: none;" id="status" cols="30" rows="7"
+    <div class="row">
+        <div class="media">
+            <div class="media-left media-middle">
+                <a href="#">
+                    <img style="width: 100px" class="media-object" src="<%= User.hinhanh %>">
+                </a>
+            </div>
+            <div class="media-body">
+                <div class="col-sm-5">
+                    <h3 class="media-heading">Bạn muốn nói gì ?</h3>
+                    <textarea name="noidung" style=" resize: none;" id="noidung" cols="30" rows="7"
                               onresize="return false" class="form-control"></textarea>
                     <input style="display: none" name="duongdan" id="duongdan">
                     <input style="display: none" name="dinhkem" id="dinhkem">
                     <hr>
-                    <button type="submit" class="btn btn-primary">Đăng</button>
+                    <button type="submit" id="dang" class="btn btn-primary">Đăng</button>
                     <button type="reset" class="btn btn-primary">Hủy</button>
-                </form>
-            </div>
-            <div class="col-sm-4">
-                <p>Ảnh & video (Max 2):<span style="color: red" id="tb1"></span></p>
-                <input type="file" id="batcuthugi">
-                <div id="hienthi"></div>
+                </div>
+                <div class="col-sm-4">
+                    <p>Ảnh & video (Max 2):<span style="color: red" id="tb1"></span></p>
+                    <input type="file" id="batcuthugi">
+                    <div id="hienthi"></div>
 
-            </div>
-            <div class="col-sm-3">
-                <p>Tệp(Max 2):<span style="color: red" id="tb2"></span></p>
-                <input type="file" id="tepdinhkem">
-                <div id="hienthidinhkem"></div>
+                </div>
+                <div class="col-sm-3">
+                    <p>Tệp(Max 2):<span style="color: red" id="tb2"></span></p>
+                    <input type="file" id="tepdinhkem">
+                    <div id="hienthidinhkem"></div>
 
+                </div>
             </div>
         </div>
     </div>
+    <br>
+    <div class="row status-box">
+        <div class="col-sm-8">
+            <h2><a style="color: #ff1a7d" href="/account?email=<%= User.email %>"><img style="width: 50px" src="<%= User.hinhanh %>"> Nguyễn
+                    tấn hậu</a></h2>
+            <i class="fa fa-calendar-check-o"></i> 4/10/2018 - 12:45 PM |
+            <a><i class="fa fa-diamond"></i> 5</a>
+            <hr>
+            <p> hzx jvczxv bjchzx bvchzj xvzhxvb zxbv zxvzxh jvzx hvjzxv hzxv jzxvhjv hzx vzxvx zhgvzxh gjzxj vz xjvc
+                cxzv zxvzx vczxvz xvzxv zzzzzzzz zzzzzzzz zzzz zzzz zzzzz zzz zzzz zzz z zzzzz zzzzz zz zzz zzzzz z zzz
+                zzzzzz zzzz zzzz zzz zzzz zzzzzz zzzz zzz z zzzzz zzz z zzzzz zzzz zzz zzzzz z zzz zz zzzzz z</p>
+            <br>
+            <img class="col-sm-6"
+                 src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg">
+            <img class="col-sm-6"
+                 src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg">
+            <br><br>
+            <div class="col-sm-12">
+                <hr>
+                <div class="box_binhluan">
+                    <div class="col-sm-1"><img style="width: 70px" class="col-sm-6"
+                              src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg"></div>
+                    <div class="col-sm-11">
 
+                        <a style=" color: #ff1a7d" href="/account?email=<%= User.email %>"><%= User.name %></a>
+                            <p>zxvc z  xvcx zvz xvcz xvczx vzxvcv zvz xhk vjfka  sj fkas d jfkasd l asj dhfa sk jnhabs kjfbk jh bkj njnh</p>
+
+                    </div>
+                </div>
+
+                <div class="box_binhluan">
+                    <div class="col-sm-1"><img style="width: 70px" class="col-sm-6"
+                                               src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg"></div>
+                    <div class="col-sm-11">
+
+                        <a style=" color: #ff1a7d" href="/account?email=<%= User.email %>"><%= User.name %></a>
+                        <p>zxvc z  xvcx zvz xvcz xvczx vzxvcv zvz xhk vjfka  sj fkas d jfkasd l asj dhfa sk jnhabs kjfbk jh bkj njnh</p>
+
+                    </div>
+                </div>
+                <div class="addbinhluan">
+                    <div class="col-sm-1"><img style="width: 70px" class="col-sm-6"
+                                               src="/uploads/393c4776ca8deb35a2392c2e33e09a0d.jpg"></div>
+                    <div class="col-sm-11">
+           <input type="text" class="form-control" placeholder="Nhập bình luận của bạn...">
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <div class="col-sm-4">
+            <h3>Tệp đính kèm</h3>
+            <div>
+                <a><i class="fa fa-file-zip-o"></i> hau.zip</a>
+                <br>
+                <a><i class="fa fa-file-pdf-o"></i> hau.pdf</a>
+            </div>
+        </div>
+    </div>
+    <br>
 </div>
 </body>
 </html>

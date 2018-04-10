@@ -19,8 +19,6 @@ router.get('/', function (req, res, next) {
         } else
             res.render('post', {title: 'Post',listUser:data.rows,User:req.session.acc});
     });
-
-
 });
 
 
