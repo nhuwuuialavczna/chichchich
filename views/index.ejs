@@ -24,7 +24,6 @@
                     url: '/login?email=' + email + '&pass=' + pass,
                     type: 'get',
                     success: function (data) {
-                        console.dir(data);
                         if (data.data === 'ok') {
                             window.location.href = '/';
                         } else {

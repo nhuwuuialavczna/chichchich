@@ -14,9 +14,8 @@ const pool = new Pool({
 });
 
 
-router.get('/livecode',function (req,res,next) {
-    console.log(req.session.acc);
-    res.render('livecode',{User: req.session.acc});
+router.get('/livecodepage',function (req,res,next) {
+    res.render('livecodepage',{User: req.session.acc});
 });
 
 router.get('/', function (req, res, next) {

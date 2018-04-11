@@ -12,7 +12,7 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="/socket.io/socket.io.js"></script><link rel="stylesheet" href="/public/assets/css/message.css">
     <script src="/public/xuly.js"></script>
-    <link rel="stylesheet" type="text/css" href="/public/layout.css"/> <script src="/public/assets/js/menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/layout.css"/><script src="/public/assets/js/menu.js"></script>
     <script>
 
 
@@ -146,8 +146,8 @@
                 <li><a href="/">Trang chủ</a></li>
                 <% if(User !== undefined){ %>
                 <li ><a style="color: red" href="/message">Chat công cộng</a></li>
-                <li><a href="/livecode">Live code</a></li>
-                <!--<li><a href="/game">Phòng game</a></li>-->
+                <li><a href="/livecodepage">Live code</a></li>
+                <li><a href="/livecode/registerpage">Register live</a></li>
                 <li><a href="/dieukhoan">Hướng dẫn</a></li>
                 <li><a href="/lienhe">Liên hệ</a></li>
 
@@ -165,7 +165,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Profile <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/">Trang cá nhân</a></li>
+                        <li><a href="/account/profile?email=<%User.email%>">Trang cá nhân</a></li>
                         <li><a href="#">Đổi mật khẩu</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a id="btnDangXuat" href="#">Đăng xuất</a></li>

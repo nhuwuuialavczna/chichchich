@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Đăng kí live code</title>
+    <script src="/public/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/assets/css/livecodepage.css">
+    <script src="/public/assets/js/menu.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('.dangki').on('click', function () {
+                $('#tbDK').html('Đang tiến hành đăng kí');
+                var malivecode = this.id;
+                var tenlivecode = $('#ten' + malivecode).val();
+                var mota = $("#mota" + malivecode).val();
+                $.ajax({
+                    url: '/livecode/register?malivecode=' + malivecode + '&tenlivecode=' + tenlivecode + '&mota=' + mota,
+                    type: 'get',
+                    success: function (data) {
+                        if (data.data === 'ok') {
+                            $('#ten' + malivecode).attr('readOnly',true);
+                            $('#mota' + malivecode).attr('readOnly',true);
+                            $('#'+malivecode).html('Vô hiệu');
+                            $('#'+malivecode).attr('disabled','disabled');
+                            $("#email"+malivecode).html(User.email);
+                            $('#tbDK').html('Đăng kí thành công');
+                        }
+                    },
+                    error: function (err) {
+                        $('#tbDK').html('Lỗi đăng kí');
+                    }
+                });
+
+            });
+        });
+
+    </script>
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Trang chủ</a></li>
+                <% if(User !== undefined){ %>
+                <li><a href="/message">Chat công cộng</a></li>
+                <li><a href="/livecodepage">Live code</a></li>
+                <li><a style="color: red" href="/livecode/registerpage">Register live</a></li>
+                <li><a href="/dieukhoan">Hướng dẫn</a></li>
+                <li><a href="/lienhe">Liên hệ</a></li>
+                <% } %>
+            </ul>
+            <% if(User !== undefined){ %>
+            <form id="formtimkiem" class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Tìm bất cứ thứ gì">
+                </div>
+                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Profile <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a id="trangcanhan">Trang cá nhân</a></li>
+                        <li><a id="doimatkhau">Đổi mật khẩu</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a id="btnDangXuat" href="#">Đăng xuất</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/#dangbai" class="btn btn-lg btn-primary">Đăng bài</a>
+                </li>
+                <% } %>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<br><br><br><br>
+<div class="container">
+    <h2>Bảng đăng kí</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Email</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+
+
+        <% liveCodeList.forEach(function (data) { console.log(User)%>
+        <% if(data.email !== User.email && (data.email === '' || data.email === undefined || data.email === 'null' || data.email === null)){ %>
+        <tr>
+            <td width="20%"><input  id="ten<%= data.malivecode %>" value="<%= data.tenlivecode %>"
+                                   class="form-control"
+                                   type="text"
+                                   placeholder="Nhập tên cho live code"></td>
+            <td width="5%"><%= data.thoigianbatdau %></td>
+            <td width="5%"><%= data.thoigianketthuc %></td>
+            <td width="20%" id="email<%= data.malivecode %>"><%= data.email %></td>
+            <td width="42"><input  id="mota<%= data.malivecode %>" value="<%= data.mota %>" type="text"
+                                  class="form-control"
+                                  placeholder="Nhập mô tả ngắn thôi....."></td>
+            <td width="8%">
+                <%if(DaDK === 'chua'){%>
+                <button id="<%= data.malivecode %>" class="btn btn-primary dangki">Đăng kí</button>
+                <%}else{%>
+                <button disabled class="btn btn-primary">Vô hiệu</button>
+                <%}%>
+            </td>
+        </tr>
+        <% } else { %>
+        <tr>
+            <td width="20%"><input readonly id="ten<%= data.malivecode %>" value="<%= data.tenlivecode %>"
+                                   class="form-control"
+                                   type="text"
+                                   placeholder="Nhập tên cho live code"></td>
+            <td width="5%"><%= data.thoigianbatdau %></td>
+            <td width="5%"><%= data.thoigianketthuc %></td>
+            <td width="20%" id="email<%= data.malivecode %>"><%= data.email %></td>
+            <td width="42"><input readonly id="mota<%= data.malivecode %>" value="<%= data.mota %>" type="text"
+                                  class="form-control"
+                                  placeholder="Nhập mô tả ngắn thôi....."></td>
+            <td width="8%">
+                <button disabled class="btn btn-primary">Vô hiệu</button>
+            </td>
+        </tr>
+        <% } %>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

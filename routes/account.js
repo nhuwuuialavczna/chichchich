@@ -7,4 +7,9 @@ router.get('/logout', function (req, res, next) {
 });
 
 
+router.get('/profile', function (req, res, next) {
+    req.session.acc  = undefined;
+    res.json({data:'ok'});
+});
+
 module.exports = router;

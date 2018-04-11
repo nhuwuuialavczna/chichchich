@@ -50,7 +50,6 @@ router.get('/addbinhluan', function (req, res, next) {
             res.json({data: 'fail'});
             return;
         }
-        console.log('vcxzvczxcvzx');
         res.json({data: 'ok'});
     });
 
