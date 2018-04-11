@@ -219,4 +219,5 @@ app.post('/upload_photos', function (req, res) {
 // app.listen(app.get('port'), function() {
 //     console.log('Express started at port ' + app.get('port'));
 // });
+process.env.TZ = 'Asia/Ho_Chi_Minh';
 server.listen(process.env.PORT || 3000);

@@ -7,7 +7,6 @@ const pool = new Pool({
     database: 'df07n687imb2qc',
     password: '9b0b4ec6667eaa650169c1b1ee6510a0b81bfaca52643c853d93b3ce609a512a',
     port: 5432, ssl: true
-
 });
 
 
