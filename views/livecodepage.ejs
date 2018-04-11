@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Live code</title>
+    <script src="/public/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/public/assets/css/message.css">
+    <script src="/public/xuly.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/layout.css"/>
+    <script src="/public/assets/js/menu.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <link rel="stylesheet" href="/public/assets/editor/doc/docs.css">
+    <link rel="stylesheet" href="/public/assets/editor/lib/codemirror.css">
+    <link rel="stylesheet" href="/public/assets/editor/lib/footer.css">
+    <!-- styles the fullscreen and search features -->
+    <link rel="stylesheet" href="/public/assets/editor/addon/display/fullscreen.css">
+    <link rel="stylesheet" href="/public/assets/editor/addon/dialog/dialog.css">
+
+    <!-- our primary themes list -->
+    <link rel="stylesheet" href="/public/assets/editor/theme/ambiance.css">
+    <link rel="stylesheet" href="/public/assets/editor/theme/eclipse.css">
+    <link rel="stylesheet" href="/public/assets/editor/theme/midnight.css">
+    <link rel="stylesheet" href="/public/assets/editor/theme/monokai.css">
+    <link rel="stylesheet" href="/public/assets/editor/theme/night.css">
+
+    <!-- essential scripts for functionality -->
+    <script src="/public/assets/editor/lib/codemirror.js"></script>
+    <script src="/public/assets/editor/mode/javascript/javascript.js"></script>
+    <script src="/public/assets/editor/keymap/extra.js"></script>
+    <script src="/public/assets/editor/addon/selection/active-line.js"></script>
+    <script src="/public/assets/editor/addon/edit/matchbrackets.js"></script>
+    <script src="/public/assets/editor/addon/edit/closebrackets.js"></script>
+    <script src="/public/assets/editor/mode/xml/xml.js"></script>
+    <script src="/public/assets/editor/addon/display/fullscreen.js"></script>
+    <script src="/public/assets/editor/addon/search/search.js"></script>
+    <script src="/public/assets/editor/addon/search/searchcursor.js"></script>
+    <script src="/public/assets/editor/addon/dialog/dialog.js"></script>
+    <!--<script type="text/javascript" src="js/caretposition.js"></script>-->
+    <!-- styles and scripts for things like slider tab -->
+    <script src="/public/assets/editor/lib/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/public/assets/editor/lib/clike.js"></script>
+    <script src="/public/assets/editor/lib/slideout.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.slide-out-div').tabSlideOut(
+                {
+                    /* ©2009 William Paoli */
+                    tabHandle: '.handle',                     //class of the element that will become your tab
+                    pathToTabImage: './editor/images/tab.png',//path to the image for the tab //Optionally can be set using css
+                    imageHeight: '137px',                     //height of tab image           //Optionally can be set using css
+                    imageWidth: '35px',                       //width of tab image            //Optionally can be set using css
+                    tabLocation: 'right',                     //side of screen where tab lives, top, right, bottom, or left
+                    speed: 300,                               //speed of animation
+                    action: 'click',                          //options: 'click' or 'hover', action to trigger animation
+                    topPos: '20px',                           //position from the top/ use if tabLocation is left or right
+                    leftPos: '20px',                          //position from left/ use if tabLocation is bottom or top
+                    fixedPosition: true                       //options: true makes it stick (fixed position) on scroll
+                });
+        });
+    </script>
+    <style type="text/css">
+        .slide-out-div {
+            padding: 5px;
+            width: 375px;
+            background: #EDEDED;
+            border: 2px solid #FF7519;
+            z-index: 2; /* hack for IE's unclickable tabSlideOut*/
+        }
+
+    </style>
+
+    <script>
+        socket.emit("client-send-Username", '<%= User.name %>');
+        socket.on("server-send-danhsach-Users", function (dataz) {
+            $("#boxContent").html("");
+            var current = $("#currentUser").html();
+            dataz.forEach(function (i) {
+                if (current === i) {
+                    $("#boxContent").append("<div style='color: red' class='user'>" + i + "</div>");
+                } else {
+                    $("#boxContent").append("<div class='user'>" + i + "</div>");
+                }
+            });
+        });
+        socket.on('server-send-code', function (data) {
+            editor.doc.setValue(data);
+        });
+        socket.on("server-send-dki-thanhcong", function (datab) {
+            $("#currentUser").html(datab);
+        });
+
+        $(document).ready(function () {
+            $("#run").on('click', function () {
+                alert('Đang làm. Đợi bản nâng cấp kế tiếp đê.');
+            });
+            $('#play').on('keyup', function (e) {
+                socket.emit("client-send-code", editor.doc.getValue());
+            });
+
+        });
+
+    </script>
+
+</head>
+<body style="font-family: monospace">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Trang chủ</a></li>
+                <% if(User !== undefined){ %>
+                <li><a href="/message">Chat công cộng</a></li>
+                <li><a style="color: red" href="/livecodepage">Live code</a></li>
+                <li><a href="/livecode/registerpage">Register live</a></li>
+                <li><a href="/dieukhoan">Hướng dẫn</a></li>
+                <li><a href="/lienhe">Liên hệ</a></li>
+                <% } %>
+            </ul>
+            <% if(User !== undefined){ %>
+            <form id="formtimkiem" class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Tìm bất cứ thứ gì">
+                </div>
+                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Profile <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/">Trang cá nhân</a></li>
+                        <li><a href="#">Đổi mật khẩu</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a id="btnDangXuat" href="#">Đăng xuất</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/#dangbai" class="btn btn-lg btn-primary">Đăng bài</a>
+                </li>
+                <% } %>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<br><br><br><br>
+<div class="container">
+    <div class="col-sm-10">
+        <form action="" method="post" id="play">
+            <textarea ng-model="myTextarea" name="code" id="code" readonly></textarea>
+        </form>
+    </div>
+    <div class="col-sm-2">
+        <select name="themeset" class="form-control" onchange="selectTheme()" id="select">
+            <option>ambiance</option>
+            <option>eclipse</option>
+            <option>midnight</option>
+            <option>monokai</option>
+            <option>night</option>
+        </select><br>
+        <button class="btn btn-default" id="run">Run</button>
+        <hr>
+        <div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">Bọn ngu</div>
+                <div class="panel-body" id="boxContent">
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+</body>
+<script>
+    $(document).ready(function () {
+//        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    // disable various key functions
+    $(document).on("keypress", 'form', function (e) {
+        var mykeycode = e.keyCode || e.which;
+        if (mykeycode == 13) { // ENTER --> form submit
+            e.preventDefault();
+            return false;
+        }
+        /* BUG: PREVENTS 'r' FROM FIRING!
+         if (mykeycode == 114) { // F3 --> document search
+         e.preventDefault();
+         return false;
+         }
+         */
+    });
+    editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true,
+        mode: "text/x-java",
+        extraKeys: {
+            "F12": function (cm) {
+                cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+                editor.refresh();
+            },
+            "F11": function () {
+                if ((document.fullScreenElement && document.fullScreenElement !== null) ||
+                    (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+                    if (document.documentElement.requestFullScreen) {
+                        document.documentElement.requestFullScreen();
+                    } else if (document.documentElement.mozRequestFullScreen) {
+                        document.documentElement.mozRequestFullScreen();
+                    } else if (document.documentElement.webkitRequestFullScreen) {
+                        document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+                    }
+                }
+                else {
+                    if (document.cancelFullScreen) {
+                        document.cancelFullScreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitCancelFullScreen) {
+                        document.webkitCancelFullScreen();
+                    }
+                }
+                editor.refresh();
+            },
+            "F4": function () {
+                openApplet();
+            },
+            "F3": function () {
+                getImportPaste();
+            },
+            "F2": function () {
+                // document.forms[0].submit();
+                postForCompile();
+            }
+        }
+    });
+
+    editor.setOption("readOnly", 'nocursor');
+
+    // clear editor on CTRL+K combination
+    var map = [];
+    onkeydown = onkeyup = function (e) {
+        e = e || event;
+        map[e.keyCode] = e.type == 'keydown';
+        if (map[17] && map[75]) {
+            editor.value = '';
+        }
+    };
+    var input = document.getElementById("select");
+
+    function selectTheme() {
+        var theme = input.options[input.selectedIndex].innerHTML;
+        editor.setOption("theme", theme);
+    }
+
+    //var choice = document.location.search && decodeURIComponent(document.location.search.slice(1));
+    var theme = input.options[input.selectedIndex].innerHTML;
+    if (theme) {
+        input.value = theme;
+        editor.setOption("theme", theme);
+    }
+    //use all available space
+    var browserHeight = document.documentElement.clientHeight;
+    editor.getWrapperElement().style.height = (browserHeight - (210 + 10)) + 'px';
+    editor.refresh();
+    window.onresize = function () {
+        var browserHeight = document.documentElement.clientHeight;
+        editor.getWrapperElement().style.height = (browserHeight - (210 + 10)) + 'px';
+        editor.refresh();
+    };
+    // if we have some kind of error message
+    //    if (typeof(data.errormsg) != "undefined") {
+    //        alert(data.errormsg);
+    //    }
+
+    function getImportPaste() {
+        window.importme = prompt("Import a Gist URL?");
+        if (window.importme) {
+            $.post("index.html", {
+                    'code': editor.doc.getValue(),
+                    'passargs': $('input:text[name=passargs]').val(),
+                    'importme': window.importme,
+                    'respond': 'respond'
+                },
+                function (data) {
+                    window.clearInterval(waiting);
+                    $("#buildout").val(data.buildout);
+                    $("#execsout").val(data.execsout);
+                    window.webapple = data.webapple;
+                    window.noinputs = data.noinputs;
+                }
+            );
+            $("#buildout").val("importing");
+            $("#execsout").val("validating");
+            waiting = setInterval(function () {
+                $("#buildout").val($("#buildout").val() + ".");
+                $("#execsout").val($("#execsout").val() + ".");
+            }, 500);
+        }
+    }
+
+    function postForCompile() {
+        $.post("index.html", {
+                'code': editor.doc.getValue(),
+                'passargs': $('input:text[name=passargs]').val(),
+                'respond': 'respond'
+            },
+            function (data) {
+                window.clearInterval(waiting);
+                $("#buildout").val(data.buildout);
+                $("#execsout").val(data.execsout);
+                window.webapple = data.webapple;
+                window.noinputs = data.noinputs;
+            }
+        );
+        $("#buildout").val("compiling");
+        $("#execsout").val("executing");
+        waiting = setInterval(function () {
+            $("#buildout").val($("#buildout").val() + ".");
+            $("#execsout").val($("#execsout").val() + ".");
+        }, 500);
+    }
+
+    function postForPaste() {
+        $.post("index.html", {
+                'code': editor.doc.getValue(),
+                'paste': 'paste'
+            },
+            function (data) {
+                window.clearInterval(waiting);
+                $("#buildout").val(data.buildout);
+                $("#execsout").val(data.execsout);
+            }
+        );
+        $("#buildout").val("pasting code to server");
+        $("#execsout").val("waiting for response");
+        waiting = setInterval(function () {
+            $("#buildout").val($("#buildout").val() + ".");
+            $("#execsout").val($("#execsout").val() + ".");
+        }, 250);
+        delete window.webapple;
+    }
+
+    function textForDownload() {
+        $("#buildout").val("compiling");
+        $("#execsout").val("packaging");
+        waiting = setInterval(function () {
+            $("#buildout").val($("#buildout").val() + ".");
+            $("#execsout").val($("#execsout").val() + ".");
+        }, 500);
+        setTimeout(function () {
+            clearInterval(waiting);
+            $("#buildout").val("Successfully created .zip archive for download.");
+            $("#execsout").val("If no .class or .jar files exist then program did not compile!");
+        }, 2000);
+        delete window.webapple;
+    }
+
+    function openApplet() {
+        if (typeof window.webapple != 'undefined' && window.webapple != '') {
+            window.open(window.webapple, window.webapple, "width=800, height=600");
+        }
+    }
+</script>
+
+</html>
