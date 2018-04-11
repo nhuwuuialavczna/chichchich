@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var moment = require('moment');
 const {Pool, Client} = require('pg');
 const pool = new Pool({
     user: 'jenhnltobjifnz',
@@ -15,7 +16,7 @@ router.get('/add', function (req, res, next) {
     var user = req.session.acc;
     var mabaiviet = Date.now();
     var tenbaiviet = user.name;
-    var thoigian = new Date().getDate();
+    var thoigian = moment().format('L') + "  " + moment().format('LTS');
     var danhgia = 0;
     var hinhanh = queries.duongdan; // là hình ảnh
     var dinhkem = queries.dinhkem; // tệp đính kèm

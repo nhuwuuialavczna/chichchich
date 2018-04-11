@@ -12,6 +12,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var nodes = {};
 var mangUsers=[];
+var mangUsersLiveCode = [];
 app.set('port', (process.env.PORT || 3000));
 app.set('view engine', 'ejs');
 app.set('view options', {layout: false});
@@ -99,6 +100,11 @@ io.on("connection", function(socket){
             io.sockets.emit("server-send-danhsach-Users", mangUsers);
         }
     });
+
+    socket.on('client-send-code',function (data) {
+        socket.broadcast.emit("server-send-code",data);
+    });
+
 
     socket.on("logout", function(){
         mangUsers.splice(

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/public/assets/css/post.css">
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!--<script src="/public/xuly.js"></script>-->
+    <script src="/public/assets/js/menu.js"></script>
     <script>
         $(document).ready(function () {
             $('#batcuthugi').on('change', function () {
@@ -180,7 +180,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="/">Trang chủ</a></li>
+                <li ><a style="color: red" href="/">Trang chủ</a></li>
                 <% if(User !== undefined){ %>
                 <li><a href="/message">Chat công cộng</a></li>
                 <li><a href="/livecode">Live code</a></li>
@@ -205,19 +205,20 @@
                         <li><a href="#">Trang cá nhân</a></li>
                         <li><a href="#">Đổi mật khẩu</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Đăng xuất</a></li>
+                        <li><a id="btnDangXuat" href="#">Đăng xuất</a></li>
                     </ul>
                 </li>
                 <li>
-                    <button class="btn btn-lg btn-primary">Đăng bài</button>
+                    <a href="/#dangbai" class="btn btn-lg btn-primary">Đăng bài</a>
                 </li>
                 <% } %>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<div class="container">
-    <div class="row">
+<p id="dangbai"></p>
+<div class="container" >
+    <div class="row" >
         <div class="media">
             <div class="media-left media-middle">
                 <a href="#">
@@ -257,7 +258,7 @@
                 <h2><a style="color: #ff1a7d" href="/account?email=<%= data.email %>">
                         <img style="width: 50px" src="<%= getUserOfBaiVietVaBinhLuan(listUser, data.email).hinhanh %>"><%= data.tenbaiviet %>
                     </a></h2>
-                <i class="fa fa-calendar-check-o"></i> <%= data.thoigian %> |
+                <i class="fa fa-calendar-check-o"></i> <%= data.thoigian %>
                 <a><i class="fa fa-diamond"></i> <%= data.danhgia %></a>
                 <div>
                 <% var dinhKem = data.dinhkem; %>
@@ -283,7 +284,6 @@
                 <br><br>
                 <div class="col-sm-12">
                     <p id="thembinhluan<%=data.mabaiviet%>"></p>
-
                     <%var dsBinhLuanCuaBaiVietNay = getDSBinhLuan[data.mabaiviet];%>
                     <%dsBinhLuanCuaBaiVietNay.forEach(function (dataDsBinhLuan) {%>
                     <div class="box_binhluan">

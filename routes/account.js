@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function (req, res, next) {
-    console.dir(getAllPost());
-    res.send('respond with a resource');
+router.get('/logout', function (req, res, next) {
+    req.session.acc  = undefined;
+    res.json({data:'ok'});
 });
 
 

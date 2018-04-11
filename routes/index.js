@@ -12,16 +12,23 @@ const pool = new Pool({
     port: 5432, ssl: true
 
 });
+
+
+router.get('/livecode',function (req,res,next) {
+    console.log(req.session.acc);
+    res.render('livecode',{User: req.session.acc});
+});
+
 router.get('/', function (req, res, next) {
     pool.query('SELECT * from account', (err, dataAcc) => {
         if (!req.session.acc) {
             res.render('index', {title: 'Trang chủ', listUser: dataAcc.rows, User: undefined});
         } else {
-            pool.query('SELECT * from baiviet', (err, data) => {
+            pool.query('SELECT * from baiviet ORDER BY mabaiviet DESC', (err, data) => {
                 if (!req.session.acc) {
                     res.render('index', {title: 'Trang chủ', listUser: data.rows, User: undefined});
                 } else {
-                    pool.query('SELECT * from binhluanbaiviet', (err, dsBinhLuan) => {
+                    pool.query('SELECT * from binhluanbaiviet  ORDER BY mabinhluan DESC', (err, dsBinhLuan) => {
                         res.render('post', {
                             title: 'Post',
                             listUser: dataAcc.rows,

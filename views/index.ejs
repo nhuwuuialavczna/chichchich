@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <!--<script src="/socket.io/socket.io.js"></script>-->
     <!--<script src="/public/xuly.js"></script>-->
     <script>
         <% console.log(listUser); %>
-        var socket = io("/");
+//        var socket = io("/");
         $(document).ready(function () {
             $("#btnLogin").on('click', function () {
                 var email = $("#emailLG").val();
@@ -177,8 +177,8 @@
         <h3>Đăng nhập vào tài khoản của bạn</h3>
     </div>
     <div class="col-lg-6">
-        <input type="email" class="form-control" id="emailLG" placeholder="Email" value="admin@gmai.com" required><br>
-        <input type="text" class="form-control" id="pass" placeholder="Mật khẩu" value="123456" required><br>
+        <input type="email" class="form-control" id="emailLG" placeholder="Email" required><br>
+        <input type="password" class="form-control" id="pass" placeholder="Mật khẩu" required><br>
         <p id="thongbaodangnhap"></p><hr>
         <button id="btnLogin" class="btn btn-success">Đăng nhập</button>
     </div>

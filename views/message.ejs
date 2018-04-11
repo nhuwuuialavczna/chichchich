@@ -10,12 +10,12 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="/socket.io/socket.io.js"></script>
-    <!--<script src="/public/xuly.js"></script>-->
-    <link rel="stylesheet" type="text/css" href="/public/layout.css"/>
+    <script src="/socket.io/socket.io.js"></script><link rel="stylesheet" href="/public/assets/css/message.css">
+    <script src="/public/xuly.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/layout.css"/> <script src="/public/assets/js/menu.js"></script>
     <script>
 
-        var socket = io("/");
+
         // var socket = io("https://chichchich.herokuapp.com/");
 
 
@@ -94,7 +94,6 @@
             });
 
             // $("#btnRegister").click(function () {
-
             socket.emit("client-send-Username", '<%= User.name %>');
             // });
 
@@ -126,8 +125,62 @@
 
 </head>
 <body id="body">
-<br><br>
-<div class="container">
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Trang chủ</a></li>
+                <% if(User !== undefined){ %>
+                <li ><a style="color: red" href="/message">Chat công cộng</a></li>
+                <li><a href="/livecode">Live code</a></li>
+                <!--<li><a href="/game">Phòng game</a></li>-->
+                <li><a href="/dieukhoan">Hướng dẫn</a></li>
+                <li><a href="/lienhe">Liên hệ</a></li>
+
+                <% } %>
+            </ul>
+            <% if(User !== undefined){ %>
+            <form id="formtimkiem" class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Tìm bất cứ thứ gì">
+                </div>
+                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Profile <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/">Trang cá nhân</a></li>
+                        <li><a href="#">Đổi mật khẩu</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a id="btnDangXuat" href="#">Đăng xuất</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/#dangbai" class="btn btn-lg btn-primary">Đăng bài</a>
+                </li>
+                <% } %>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<br><br><br><br>
+<div class="container" style="background-color: white">
     <div id="wrapper" class="col-md-12">
         <audio style="display: none" id="audio" src="/uploads/beep-08b.mp3"></audio>
         <div id="chatForm">
@@ -142,7 +195,7 @@
                     <div class="row">
                         <div class="col-md-12" align="right" id="sayHi">
                             Hello <span id="currentUser">Teo</span>
-                            <input type="button" class="btn btn-danger" id="btnLogout" value="Logout">
+                            <input type="button" class="btn btn-danger" id="btnLogout" value="Ra khỏi chỗ này">
                         </div>
                     </div>
                     <hr>
