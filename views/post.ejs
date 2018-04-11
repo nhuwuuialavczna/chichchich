@@ -135,7 +135,7 @@
                     success: function (data) {
                         if(data.data === 'ok'){
                             var html = '<div class="box_binhluan">'+
-                               ' <div class="col-sm-1"><img style="width: 50px;height:50px" class="col-sm-6"'+
+                               ' <div class="col-sm-1"><img style="width: 50px;height:30px" class="col-sm-6"'+
                             'src="'+'<%=User.hinhanh%>'+'"></div>'+
                                 '<div class="col-sm-11">'+
                                 '<a style=" color: #ff1a7d" href="/account?email='+'<%= User.email %>'+'">'+'<%= User.name %>'+'</a>'+
@@ -287,7 +287,7 @@
                     <%var dsBinhLuanCuaBaiVietNay = getDSBinhLuan[data.mabaiviet];%>
                     <%dsBinhLuanCuaBaiVietNay.forEach(function (dataDsBinhLuan) {%>
                     <div class="box_binhluan">
-                        <div class="col-sm-1"><img style="width: 50px;height: 50px" class="col-sm-6"
+                        <div class="col-sm-1"><img style="width: 50px;height: 30px" class="col-sm-6"
                                                    src="<%=getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).hinhanh%>"></div>
                         <div class="col-sm-11">
                             <a style=" color: #ff1a7d" href="/account?email=<%= dataDsBinhLuan.email %>"><%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).name %></a>
@@ -297,7 +297,7 @@
                     <% });%>
                     <hr>
                     <div class="addbinhluan">
-                        <div class="col-sm-1"><img style="width: 50px;height: 50px" class="col-sm-6" src="<%=User.hinhanh%>"></div>
+                        <div class="col-sm-1"><img style="width: 50px;height: 30px" class="col-sm-6" src="<%=User.hinhanh%>"></div>
                         <div class="col-sm-11">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="<%=data.mabaiviet%>" placeholder="Nhập bình luận của bạn...">
