@@ -70,15 +70,19 @@
                     return;
                 }
                 if (listEmail.indexOf(email) !== -1) {
-                    thongBaoDangKi.html('Email này đã tồn tại');
+                    thongBaoDangKi.html('Username này đã tồn tại');
                     return;
                 }
 
-                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                if (!filter.test(email)) {
-                    thongBaoDangKi.html('Địa chỉ email không hợp lệ');
-                    return false;
+                if (name.length > 20) {
+                    thongBaoDangKi.html('Hãy chọn tên ngắn lại, tên đừng quá 20 kí tự');
+                    return;
                 }
+                if(email.length> 16){
+                    thongBaoDangKi.html('Username không được vượt quá 16 kí tự');
+                    return;
+                }
+
                 else {
                     $.ajax({
                         url: '/register?email=' + email + '&name=' + name + '&duongdan=' + duongDan + '&password=' + pass,
@@ -112,6 +116,7 @@
                     type: 'post',
                     success: function (data) {
                         $('#duongdan').val(data);
+                        $('#hienthi').attr('width','300px');
                         $('#hienthi').attr('src', 'https://uploadserver.azurewebsites.net/img?fileName=' + data);
                     }, error: function (err) {
                         $('#hienthi').attr('alt', 'Có lỗi xảy ra !');
@@ -121,18 +126,18 @@
 
 
             $("#btnForget").on('click', function () {
-                var email = $("#email").val();
-
-                $.ajax({
-                    url: '/forget?email=' + email,
-                    type: 'get',
-                    success: function (data) {
-                        alert(data);
-                    },
-                    error: function (err) {
-                        alert(err.message + "");
-                    }
-                })
+//                var email = $("#email").val();
+//                $.ajax({
+//                    url: '/forget?email=' + email,
+//                    type: 'get',
+//                    success: function (data) {
+//                        alert(data);
+//                    },
+//                    error: function (err) {
+//                        alert(err.message + "");
+//                    }
+//                })
+                alert('Đang được triển khai. Cập nhật ở lần sau. Mệt rồi khi nào rảnh làm tiếp');
 
             });
 
@@ -176,15 +181,15 @@
         <h3>Đăng nhập vào tài khoản của bạn</h3>
     </div>
     <div class="col-lg-6">
-        <input type="email" class="form-control" id="emailLG" placeholder="Email" required><br>
+        <input type="email" class="form-control" id="emailLG" placeholder="Username" required><br>
         <input type="password" class="form-control" id="pass" placeholder="Mật khẩu" required><br>
-        <p id="thongbaodangnhap"></p><hr>
+        <p style="color: red" id="thongbaodangnhap"></p><hr>
         <button id="btnLogin" class="btn btn-success">Đăng nhập</button>
     </div>
 
 
     <div class="col-lg-6">
-        <input type="email" class="form-control" id="emailRG" placeholder="Email"  required><br>
+        <input type="text" class="form-control" id="emailRG" placeholder="Username"  required><br>
         <input type="password" class="form-control" placeholder="Mật khẩu"  id="p" required><br>
         <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" id="rep" required><br>
         <input type="text" class="form-control" id="name" placeholder="Tên của bạn" required><br>
@@ -193,7 +198,7 @@
         <p style="display: none" id="duongdan"></p>
         <img src="" id="hienthi">
         <hr>
-        <p id="thongbaodangki"></p>
+        <p style="color: red" id="thongbaodangki"></p>
         <button class="btn btn-primary" id="btnRegister">Đăng kí</button>
         <button class="btn btn-default" id="btnForget">Quên mật khẩu</button>
     </div>

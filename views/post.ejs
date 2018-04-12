@@ -16,84 +16,93 @@
     <script>
         $(document).ready(function () {
             $('#batcuthugi').on('change', function () {
-                var ds = $('#duongdan').val();
-                if (ds.split(':').length < 3) {
-                    $('#tb1').html('');
-                    var file_data = $("#batcuthugi").prop("files")[0];
-                    var phanMoRong = getPhanMoRong(file_data.name);
-                    if (phanMoRong === 'jpg' || phanMoRong === 'png' || phanMoRong === 'gif' || phanMoRong === 'mp3' || phanMoRong === 'mp4') {
-                        var form_data = new FormData();
-                        var fileName = Date.now() + file_data.name;
-                        form_data.append('imgUploader', file_data);
-                        $('#tb1').append('Uploading...');
-                        $.ajax({
-                            url: "https://uploadserver.azurewebsites.net/api/Upload/",
-                            contentType: false,
-                            processData: false,
-                            data: form_data,
-                            type: 'post',
-                            success: function (data) {
-
-                                if (ds === '') {
-                                    $('#duongdan').val(data);
-                                } else {
-                                    $('#duongdan').val(ds + ':' + data);
-                                }
-                                $('#tb1').html('');
-                                if (phanMoRong === 'jpg' || phanMoRong === 'png' || phanMoRong === 'gif') {
-                                    $('#hienthi').append('<div class="col-sm-4"><img style="width:80px;" src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '"></div>');
-                                }
-                                if (phanMoRong === 'mp3') {
-                                    $('#hienthi').append('<div class="col-sm-4"><audio style="width:160px" controls><source src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '" type="audio/mpeg"></audio></div>');
-                                }
-                                if (phanMoRong === 'mp4') {
-                                    $('#hienthi').append('<div class="col-sm-4"><video style="width:160px" controls><source src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '" type="video/mp4"></video></div>');
-                                }
-                            }, error: function (err) {
-                            }
-                        });
-                    } else {
-                        $('#tb1').html('Không hỗ trợ');
-                    }
+                var file_data = $("#batcuthugi").prop("files")[0];
+                if (file_data.size > 25000000) {
+                    $('#tb2').html('Quá kích thước');
                 } else {
-                    $('#tb1').html('Quá số lượng');
+                    var ds = $('#duongdan').val();
+                    if (ds.split(':').length < 3) {
+                        $('#tb1').html('');
+                        var phanMoRong = getPhanMoRong(file_data.name);
+                        if (phanMoRong === 'jpg' || phanMoRong === 'png' || phanMoRong === 'gif' || phanMoRong === 'mp3' || phanMoRong === 'mp4') {
+                            var form_data = new FormData();
+                            var fileName = Date.now() + file_data.name;
+                            form_data.append('imgUploader', file_data);
+                            $('#tb1').append('Uploading...');
+                            $.ajax({
+                                url: "https://uploadserver.azurewebsites.net/api/Upload/",
+                                contentType: false,
+                                processData: false,
+                                data: form_data,
+                                type: 'post',
+                                success: function (data) {
+
+                                    if (ds === '') {
+                                        $('#duongdan').val(data);
+                                    } else {
+                                        $('#duongdan').val(ds + ':' + data);
+                                    }
+                                    $('#tb1').html('');
+                                    if (phanMoRong === 'jpg' || phanMoRong === 'png' || phanMoRong === 'gif') {
+                                        $('#hienthi').append('<div class="col-sm-4"><img style="width:80px;" src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '"></div>');
+                                    }
+                                    if (phanMoRong === 'mp3') {
+                                        $('#hienthi').append('<div class="col-sm-4"><audio style="width:160px" controls><source src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '" type="audio/mpeg"></audio></div>');
+                                    }
+                                    if (phanMoRong === 'mp4') {
+                                        $('#hienthi').append('<div class="col-sm-4"><video style="width:160px" controls><source src="' + 'https://uploadserver.azurewebsites.net/img?fileName=' + data + '" type="video/mp4"></video></div>');
+                                    }
+                                }, error: function (err) {
+                                }
+                            });
+                        } else {
+                            $('#tb1').html('Không hỗ trợ');
+                        }
+                    } else {
+                        $('#tb1').html('Quá số lượng');
+                    }
                 }
             });
 
             $('#tepdinhkem').on('change', function () {
                 $('#tb2').html('');
                 var file_data = $("#tepdinhkem").prop("files")[0];
-                var ds = $('#dinhkem').val();
-                if (ds.split(':').length < 3) {
-                    var phanMoRong = getPhanMoRong(file_data.name);
-                    if (phanMoRong === 'zip' || phanMoRong === 'rar' || phanMoRong === 'java' || phanMoRong === 'war' || phanMoRong === 'doc' || phanMoRong === 'pdf') {
-                        var form_data = new FormData();
-                        var fileName = file_data.name;
-                        form_data.append('imgUploader', file_data);
-                        $('#tb2').append('Uploading...');
-                        $.ajax({
-                            url: "https://uploadserver.azurewebsites.net/api/Upload/",
-                            contentType: false,
-                            processData: false,
-                            data: form_data,
-                            type: 'post',
-                            success: function (data) {
-                                if (ds === '') {
-                                    $('#dinhkem').val(data);
-                                } else {
-                                    $('#dinhkem').val(ds + ':' + data);
-                                }
-                                $('#tb2').html('');
-                                $('#hienthidinhkem').append('<p>' + fileName + '</p>');
-
-                            }, error: function (err) {
-                            }
-                        });
-                    } else {
-                        $('#tb2').html('Không hỗ trợ');
-                    }
+                if (file_data.size > 25000000) {
+                    $('#tb2').html('Quá kích thước');
                 } else {
-                    $('#tb2').html('Quá số lượng');
+
+                    var ds = $('#dinhkem').val();
+                    if (ds.split(':').length < 3) {
+                        var phanMoRong = getPhanMoRong(file_data.name);
+                        if (phanMoRong === 'zip' || phanMoRong === 'rar' || phanMoRong === 'java' || phanMoRong === 'war' ||phanMoRong === 'docx' || phanMoRong === 'doc' || phanMoRong === 'pdf') {
+                            var form_data = new FormData();
+                            var fileName = file_data.name;
+                            form_data.append('imgUploader', file_data);
+                            $('#tb2').append('Uploading...');
+                            $.ajax({
+                                url: "https://uploadserver.azurewebsites.net/api/Upload/",
+                                contentType: false,
+                                processData: false,
+                                data: form_data,
+                                type: 'post',
+                                success: function (data) {
+                                    if (ds === '') {
+                                        $('#dinhkem').val(data);
+                                    } else {
+                                        $('#dinhkem').val(ds + ':' + data);
+                                    }
+                                    $('#tb2').html('');
+                                    $('#hienthidinhkem').append('<p>' + fileName + '</p>');
+
+                                }, error: function (err) {
+                                }
+                            });
+                        } else {
+                            $('#tb2').html('Không hỗ trợ');
+                        }
+                    } else {
+                        $('#tb2').html('Quá số lượng');
+                    }
                 }
             });
 
@@ -108,9 +117,9 @@
                     processData: false,
                     type: 'get',
                     success: function (data) {
-                        if(data.data === 'ok'){
+                        if (data.data === 'ok') {
                             window.location.href = "/";
-                        }else {
+                        } else {
                             $('#thongbaodang').html('Có lỗi xảy ra. Bạn hãy reload hoặc đăng xuất ra và đăng nhập lại');
                         }
                     }, error: function (err) {
@@ -124,27 +133,27 @@
                 return a[a.length - 1];
             }
 
-            $('.gui').on('click',function () {
-               var maBaiViet =  this.id;
-               var noiDung = $("#"+maBaiViet).val();
+            $('.gui').on('click', function () {
+                var maBaiViet = this.id;
+                var noiDung = $("#" + maBaiViet).val();
                 $.ajax({
-                    url: "/post/addbinhluan?mabaiviet=" + maBaiViet+"&noidung="+noiDung,
+                    url: "/post/addbinhluan?mabaiviet=" + maBaiViet + "&noidung=" + noiDung,
                     contentType: false,
                     processData: false,
                     type: 'get',
                     success: function (data) {
-                        if(data.data === 'ok'){
-                            var html = '<div class="box_binhluan">'+
-                               ' <div class="col-sm-1"><img style="width: 50px;height:30px" class="col-sm-6"'+
-                            'src="'+'<%=User.hinhanh%>'+'"></div>'+
-                                '<div class="col-sm-11">'+
-                                '<a style=" color: #ff1a7d" href="/account?email='+'<%= User.email %>'+'">'+'<%= User.name %>'+'</a>'+
-                                '<p>'+noiDung+'</p>'+
-                                '</div>'+
+                        if (data.data === 'ok') {
+                            var html = '<div class="box_binhluan">' +
+                                ' <div class="col-sm-1"><img style="width: 50px;height:30px" class="col-sm-6"' +
+                                'src="' + '<%= User.hinhanh %>' + '"></div>' +
+                                '<div class="col-sm-11">' +
+                                '<a style=" color: #ff1a7d" href="/account?email=' + '<%= User.email %>' + '">' + '<%= User.name %>' + '</a>' +
+                                '<p>' + noiDung + '</p>' +
+                                '</div>' +
                                 '</div>';
-                            $('#thembinhluan'+maBaiViet).prepend(html);
-                        }else {
-                            $('#thongbaobinhluan'+maBaiViet).html('Có lỗi xảy ra. Bạn hãy reload hoặc đăng xuất ra và đăng nhập lại');
+                            $('#thembinhluan' + maBaiViet).prepend(html);
+                        } else {
+                            $('#thongbaobinhluan' + maBaiViet).html('Có lỗi xảy ra. Bạn hãy reload hoặc đăng xuất ra và đăng nhập lại');
                         }
                     }, error: function (err) {
 
@@ -156,7 +165,7 @@
     </script>
     <style>
         /*input {*/
-            /*border-bottom: 10px;*/
+        /*border-bottom: 10px;*/
         /*}*/
     </style>
     <title>Trang chủ</title>
@@ -180,12 +189,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li ><a style="color: red" href="/">Trang chủ</a></li>
+                <li><a style="color: red" href="/">Trang chủ</a></li>
                 <% if(User !== undefined){ %>
                 <li><a href="/message">Chat công cộng</a></li>
                 <li><a href="/livecodepage">Live code</a></li>
                 <li><a href="/livecode/registerpage">Register live</a></li>
-                <li><a href="/dieukhoan">Hướng dẫn</a></li>
                 <li><a href="/lienhe">Liên hệ</a></li>
                 <% } %>
             </ul>
@@ -199,10 +207,9 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Profile <span class="caret"></span></a>
+                       aria-expanded="false"><%= User.email %> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Trang cá nhân</a></li>
-                        <li><a href="#">Đổi mật khẩu</a></li>
+                        <li><a href="/account/profile?email=<%= User.email %>">Trang cá nhân</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a id="btnDangXuat" href="#">Đăng xuất</a></li>
                     </ul>
@@ -211,13 +218,13 @@
                     <a href="/#dangbai" class="btn btn-lg btn-primary">Đăng bài</a>
                 </li>
             </ul>
-                <% } %>
+            <% } %>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
 <p id="dangbai"></p>
-<div class="container" >
-    <div class="row" >
+<div class="container">
+    <div class="row">
         <div class="media">
             <div class="media-left media-middle">
                 <a href="#">
@@ -250,24 +257,44 @@
         </div>
     </div>
     <br>
-    <% Post.forEach(function (data, index) { %>
+
+
     <div class="box">
         <div class="status-box row">
             <div class="col-sm-12">
-                <h2><a style="color: #ff1a7d" href="/account?email=<%= data.email %>">
-                        <img style="width: 50px" src="<%= getUserOfBaiVietVaBinhLuan(listUser, data.email).hinhanh %>"><%= data.tenbaiviet %>
+                <% if(TrangThai.thongbaotong !== '0'){ %>
+                <b><i class="fa fa-bell-o"></i> <%= TrangThai.thongbaotong %></b>
+                <% } %>
+                <br>
+                <% if(TrangThai.thongbaorieng !== '0' && TrangThai.emailthongbaorieng.indexOf(User.email) > -1){ %>
+                <b><i class="fa fa-bell"></i> <%= TrangThai.thongbaorieng %></b>
+                <% } %>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    <% Post.forEach(function (data, index) { %>
+    <div id="id-status<%= data.mabaiviet %>" class="box">
+        <div class="status-box row">
+            <div class="col-sm-12">
+                <h2><a style="color: #ff1a7d" href="/account/profile?email=<%= data.email %>">
+                        <img style="width: 50px"
+                             src="<%= getUserOfBaiVietVaBinhLuan(listUser, data.email).hinhanh %>"><%= data.tenbaiviet %>
                     </a></h2>
                 <i class="fa fa-calendar-check-o"></i> <%= data.thoigian %>
                 <a><i class="fa fa-diamond"></i> <%= data.danhgia %></a>
                 <div>
-                <% var dinhKem = data.dinhkem; %>
-                <% if(dinhKem === '' || dinhKem === undefined){ %>
-                <% }else{ %>
-                <% var doDaiDinhKem = dinhKem.split(':'); %>
-                <% for(var i=0;i<doDaiDinhKem.length;i++){ %>
-                    <a href="https://uploadserver.azurewebsites.net/img?fileName=<%=doDaiDinhKem[i]%>"><i class="fa fa-file"></i> <%=doDaiDinhKem[i].split('_')[doDaiDinhKem[i].split('_').length-1]%></a>
-                <% } %>
-                <% } %>
+                    <% var dinhKem = data.dinhkem; %>
+                    <% if(dinhKem === '' || dinhKem === undefined){ %>
+                    <% }else{ %>
+                    <% var doDaiDinhKem = dinhKem.split(':'); %>
+                    <% for(var i = 0;i < doDaiDinhKem.length;i++){ %>
+                    <a href="https://uploadserver.azurewebsites.net/download?fileName=<%= doDaiDinhKem[i] %>"><i
+                                class="fa fa-file"></i> <%= doDaiDinhKem[i].split('_')[doDaiDinhKem[i].split('_').length - 1] %>
+                    </a>
+                    <% } %>
+                    <% } %>
                 </div>
                 <hr>
                 <p> <%= data.noidung %></p>
@@ -276,33 +303,40 @@
                 <% if(cd === '' || cd === undefined){ %>
                 <% }else{ %>
                 <% var doDai = cd.split(':'); %>
-                <% for(var i=0;i<doDai.length;i++){ %>
-                    <img class="col-sm-4" src="https://uploadserver.azurewebsites.net/img?fileName=<%=doDai[i]%>">
+                <% for(var i = 0;i < doDai.length;i++){ %>
+                <img class="col-sm-4" src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>">
                 <% } %>
                 <% } %>
                 <br><br>
                 <div class="col-sm-12">
-                    <p id="thembinhluan<%=data.mabaiviet%>"></p>
-                    <%var dsBinhLuanCuaBaiVietNay = getDSBinhLuan[data.mabaiviet];%>
-                    <%dsBinhLuanCuaBaiVietNay.forEach(function (dataDsBinhLuan) {%>
+                    <p id="thembinhluan<%= data.mabaiviet %>"></p>
+                    <% var dsBinhLuanCuaBaiVietNay = getDSBinhLuan[data.mabaiviet]; %>
+                    <% dsBinhLuanCuaBaiVietNay.forEach(function (dataDsBinhLuan) { %>
                     <div class="box_binhluan">
                         <div class="col-sm-1"><img style="width: 50px;height: 30px" class="col-sm-6"
-                                                   src="<%=getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).hinhanh%>"></div>
+                                                   src="<%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).hinhanh %>">
+                        </div>
                         <div class="col-sm-11">
-                            <a style=" color: #ff1a7d" href="/account?email=<%= dataDsBinhLuan.email %>"><%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).name %></a>
-                            <p><%=dataDsBinhLuan.noidung%></p>
+                            <a style=" color: #ff1a7d"
+                               href="/account/profile?email=<%= dataDsBinhLuan.email %>"><%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).name %></a>
+                            <p><%= dataDsBinhLuan.noidung %></p>
                         </div>
                     </div>
-                    <% });%>
+                    <% }); %>
                     <hr>
                     <div class="addbinhluan">
-                        <div class="col-sm-1"><img style="width: 50px;height: 30px" class="col-sm-6" src="<%=User.hinhanh%>"></div>
+                        <div class="col-sm-1"><img style="width: 50px;height: 30px" class="col-sm-6"
+                                                   src="<%= User.hinhanh %>"></div>
                         <div class="col-sm-11">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="<%=data.mabaiviet%>" placeholder="Nhập bình luận của bạn...">
-                                <p style="color: red" id="thongbaobinhluan<%=data.mabaiviet%>"></p>
-                                <span class="input-group-btn"><button class="btn btn-default gui " id="<%=data.mabaiviet%>" type="button">Gửi</button> </span>
-                            </div><br><br>
+                                <input type="text" class="form-control" id="<%= data.mabaiviet %>"
+                                       placeholder="Nhập bình luận của bạn...">
+                                <p style="color: red" id="thongbaobinhluan<%= data.mabaiviet %>"></p>
+                                <span class="input-group-btn"><button class="btn btn-default gui "
+                                                                      id="<%= data.mabaiviet %>"
+                                                                      type="button">Gửi</button> </span>
+                            </div>
+                            <br><br>
                         </div>
 
                     </div>

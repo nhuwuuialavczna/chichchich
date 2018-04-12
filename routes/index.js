@@ -14,14 +14,30 @@ const pool = new Pool({
 });
 
 
-router.get('/livecodepage',function (req,res,next) {
-    res.render('livecodepage',{User: req.session.acc});
+router.get('/livecodepage', function (req, res, next) {
+    res.render('livecodepage', {
+        User: req.session.acc,
+        TrangThai: req.session.trangthai
+    });
 });
 
 router.get('/', function (req, res, next) {
     pool.query('SELECT * from account', (err, dataAcc) => {
         if (!req.session.acc) {
-            res.render('index', {title: 'Trang chủ', listUser: dataAcc.rows, User: undefined});
+            pool.query('SELECT * from trangthai', (err, data) => {
+                if (data) {
+                    req.session.trangthai = data.rows[0];
+                } else {
+                    req.session.trangthai = undefined;
+                }
+                res.render('index', {
+                    title: 'Trang chủ',
+                    listUser: dataAcc.rows,
+                    User: undefined,
+                    TrangThai: req.session.trangthai
+                });
+            });
+
         } else {
             pool.query('SELECT * from baiviet ORDER BY mabaiviet DESC', (err, data) => {
                 if (!req.session.acc) {
@@ -34,7 +50,8 @@ router.get('/', function (req, res, next) {
                             User: req.session.acc,
                             Post: data.rows,
                             getUserOfBaiVietVaBinhLuan: getUserOfBaiVietVaBinhLuan,
-                            getDSBinhLuan:getDSBinhLuan(data.rows,dsBinhLuan.rows)
+                            getDSBinhLuan: getDSBinhLuan(data.rows, dsBinhLuan.rows),
+                            TrangThai: req.session.trangthai
                         });
                     });
                 }
@@ -48,17 +65,17 @@ function getDSBinhLuan(dsPost, dsBinhLuan) {
     var list = [];
     for (var i = 0; i < dsPost.length; i++) {
         var post = dsPost[i];
-        list[post.mabaiviet] = getBinhLuanTheoMa(dsBinhLuan,post.mabaiviet);
+        list[post.mabaiviet] = getBinhLuanTheoMa(dsBinhLuan, post.mabaiviet);
     }
     return list;
 }
 
-function getBinhLuanTheoMa(dsBinhLuan,maBaiViet) {
+function getBinhLuanTheoMa(dsBinhLuan, maBaiViet) {
     var ds = [];
     dsBinhLuan.forEach(function (data) {
-       if(data.mabaiviet === maBaiViet){
-           ds.push(data);
-       }
+        if (data.mabaiviet === maBaiViet) {
+            ds.push(data);
+        }
     });
     return ds;
 }
@@ -79,6 +96,7 @@ router.get('/login', function (req, res, next) {
 
     var acc = new account(email, ps, '', '', '', '', '', '', 0);
     var isLogin = false;
+
 
     // tại đây kiểm tra trong database rồi trả về kết quả
     pool.query('SELECT * from account', (err, data) => {
@@ -164,6 +182,15 @@ router.get('/forget', function (req, res, next) {
     // tại đây gửi mail về bên kia cho người ta nhập pass
 
     res.json({data: 'ok'});
+});
+
+
+router.get('/lienhe', function (req, res, next) {
+
+    res.render('lienhe', {
+        TrangThai: req.session.trangthai,
+        User: req.session.acc,
+    });
 });
 
 module.exports = router;

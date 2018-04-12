@@ -136,7 +136,6 @@ io.on("connection", function(socket){
         );
         socket.broadcast.emit("server-send-danhsach-Users",mangUsers);
     });
-
 });
 
 app.get('/download', function(req, res){

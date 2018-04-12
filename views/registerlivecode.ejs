@@ -69,7 +69,6 @@
                 <li><a href="/message">Chat công cộng</a></li>
                 <li><a href="/livecodepage">Live code</a></li>
                 <li><a style="color: red" href="/livecode/registerpage">Register live</a></li>
-                <li><a href="/dieukhoan">Hướng dẫn</a></li>
                 <li><a href="/lienhe">Liên hệ</a></li>
                 <% } %>
             </ul>
@@ -83,10 +82,9 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Profile <span class="caret"></span></a>
+                       aria-expanded="false"><%=User.email%> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a id="trangcanhan">Trang cá nhân</a></li>
-                        <li><a id="doimatkhau">Đổi mật khẩu</a></li>
+                        <li><a href="/account/profile?email=<%=User.email%>">Trang cá nhân</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a id="btnDangXuat" href="#">Đăng xuất</a></li>
                     </ul>
@@ -101,7 +99,7 @@
 </nav>
 <br><br><br><br>
 <div class="container">
-    <h2>Bảng đăng kí</h2>
+    <h2>Bảng đăng kí (Chức năng đang hoàn thiện)</h2>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -157,6 +155,16 @@
         <% }); %>
         </tbody>
     </table>
+
+    <div>
+        <p>- Tại sao lại có chức năng này? Vì cả hệ thống sẽ sử dụng chung 1 khu vực để code. Vì vậy bạn phải đăng kí
+            khung giờ mới thao tác được trên đó. Những gì bạn code thì tất cả mọi người đều thấy.</p>
+        <p>- Những ai không đăng kí hoặc không nằm trong khung giờ đăng kí sẽ không thao tác được trên đó.</p>
+        <p>- Sẽ cải tiến tương tự như live stream.</p>
+        <p>- Chúng tô chỉ hỗ rợ cho Java và Javascript thôi nha.</p>
+        <p>- Hãy nhập thông tin 1 cách chính xác và nhấn đăng kí. Bị chỉ có thể đăng kí nếu như bạn chưa đăng kí</p>
+    </div>
+
 </div>
 
 </body>

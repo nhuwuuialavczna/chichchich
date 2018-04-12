@@ -5,9 +5,96 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title></title>
+    <script src="/public/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/public/assets/css/post.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/public/assets/js/menu.js"></script>
+    <title><%= title %></title>
 </head>
 <body>
-    Đây là trang profile
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Trang chủ</a></li>
+                <% if(User !== undefined){ %>
+                <li><a href="/message">Chat công cộng</a></li>
+                <li><a href="/livecodepage">Live code</a></li>
+                <li><a href="/livecode/registerpage">Register live</a></li>
+                <li><a href="/lienhe">Liên hệ</a></li>
+                <% } %>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a><%= UserProfile.name %></a>
+                </li>
+
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+    <br><br><br><br><br>
+    <div class="col-lg-3">
+        <img width="100%" src="<%= UserProfile.hinhanh %>">
+        <b><%= UserProfile.name %></b>
+        <%if(UserProfile.email === User.email){%>
+        <p>
+            <button id="btnDangXuat" class="btn btn-danger">Đăng xuất</button>
+        </p>
+        <%}%>
+    </div>
+    <div style="background-color:white" class="col-lg-6">
+        <h3>Bài viết đã đăng</h3>
+        <% DsBaiVietCuaUS.forEach(function (data) { %>
+        <div style="border-spacing: 2px; ">
+            <p><%= data.noidung %></p>
+            <p><%= data.thoigian %></p>
+            <a href="/#id-status<%= data.mabaiviet %>">
+                <button class="btn btn-success">Xem chi tiết</button>
+            </a>
+        </div>
+        <hr>
+        <% }); %>
+    </div>
+    <div style="background-color:white" class="col-lg-3">
+        <h3>Tất cả tệp đã up</h3>
+        <% DsBaiVietCuaUS.forEach(function (data) { %>
+        <div style="border-spacing: 2px; ">
+            <%var tep = data.dinhkem;%>
+            <%if(tep!='' && tep !=undefined){%>
+                <%var dsTep = tep.split(':');%>
+                <%dsTep.forEach(function (data2) {%>
+                    <%var duongDanFull = 'https://uploadserver.azurewebsites.net/download?fileName='+data2;
+                      var tenT = data2.split('_'); var ten = data2.split('_')[tenT.length-1];
+                    %>
+                    <a href="<%=duongDanFull%>"><button class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> <%=ten%></button></a>
+            <hr>
+                <%});%>
+            <%}%>
+        </div>
+        <% }); %>
+    </div>
+</div>
 </body>
 </html>

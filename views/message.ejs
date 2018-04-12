@@ -10,9 +10,11 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="/socket.io/socket.io.js"></script><link rel="stylesheet" href="/public/assets/css/message.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/public/assets/css/message.css">
     <script src="/public/xuly.js"></script>
-    <link rel="stylesheet" type="text/css" href="/public/layout.css"/><script src="/public/assets/js/menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/layout.css"/>
+    <script src="/public/assets/js/menu.js"></script>
     <script>
 
 
@@ -94,7 +96,7 @@
             });
 
             // $("#btnRegister").click(function () {
-            socket.emit("client-send-Username", '<%= User.name %>');
+            socket.emit("client-send-Username", '<%= User.email %>');
             // });
 
             $("#btnLogout").click(function () {
@@ -145,10 +147,9 @@
             <ul class="nav navbar-nav">
                 <li><a href="/">Trang chủ</a></li>
                 <% if(User !== undefined){ %>
-                <li ><a style="color: red" href="/message">Chat công cộng</a></li>
+                <li><a style="color: red" href="/message">Chat công cộng</a></li>
                 <li><a href="/livecodepage">Live code</a></li>
                 <li><a href="/livecode/registerpage">Register live</a></li>
-                <li><a href="/dieukhoan">Hướng dẫn</a></li>
                 <li><a href="/lienhe">Liên hệ</a></li>
 
                 <% } %>
@@ -163,10 +164,9 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Profile <span class="caret"></span></a>
+                       aria-expanded="false"><%= User.email %> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/account/profile?email=<%User.email%>">Trang cá nhân</a></li>
-                        <li><a href="#">Đổi mật khẩu</a></li>
+                        <li><a href="/account/profile?email=<%= User.email %>">Trang cá nhân</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a id="btnDangXuat" href="#">Đăng xuất</a></li>
                     </ul>
@@ -186,7 +186,7 @@
         <div id="chatForm">
             <div class="col-md-2 ">
                 <div id="left" class="panel panel-default">
-                    <div id="boxTitle" class="panel-heading">Bọn ngu</div>
+                    <div id="boxTitle" class="panel-heading">Đang chat</div>
                     <div class="panel-body" id="boxContent"></div>
                 </div>
             </div>
@@ -194,7 +194,7 @@
                 <div id="right">
                     <div class="row">
                         <div class="col-md-12" align="right" id="sayHi">
-                            Hello <span id="currentUser">Teo</span>
+                            Hello <span id="currentUser"></span>
                             <input type="button" class="btn btn-danger" id="btnLogout" value="Ra khỏi chỗ này">
                         </div>
                     </div>
@@ -214,8 +214,7 @@
                     <div class="form-group">
                         <label for="photos-input">Gửi file</label>
                         <input id="photos-input" type="file" name="photos[]" multiple="multiple">
-                        <p class="help-block">File sẽ được gửi đi ngay lập tức sau khi nhấn nút gửi. Dữ liệu của file
-                            dưới 500MB</p>
+                        <p class="help-block">Chọn 1 file và nhấn send luôn</p>
                     </div>
                     <input type="hidden" name="csrf_token" value="just_a_text_field"/>
                     <input class="btn btn-default" type="submit" name="Photo Uploads" value="Send luôn"/>
@@ -237,14 +236,13 @@
                 <div id="album" class="row"></div>
                 <hr/>
                 <div id="yeucau" class="row">
-                    <p>- Đứa nào không phận sự thì biến mẹ đi nhen. Thằng nào gửi ảnh sex hay tào lao mía lao thì bỏ
-                        nhen. Được thì inbox riêng đây là chốn công
-                        cộng nha. </p>
-                    <p>- Tao mới nâng cấp lên 500MB luôn đó. Nghiêm cấm spam dưới mọi hình thức nha. Hệ thống không đủ
-                        bộ nhớ để lưu các file đã được gửi</p>
-                    <p>- Hi vọng tụi bây dùng nó cho mục đích gửi file thôi nha. Thân. Có thắc mắc hay ức chế gì hoặc
-                        góp ý cứ liên hệ: <a href="https://www.facebook.com/profile.php?id=100009115420843">Facebook</a>
-                    </p>
+                    <p>- Tất cả mọi người đều có thể xem được các tin nhắn ở đây. Hãy đảm bảo về phát ngôn </p>
+                    <p>- Tại đây có thể upload file lớn đến 500MB trong khi ngoài kia tối đa chỉ 50MB các bạn lưu ý.</p>
+                    <p>- Nếu quá trình gửi quá chậm hoặc ko gửi được thì hãy reload và thực hiện lại </p>
+                    <p>- Tại đây ko gì được lưu lại và tin nhắn ko là ngoại lệ. Nếu bạn reload thì nó sẽ mất đi tại màn
+                        hình của bạn</p>
+                    <p>- Mọi lỗi hoặc vấn đề xin liên hệ: <a
+                                href="https://www.facebook.com/profile.php?id=100009115420843">Facebook</a></p>
                 </div>
             </div>
         </div>

@@ -26,13 +26,14 @@ router.get('/add', function (req, res, next) {
     var sql = "insert into baiviet values('" + mabaiviet + "','" + tenbaiviet + "','" + thoigian + "','" + danhgia + "','" + hinhanh + "','" + email + "','" + noidung + "','" + dinhkem + "')";
 
     pool.query(sql, (err, data) => {
-        if(err) {
+        if (err) {
             res.json({data: 'fail'});
             return;
         }
         res.json({data: 'ok'});
-    });
 
+
+    });
 });
 
 router.get('/addbinhluan', function (req, res, next) {
@@ -41,11 +42,11 @@ router.get('/addbinhluan', function (req, res, next) {
     var mabaiviet = req.query.mabaiviet;
     var date = new Date();
     var email = req.session.acc.email;
-    var thoiGian = date.getHours()+":"+date.getMinutes()+" - " +date.getDay()+":"+ date.getMonth() + ":"+date.getYear();
-    var sql = "insert into binhluanbaiviet values('"+maBinhLuan+"','"+noidung+"','"+mabaiviet+"','"+email+"','"+thoiGian+"')";
+    var thoiGian = date.getHours() + ":" + date.getMinutes() + " - " + date.getDay() + ":" + date.getMonth() + ":" + date.getYear();
+    var sql = "insert into binhluanbaiviet values('" + maBinhLuan + "','" + noidung + "','" + mabaiviet + "','" + email + "','" + thoiGian + "')";
 
     pool.query(sql, (err, data) => {
-        if(err) {
+        if (err) {
             console.log(err);
             res.json({data: 'fail'});
             return;
