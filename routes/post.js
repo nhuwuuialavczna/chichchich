@@ -12,9 +12,6 @@ const pool = new Pool({
 });
 /* GET users listing. */
 router.get('/add', function (req, res, next) {
-    if (req.session.acc === undefined) {
-        res.redirect('/');
-    } else {
         var queries = req.query;
         var user = req.session.acc;
         var mabaiviet = Date.now();
@@ -33,13 +30,9 @@ router.get('/add', function (req, res, next) {
             }
             res.json({data: 'ok'});
         });
-    }
 });
 
 router.get('/addbinhluan', function (req, res, next) {
-    if (req.session.acc === undefined) {
-        res.redirect('/');
-    } else {
         var maBinhLuan = Date.now();
         var noidung = req.query.noidung;
         var mabaiviet = req.query.mabaiviet;
@@ -56,7 +49,6 @@ router.get('/addbinhluan', function (req, res, next) {
             }
             res.json({data: 'ok'});
         });
-    }
 
 });
 

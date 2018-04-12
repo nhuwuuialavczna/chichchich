@@ -41,9 +41,6 @@ router.get('/registerpage', function (req, res, next) {
 
 
 router.get('/register', function (req, res, next) {
-    if (req.session.acc === undefined) {
-        res.redirect('/');
-    } else {
         var malive = req.query.malivecode;
         var ten = req.query.tenlivecode;
         var mota = req.query.mota;
@@ -56,7 +53,6 @@ router.get('/register', function (req, res, next) {
             }
             res.json({data: 'ok'});
         });
-    }
 });
 
 module.exports = router;

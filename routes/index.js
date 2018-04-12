@@ -27,9 +27,7 @@ router.get('/livecodepage', function (req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-    if (req.session.acc === undefined) {
-        res.redirect('/');
-    } else {
+
         pool.query('SELECT * from account', (err, dataAcc) => {
             if (!req.session.acc) {
                 pool.query('SELECT * from trangthai', (err, data) => {
@@ -66,7 +64,7 @@ router.get('/', function (req, res, next) {
                 });
             }
         });
-    }
+
 });
 
 
@@ -100,9 +98,6 @@ function getUserOfBaiVietVaBinhLuan(rowsAcc, email) {
 }
 
 router.get('/login', function (req, res, next) {
-    if (req.session.acc === undefined) {
-        res.redirect('/');
-    } else {
         var email = req.query.email;
         var ps = req.query.pass;
 
@@ -127,7 +122,6 @@ router.get('/login', function (req, res, next) {
                 }
             }
         });
-    }
 });
 function account(email, password, name, ip, hinhanh, banbe, baiviet, filedaup, danhgia) {
     this.email = email;
@@ -170,9 +164,6 @@ function checkExist(list, account) {
 }
 
 router.get('/register', function (req, res, next) {
-    if (req.session.acc === undefined) {
-        res.redirect('/');
-    } else {
         var email = req.query.email;
         var name = req.query.name;
         var duongDan = 'https://uploadserver.azurewebsites.net/img?fileName=' + req.query.duongdan;
@@ -189,7 +180,6 @@ router.get('/register', function (req, res, next) {
         req.session.acc = acc;
         // tại đây thêm vào database và gửi mail về thông báo
         res.json({data: 'ok', name: name});
-    }
 });
 
 
