@@ -11,44 +11,52 @@ const pool = new Pool({
 
 
 router.get('/registerpage', function (req, res, next) {
-    pool.query("select * from livecode", (err, data) => {
-        if (err) {
-            res.json({data: 'fail'});
-            return;
-        }
-        var ds = data.rows;
-        var us = req.session.acc;
-        for (var i = 0; i < ds.length; i++) {
-            var livecode = ds[i];
-            if (livecode.email === us.email) {
-                res.render('registerlivecode', {
-                    liveCodeList: data.rows, User: req.session.acc, DaDK: 'ok',
-                    TrangThai: req.session.trangthai
-                });
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        pool.query("select * from livecode", (err, data) => {
+            if (err) {
+                res.json({data: 'fail'});
                 return;
             }
-        }
-        res.render('registerlivecode', {
-            liveCodeList: data.rows, User: req.session.acc, DaDK: 'chua',
-            TrangThai: req.session.trangthai
+            var ds = data.rows;
+            var us = req.session.acc;
+            for (var i = 0; i < ds.length; i++) {
+                var livecode = ds[i];
+                if (livecode.email === us.email) {
+                    res.render('registerlivecode', {
+                        liveCodeList: data.rows, User: req.session.acc, DaDK: 'ok',
+                        TrangThai: req.session.trangthai
+                    });
+                    return;
+                }
+            }
+            res.render('registerlivecode', {
+                liveCodeList: data.rows, User: req.session.acc, DaDK: 'chua',
+                TrangThai: req.session.trangthai
+            });
         });
-    });
+    }
 });
 
 
 router.get('/register', function (req, res, next) {
-    var malive = req.query.malivecode;
-    var ten = req.query.tenlivecode;
-    var mota = req.query.mota;
-    var a = req.session.acc;
-    var sql = "update livecode set tenlivecode='" + ten + "',email='" + a.email + "',mota='" + mota + "' where malivecode='" + malive + "'";
-    pool.query(sql, (err, data) => {
-        if (err) {
-            res.json({data: 'fail'});
-            return;
-        }
-        res.json({data: 'ok'});
-    });
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var malive = req.query.malivecode;
+        var ten = req.query.tenlivecode;
+        var mota = req.query.mota;
+        var a = req.session.acc;
+        var sql = "update livecode set tenlivecode='" + ten + "',email='" + a.email + "',mota='" + mota + "' where malivecode='" + malive + "'";
+        pool.query(sql, (err, data) => {
+            if (err) {
+                res.json({data: 'fail'});
+                return;
+            }
+            res.json({data: 'ok'});
+        });
+    }
 });
 
 module.exports = router;

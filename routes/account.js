@@ -20,19 +20,23 @@ router.get('/logout', function (req, res, next) {
 
 
 router.get('/profile', function (req, res, next) {
-    var email = req.query.email;
-    pool.query("SELECT * from account where email='"+email+"'", (err, account) => {
-        pool.query("SELECT * from baiviet where email='"+email+"'", (err, baiviet) => {
-            res.render('profile', {
-                title: email,
-                User: req.session.acc,
-                UserProfile: account.rows[0],
-                DsBaiVietCuaUS: baiviet.rows,
-                TrangThai: req.session.trangthai
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+
+        var email = req.query.email;
+        pool.query("SELECT * from account where email='" + email + "'", (err, account) => {
+            pool.query("SELECT * from baiviet where email='" + email + "'", (err, baiviet) => {
+                res.render('profile', {
+                    title: email,
+                    User: req.session.acc,
+                    UserProfile: account.rows[0],
+                    DsBaiVietCuaUS: baiviet.rows,
+                    TrangThai: req.session.trangthai
+                });
             });
         });
-    });
-
+    }
 });
 
 module.exports = router;

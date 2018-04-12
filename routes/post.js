@@ -12,48 +12,51 @@ const pool = new Pool({
 });
 /* GET users listing. */
 router.get('/add', function (req, res, next) {
-    var queries = req.query;
-    var user = req.session.acc;
-    var mabaiviet = Date.now();
-    var tenbaiviet = user.name;
-    var thoigian = moment().format('L') + "  " + moment().format('LTS');
-    var danhgia = 0;
-    var hinhanh = queries.duongdan; // là hình ảnh
-    var dinhkem = queries.dinhkem; // tệp đính kèm
-    var email = user.email;
-    var noidung = queries.noidung;
-
-    var sql = "insert into baiviet values('" + mabaiviet + "','" + tenbaiviet + "','" + thoigian + "','" + danhgia + "','" + hinhanh + "','" + email + "','" + noidung + "','" + dinhkem + "')";
-
-    pool.query(sql, (err, data) => {
-        if (err) {
-            res.json({data: 'fail'});
-            return;
-        }
-        res.json({data: 'ok'});
-
-
-    });
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var queries = req.query;
+        var user = req.session.acc;
+        var mabaiviet = Date.now();
+        var tenbaiviet = user.name;
+        var thoigian = moment().format('L') + "  " + moment().format('LTS');
+        var danhgia = 0;
+        var hinhanh = queries.duongdan; // là hình ảnh
+        var dinhkem = queries.dinhkem; // tệp đính kèm
+        var email = user.email;
+        var noidung = queries.noidung;
+        var sql = "insert into baiviet values('" + mabaiviet + "','" + tenbaiviet + "','" + thoigian + "','" + danhgia + "','" + hinhanh + "','" + email + "','" + noidung + "','" + dinhkem + "')";
+        pool.query(sql, (err, data) => {
+            if (err) {
+                res.json({data: 'fail'});
+                return;
+            }
+            res.json({data: 'ok'});
+        });
+    }
 });
 
 router.get('/addbinhluan', function (req, res, next) {
-    var maBinhLuan = Date.now();
-    var noidung = req.query.noidung;
-    var mabaiviet = req.query.mabaiviet;
-    var date = new Date();
-    var email = req.session.acc.email;
-    var thoiGian = date.getHours() + ":" + date.getMinutes() + " - " + date.getDay() + ":" + date.getMonth() + ":" + date.getYear();
-    var sql = "insert into binhluanbaiviet values('" + maBinhLuan + "','" + noidung + "','" + mabaiviet + "','" + email + "','" + thoiGian + "')";
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var maBinhLuan = Date.now();
+        var noidung = req.query.noidung;
+        var mabaiviet = req.query.mabaiviet;
+        var date = new Date();
+        var email = req.session.acc.email;
+        var thoiGian = date.getHours() + ":" + date.getMinutes() + " - " + date.getDay() + ":" + date.getMonth() + ":" + date.getYear();
+        var sql = "insert into binhluanbaiviet values('" + maBinhLuan + "','" + noidung + "','" + mabaiviet + "','" + email + "','" + thoiGian + "')";
 
-    pool.query(sql, (err, data) => {
-        if (err) {
-            console.log(err);
-            res.json({data: 'fail'});
-            return;
-        }
-        res.json({data: 'ok'});
-    });
-
+        pool.query(sql, (err, data) => {
+            if (err) {
+                console.log(err);
+                res.json({data: 'fail'});
+                return;
+            }
+            res.json({data: 'ok'});
+        });
+    }
 
 });
 
