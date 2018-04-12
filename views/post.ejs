@@ -29,8 +29,8 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
         $(document).ready(function () {
             $('#batcuthugi').on('change', function () {
                 var file_data = $("#batcuthugi").prop("files")[0];
-                if (file_data.size > 25000000) {
-                    $('#tb2').html('Quá kích thước');
+                if (file_data.size > 250000000) {
+                    $('#tb1').html('Quá kích thước');
                 } else {
                     var ds = $('#duongdan').val();
                     if (ds.split(':').length < 3) {
@@ -79,7 +79,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
             $('#tepdinhkem').on('change', function () {
                 $('#tb2').html('');
                 var file_data = $("#tepdinhkem").prop("files")[0];
-                if (file_data.size > 25000000) {
+                if (file_data.size > 250000000) {
                     $('#tb2').html('Quá kích thước');
                 } else {
 
@@ -274,11 +274,11 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
     <div class="box">
         <div class="status-box row">
             <div class="col-sm-12">
-                <% if(TrangThai.thongbaotong !== '0'){ %>
+                <% if(TrangThai !== undefined && TrangThai.thongbaotong !== '0'){ %>
                 <b><i class="fa fa-bell-o"></i> <%= TrangThai.thongbaotong %></b>
                 <% } %>
                 <br>
-                <% if(TrangThai.thongbaorieng !== '0' && TrangThai.emailthongbaorieng.indexOf(User.email) > -1){ %>
+                <% if(TrangThai !== undefined && TrangThai.thongbaorieng !== '0' && TrangThai.emailthongbaorieng.indexOf(User.email) > -1){ %>
                 <b><i class="fa fa-bell"></i> <%= TrangThai.thongbaorieng %></b>
                 <% } %>
             </div>
@@ -315,10 +315,20 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                 <% if(cd === '' || cd === undefined){ %>
                 <% }else{ %>
                 <% var doDai = cd.split(':'); %>
-                <% for(var i = 0;i < doDai.length;i++){ %>
-                <img class="col-sm-4" src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>">
+                <% for(var i = 0;i < doDai.length;i++){%>
+                <%if(getPhanMoRong(doDai[i]) === 'jpg'||getPhanMoRong(doDai[i]) === 'png'||getPhanMoRong(doDai[i]) === 'gif'){%>
+                    <img class="col-sm-4" src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>">
                 <% } %>
+
+                <%if(getPhanMoRong(doDai[i]) === 'mp3'){%>
+                    <audio controls><source  src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>" type="audio/mpeg"></audio>
                 <% } %>
+
+                <%if(getPhanMoRong(doDai[i]) === 'mp4'){%>
+                <video  class="col-sm-4" width="100%" controls><source src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>" type="video/mp4"></video>
+                <% } %>
+
+                <% }} %>
                 <br><br>
                 <div class="col-sm-12">
                     <p id="thembinhluan<%= data.mabaiviet %>"></p>

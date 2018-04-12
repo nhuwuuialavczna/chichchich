@@ -15,15 +15,15 @@ const pool = new Pool({
 
 
 router.get('/livecodepage', function (req, res, next) {
-    if (req.session.acc === undefined) {
-        res.redirect('/');
-    } else {
+    // if (req.session.acc === undefined) {
+    //     res.redirect('/');
+    // } else {
 
         res.render('livecodepage', {
             User: req.session.acc,
             TrangThai: req.session.trangthai
         });
-    }
+    // }
 });
 
 router.get('/', function (req, res, next) {
@@ -57,7 +57,8 @@ router.get('/', function (req, res, next) {
                                 Post: data.rows,
                                 getUserOfBaiVietVaBinhLuan: getUserOfBaiVietVaBinhLuan,
                                 getDSBinhLuan: getDSBinhLuan(data.rows, dsBinhLuan.rows),
-                                TrangThai: req.session.trangthai
+                                TrangThai: req.session.trangthai,
+                                getPhanMoRong:getPhanMoRong
                             });
                         });
                     }
@@ -66,7 +67,13 @@ router.get('/', function (req, res, next) {
         });
 
 });
-
+function getPhanMoRong(fileName) {
+    if(fileName === undefined){
+        return '';
+    }
+    var ext = fileName.split('.');
+    return ext[ext.length - 1];
+}
 
 function getDSBinhLuan(dsPost, dsBinhLuan) {
     var list = [];

@@ -61,31 +61,35 @@ app.use(function(req, res, next) {
 });
 
 app.get('/message', function (req, res) {
-    // Don't bother about this :)
-    var filesPath = path.join(__dirname, 'uploads/');
-    fs.readdir(filesPath, function (err, files) {
-        if (err) {
-            console.log(err);
-            return;
-        }
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        // Don't bother about this :)
+        var filesPath = path.join(__dirname, 'uploads/');
+        fs.readdir(filesPath, function (err, files) {
+            if (err) {
+                console.log(err);
+                return;
+            }
 
-        files.forEach(function (file) {
-            fs.stat(filesPath + file, function (err, stats) {
-                if (err) {
-                    console.log(err);
-                    return;
-                }
+            files.forEach(function (file) {
+                fs.stat(filesPath + file, function (err, stats) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
 
-                var createdAt = Date.parse(stats.ctime),
-                    days = Math.round((Date.now() - createdAt) / (1000 * 60 * 60 * 24));
+                    var createdAt = Date.parse(stats.ctime),
+                        days = Math.round((Date.now() - createdAt) / (1000 * 60 * 60 * 24));
 
-                if (days > 1) {
-                    fs.unlink(filesPath + file);
-                }
+                    if (days > 1) {
+                        fs.unlink(filesPath + file);
+                    }
+                });
             });
         });
-    });
-    res.render('message', {title: 'Trang chủ',User:req.session.acc});
+        res.render('message', {title: 'Trang chủ', User: req.session.acc});
+    }
 });
 
 io.on("connection", function(socket){

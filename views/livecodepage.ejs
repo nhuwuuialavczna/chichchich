@@ -79,7 +79,7 @@
     </style>
 
     <script>
-        socket.emit("client-send-Username", '<%= User.name %>');
+        socket.emit("client-send-Username", '<%= User.email %>');
         socket.on("server-send-danhsach-Users", function (dataz) {
             $("#boxContent").html("");
             var current = $("#currentUser").html();
