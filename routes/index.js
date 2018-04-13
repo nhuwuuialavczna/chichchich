@@ -27,7 +27,6 @@ router.get('/livecodepage', function (req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-
         pool.query('SELECT * from account', (err, dataAcc) => {
             if (!req.session.acc) {
                 pool.query('SELECT * from trangthai', (err, data) => {

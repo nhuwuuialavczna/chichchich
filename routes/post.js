@@ -12,43 +12,86 @@ const pool = new Pool({
 });
 /* GET users listing. */
 router.get('/add', function (req, res, next) {
-        var queries = req.query;
-        var user = req.session.acc;
-        var mabaiviet = Date.now();
-        var tenbaiviet = user.name;
-        var thoigian = moment().format('L') + "  " + moment().format('LTS');
-        var danhgia = 0;
-        var hinhanh = queries.duongdan; // là hình ảnh
-        var dinhkem = queries.dinhkem; // tệp đính kèm
-        var email = user.email;
-        var noidung = queries.noidung;
-        var sql = "insert into baiviet values('" + mabaiviet + "','" + tenbaiviet + "','" + thoigian + "','" + danhgia + "','" + hinhanh + "','" + email + "','" + noidung + "','" + dinhkem + "')";
-        pool.query(sql, (err, data) => {
-            if (err) {
-                res.json({data: 'fail'});
-                return;
-            }
-            res.json({data: 'ok'});
-        });
+    var queries = req.query;
+    var user = req.session.acc;
+    var mabaiviet = Date.now();
+    var tenbaiviet = user.name;
+    var thoigian = moment().format('L') + "  " + moment().format('LTS');
+    var danhgia = 0;
+    var hinhanh = queries.duongdan; // là hình ảnh
+    var dinhkem = queries.dinhkem; // tệp đính kèm
+    var email = user.email;
+    var noidung = queries.noidung;
+    var sql = "insert into baiviet values('" + mabaiviet + "','" + tenbaiviet + "','" + thoigian + "','" + danhgia + "','" + hinhanh + "','" + email + "','" + noidung + "','" + dinhkem + "')";
+    pool.query(sql, (err, data) => {
+        if (err) {
+            res.json({data: 'fail'});
+            return;
+        }
+        res.json({data: 'ok'});
+    });
+});
+
+
+router.get('/xoabaiviet', function (req, res, next) {
+    var mabaiviet = req.query.mabaiviet;
+    var sql = "delete from baiviet where mabaiviet='" + mabaiviet + "'";
+    pool.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.json({data: 'fail'});
+            return;
+        }
+        res.json({data: 'ok'});
+    });
+});
+
+router.get('/xoabinhluan', function (req, res, next) {
+    var mabinhluan = req.query.mabinhluan;
+    var sql = "delete from binhluanbaiviet where mabinhluan='" + mabinhluan + "'";
+    pool.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.json({data: 'fail'});
+            return;
+        }
+        res.json({data: 'ok'});
+    });
+});
+
+router.get('/baoxau', function (req, res, next) {
+    var mabaiviet = req.query.mabaiviet;
+    var noiDung = "Báo xấu: " + mabaiviet;
+    var thoigian = moment().format('L') + "  " + moment().format('LTS');
+    var email = req.session.acc.email;
+    var sql = "insert into phanhoi values('" + email + "','" + thoigian + "','" + noiDung + "')";
+    pool.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.json({data: 'fail'});
+            return;
+        }
+        res.json({data: 'ok'});
+    });
 });
 
 router.get('/addbinhluan', function (req, res, next) {
-        var maBinhLuan = Date.now();
-        var noidung = req.query.noidung;
-        var mabaiviet = req.query.mabaiviet;
-        var date = new Date();
-        var email = req.session.acc.email;
-        var thoiGian = date.getHours() + ":" + date.getMinutes() + " - " + date.getDay() + ":" + date.getMonth() + ":" + date.getYear();
-        var sql = "insert into binhluanbaiviet values('" + maBinhLuan + "','" + noidung + "','" + mabaiviet + "','" + email + "','" + thoiGian + "')";
+    var maBinhLuan = Date.now();
+    var noidung = req.query.noidung;
+    var mabaiviet = req.query.mabaiviet;
+    var date = new Date();
+    var email = req.session.acc.email;
+    var thoiGian = date.getHours() + ":" + date.getMinutes() + " - " + date.getDay() + ":" + date.getMonth() + ":" + date.getYear();
+    var sql = "insert into binhluanbaiviet values('" + maBinhLuan + "','" + noidung + "','" + mabaiviet + "','" + email + "','" + thoiGian + "')";
 
-        pool.query(sql, (err, data) => {
-            if (err) {
-                console.log(err);
-                res.json({data: 'fail'});
-                return;
-            }
-            res.json({data: 'ok'});
-        });
+    pool.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.json({data: 'fail'});
+            return;
+        }
+        res.json({data: 'ok'});
+    });
 
 });
 

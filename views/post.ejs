@@ -173,6 +173,60 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                 });
             });
 
+            $(".baoxau").on('click',function () {
+               var mabaiviet = this.id;
+               $.ajax({
+                  url:'/post/baoxau?mabaiviet='+mabaiviet,
+                   success:function (data) {
+                       alert("Báo xấu bài viết thành công. Chúng tôi sẽ xem xét lại ở thời gian gần nhất.");
+                   },
+                   error:function (error) {
+                       alert("Đã xảy ra lỗi mời bạn kiểm tra lại");
+                   }
+
+               });
+
+            });
+
+            $(".xoabaiviet").on('click',function () {
+                var mabaiviet = this.id;
+                $.ajax({
+                    url:'/post/xoabaiviet?mabaiviet='+mabaiviet,
+                    success:function (data) {
+                        if(data.data === 'ok'){
+                            $('#id-status'+mabaiviet).hide();
+                            alert("Xóa bài viết thành công. Bạn không thể khôi phục thông tin này.");
+
+                        }else{
+                            alert("Xóa bài viết không thành công. Nếu bạn cho rằng đây là lỗi hãy báo cho chúng tôi.");
+                        }
+                    },
+                    error:function (error) {
+                        alert("Đã xảy ra lỗi mời bạn kiểm tra lại");
+                    }
+
+                });
+
+            });
+
+            $(".xoabinhluan").on('click',function () {
+                var mabinhluan = this.id;
+                $.ajax({
+                    url:'/post/xoabinhluan?mabinhluan='+mabinhluan,
+                    success:function (data) {
+                        if(data.data === 'ok'){
+                            $('#box_binhluan'+mabinhluan).hide();
+                            alert("Xóa bình luận thành công. Bạn không thể khôi phục thông tin này.");
+
+                        }else{
+                            alert("Xóa bình luận không công. Nếu bạn cho rằng đây là lỗi hãy báo cho chúng tôi.") ;
+                        }
+                    },
+                    error:function (error) {
+                        alert("Đã xảy ra lỗi mời bạn kiểm tra lại");
+                    }
+                });
+            });
         });
     </script>
     <style>
@@ -288,12 +342,24 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
 
     <% Post.forEach(function (data, index) { %>
     <div id="id-status<%= data.mabaiviet %>" class="box">
+
         <div class="status-box row">
             <div class="col-sm-12">
                 <h2><a style="color: #ff1a7d" href="/account/profile?email=<%= data.email %>">
                         <img style="width: 50px"
                              src="<%= getUserOfBaiVietVaBinhLuan(listUser, data.email).hinhanh %>"><%= data.tenbaiviet %>
-                    </a></h2>
+                    </a>
+                    <div style="float: right" class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <li class="	fa fa-angle-down"></li>
+                        </button>
+                        <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                            <li><a class="baoxau" id="<%=data.mabaiviet%>">Báo xấu</a></li>
+                            <li><a class="xoabaiviet" id="<%=data.mabaiviet%>">Xóa bài viết</a></li>
+                        </ul>
+                    </div>
+                </h2>
+
                 <i class="fa fa-calendar-check-o"></i> <%= data.thoigian %>
                 <a><i class="fa fa-diamond"></i> <%= data.danhgia %></a>
                 <div>
@@ -334,21 +400,23 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                     <p id="thembinhluan<%= data.mabaiviet %>"></p>
                     <% var dsBinhLuanCuaBaiVietNay = getDSBinhLuan[data.mabaiviet]; %>
                     <% dsBinhLuanCuaBaiVietNay.forEach(function (dataDsBinhLuan) { %>
-                    <div class="box_binhluan">
+                    <div id="box_binhluan<%=dataDsBinhLuan.mabinhluan%>" class="box_binhluan">
                         <div class="col-sm-1"><img style="width: 50px;height: 30px" class="col-sm-6"
                                                    src="<%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).hinhanh %>">
                         </div>
                         <div class="col-sm-11">
                             <a style=" color: #ff1a7d"
                                href="/account/profile?email=<%= dataDsBinhLuan.email %>"><%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).name %></a>
-                            <p><%= dataDsBinhLuan.noidung %></p>
+                            <p><%= dataDsBinhLuan.noidung %> <a class="xoabinhluan" id="<%=dataDsBinhLuan.mabinhluan%>" style="float: right">Xóa</a></p>
                         </div>
                     </div>
                     <% }); %>
                     <hr>
                     <div class="addbinhluan">
                         <div class="col-sm-1"><img style="width: 50px;height: 30px" class="col-sm-6"
-                                                   src="<%= User.hinhanh %>"></div>
+                                                   src="<%= User.hinhanh %>">
+                        </div>
+
                         <div class="col-sm-11">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="<%= data.mabaiviet %>"
@@ -360,9 +428,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                             </div>
                             <br><br>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>

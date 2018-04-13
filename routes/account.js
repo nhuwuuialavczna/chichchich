@@ -13,11 +13,37 @@ const pool = new Pool({
 
 });
 router.get('/logout', function (req, res, next) {
-    req.session.acc  = undefined;
-    res.json({data:'ok',
-        TrangThai: req.session.trangthai});
+    req.session.acc = undefined;
+    res.json({
+        data: 'ok',
+        TrangThai: req.session.trangthai
+    });
 });
 
+router.get('/destroy', function (req, res, next) {
+    var email = req.session.acc.email;
+    var sql = "delete from account where email='" + email + "'";
+    pool.query(sql, (err, account) => {
+        if(err){
+            res.json({data:'fail'});
+        }
+        req.session.acc = undefined;
+        res.json({data:'ok'});
+    });
+});
+
+router.get('/changeimage', function (req, res, next) {
+    var imgNew = req.query.hinhanh;
+    var email = req.session.acc.email;
+
+    var sql = "update account set hinhanh='" + imgNew + "' where email='" + email + "'";
+    pool.query(sql, (err, account) => {
+       if(err){
+           res.json({data:'fail'});
+       }
+       res.json({data:'ok'});
+    });
+});
 
 router.get('/profile', function (req, res, next) {
     if (req.session.acc === undefined) {
