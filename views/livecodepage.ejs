@@ -237,8 +237,11 @@
         lineNumbers: true,
         styleActiveLine: true,
         matchBrackets: true,
-        mode: "text/x-java",
+        mode:  "javascript",
         extraKeys: {
+            "Ctrl-Space": function () {
+
+            },
             "F12": function (cm) {
                 if($('#memucode').is(':hidden')){
                     $('#memucode').show(1000);

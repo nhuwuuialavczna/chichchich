@@ -147,7 +147,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
 
             $('.gui').on('click', function () {
                 var maBaiViet = this.id;
-                var noiDung = $("#" + maBaiViet).val();
+                var noiDung = $("#noidungbinhluan" + maBaiViet).val();
                 $.ajax({
                     url: "/post/addbinhluan?mabaiviet=" + maBaiViet + "&noidung=" + noiDung,
                     contentType: false,
@@ -163,6 +163,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                                 '<p>' + noiDung + '</p>' +
                                 '</div>' +
                                 '</div>';
+                                alert(html)
                             $('#thembinhluan' + maBaiViet).prepend(html);
                         } else {
                             $('#thongbaobinhluan' + maBaiViet).html('Có lỗi xảy ra. Bạn hãy reload hoặc đăng xuất ra và đăng nhập lại');
@@ -419,7 +420,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
 
                         <div class="col-sm-11">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="<%= data.mabaiviet %>"
+                                <input type="text" class="form-control" id="noidungbinhluan<%= data.mabaiviet %>"
                                        placeholder="Nhập bình luận của bạn...">
                                 <p style="color: red" id="thongbaobinhluan<%= data.mabaiviet %>"></p>
                                 <span class="input-group-btn"><button class="btn btn-default gui "
