@@ -11,16 +11,18 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/public/assets/css/post.css">
     <!--  SEO -->
-    <meta content='https://nguyentanhau.herokuapp.com/' property='og:url' />
-    <meta content='NGUYỄN TẤN HẬU' property='og:title' />
-    <meta content='Nguyễn Tấn Hậu | Chia sẽ tài liệu về Java,chia se tai lieu,chiasetailieu,chiase tailieu, chiasetailieunlu,nluchiasetailieu, JavaScript,C,C++,C#,Ruby,Python' property='og:description' />
+    <meta content='https://nguyentanhau.herokuapp.com/' property='og:url'/>
+    <meta content='NGUYỄN TẤN HẬU' property='og:title'/>
+    <meta content='Nguyễn Tấn Hậu | Chia sẽ tài liệu về Java,chia se tai lieu,chiasetailieu,chiase tailieu, chiasetailieunlu,nluchiasetailieu, JavaScript,C,C++,C#,Ruby,Python'
+          property='og:description'/>
 
-    <meta name="description" content="Nguyễn Tấn Hậu | Web chat gửi tài liệu dung lượng lớn qua mạng, Chia sẽ tài liệu lập trình về Java, ASP.NET,VB.NET, JavaScript, C/C++, C#, Lập trình mạng, AI" />
+    <meta name="description"
+          content="Nguyễn Tấn Hậu | Web chat gửi tài liệu dung lượng lớn qua mạng, Chia sẽ tài liệu lập trình về Java, ASP.NET,VB.NET, JavaScript, C/C++, C#, Lập trình mạng, AI"/>
     <meta name="keywords" content="Web chat gửi tài liệu dung lượng lớn qua mạng,
     IDE online, code java online, code javascript online, Web chia sẽ full tài liệu lập trình, Web chia sẽ tài liệu trí tuệ nhân tạo, trí tuệ nhân tạo, học máy, trí tuệ nhân tạo
     đại học nông lâm, chia sẽ code java, chia sẽ code trí tuệ nhân tạo, chia sẽ code javascript, chia sẽ code game caro, đăng nhập và đăng bài viết,
 nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, chat công cộng, livecode, phòng chat, gửi file trên 25MB, gửi file qua mạng, file online,
-đại học nông lâm, đại học, nlu, nông lâm, java, javascript nâng cao, lập trình hướng đối tượng, design pattern trong javascript" />
+đại học nông lâm, đại học, nlu, nông lâm, java, javascript nâng cao, lập trình hướng đối tượng, design pattern trong javascript"/>
     <!--  SEO -->
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -86,7 +88,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                     var ds = $('#dinhkem').val();
                     if (ds.split(':').length < 3) {
                         var phanMoRong = getPhanMoRong(file_data.name);
-                        if (phanMoRong === 'zip' || phanMoRong === 'rar' || phanMoRong === 'java' || phanMoRong === 'war' ||phanMoRong === 'docx' || phanMoRong === 'doc' || phanMoRong === 'pdf') {
+                        if (phanMoRong === 'zip' || phanMoRong === 'rar' || phanMoRong === 'java' || phanMoRong === 'war' || phanMoRong === 'docx' || phanMoRong === 'doc' || phanMoRong === 'pdf') {
                             var form_data = new FormData();
                             var fileName = file_data.name;
                             form_data.append('imgUploader', file_data);
@@ -173,35 +175,14 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                 });
             });
 
-            $(".baoxau").on('click',function () {
-               var mabaiviet = this.id;
-               $.ajax({
-                  url:'/post/baoxau?mabaiviet='+mabaiviet,
-                   success:function (data) {
-                       alert("Báo xấu bài viết thành công. Chúng tôi sẽ xem xét lại ở thời gian gần nhất.");
-                   },
-                   error:function (error) {
-                       alert("Đã xảy ra lỗi mời bạn kiểm tra lại");
-                   }
-
-               });
-
-            });
-
-            $(".xoabaiviet").on('click',function () {
+            $(".baoxau").on('click', function () {
                 var mabaiviet = this.id;
                 $.ajax({
-                    url:'/post/xoabaiviet?mabaiviet='+mabaiviet,
-                    success:function (data) {
-                        if(data.data === 'ok'){
-                            $('#id-status'+mabaiviet).hide();
-                            alert("Xóa bài viết thành công. Bạn không thể khôi phục thông tin này.");
-
-                        }else{
-                            alert("Xóa bài viết không thành công. Nếu bạn cho rằng đây là lỗi hãy báo cho chúng tôi.");
-                        }
+                    url: '/post/baoxau?mabaiviet=' + mabaiviet,
+                    success: function (data) {
+                        alert("Báo xấu bài viết thành công. Chúng tôi sẽ xem xét lại ở thời gian gần nhất.");
                     },
-                    error:function (error) {
+                    error: function (error) {
                         alert("Đã xảy ra lỗi mời bạn kiểm tra lại");
                     }
 
@@ -209,20 +190,41 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
 
             });
 
-            $(".xoabinhluan").on('click',function () {
-                var mabinhluan = this.id;
+            $(".xoabaiviet").on('click', function () {
+                var mabaiviet = this.id;
                 $.ajax({
-                    url:'/post/xoabinhluan?mabinhluan='+mabinhluan,
-                    success:function (data) {
-                        if(data.data === 'ok'){
-                            $('#box_binhluan'+mabinhluan).hide();
-                            alert("Xóa bình luận thành công. Bạn không thể khôi phục thông tin này.");
+                    url: '/post/xoabaiviet?mabaiviet=' + mabaiviet,
+                    success: function (data) {
+                        if (data.data === 'ok') {
+                            $('#id-status' + mabaiviet).hide();
+                            alert("Xóa bài viết thành công. Bạn không thể khôi phục thông tin này.");
 
-                        }else{
-                            alert("Xóa bình luận không công. Nếu bạn cho rằng đây là lỗi hãy báo cho chúng tôi.") ;
+                        } else {
+                            alert("Xóa bài viết không thành công. Nếu bạn cho rằng đây là lỗi hãy báo cho chúng tôi.");
                         }
                     },
-                    error:function (error) {
+                    error: function (error) {
+                        alert("Đã xảy ra lỗi mời bạn kiểm tra lại");
+                    }
+
+                });
+
+            });
+
+            $(".xoabinhluan").on('click', function () {
+                var mabinhluan = this.id;
+                $.ajax({
+                    url: '/post/xoabinhluan?mabinhluan=' + mabinhluan,
+                    success: function (data) {
+                        if (data.data === 'ok') {
+                            $('#box_binhluan' + mabinhluan).hide();
+                            alert("Xóa bình luận thành công. Bạn không thể khôi phục thông tin này.");
+
+                        } else {
+                            alert("Xóa bình luận không công. Nếu bạn cho rằng đây là lỗi hãy báo cho chúng tôi.");
+                        }
+                    },
+                    error: function (error) {
                         alert("Đã xảy ra lỗi mời bạn kiểm tra lại");
                     }
                 });
@@ -350,12 +352,15 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                              src="<%= getUserOfBaiVietVaBinhLuan(listUser, data.email).hinhanh %>"><%= data.tenbaiviet %>
                     </a>
                     <div style="float: right" class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <li class="	fa fa-angle-down"></li>
                         </button>
                         <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
-                            <li><a class="baoxau" id="<%=data.mabaiviet%>">Báo xấu</a></li>
-                            <li><a class="xoabaiviet" id="<%=data.mabaiviet%>">Xóa bài viết</a></li>
+                            <li><a class="baoxau" id="<%= data.mabaiviet %>">Báo xấu</a></li>
+                            <% if(User.email === data.email){ %>
+                            <li><a class="xoabaiviet" id="<%= data.mabaiviet %>">Xóa bài viết</a></li>
+                            <% } %>
                         </ul>
                     </div>
                 </h2>
@@ -381,17 +386,21 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                 <% if(cd === '' || cd === undefined){ %>
                 <% }else{ %>
                 <% var doDai = cd.split(':'); %>
-                <% for(var i = 0;i < doDai.length;i++){%>
-                <%if(getPhanMoRong(doDai[i]) === 'jpg'||getPhanMoRong(doDai[i]) === 'png'||getPhanMoRong(doDai[i]) === 'gif'){%>
-                    <img class="col-sm-4" src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>">
+                <% for(var i = 0;i < doDai.length;i++){ %>
+                <% if(getPhanMoRong(doDai[i]) === 'jpg' || getPhanMoRong(doDai[i]) === 'png' || getPhanMoRong(doDai[i]) === 'gif'){ %>
+                <img class="col-sm-4" src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>">
                 <% } %>
 
-                <%if(getPhanMoRong(doDai[i]) === 'mp3'){%>
-                    <audio controls><source  src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>" type="audio/mpeg"></audio>
+                <% if(getPhanMoRong(doDai[i]) === 'mp3'){ %>
+                <audio controls>
+                    <source src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>" type="audio/mpeg">
+                </audio>
                 <% } %>
 
-                <%if(getPhanMoRong(doDai[i]) === 'mp4'){%>
-                <video  class="col-sm-4" width="100%" controls><source src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>" type="video/mp4"></video>
+                <% if(getPhanMoRong(doDai[i]) === 'mp4'){ %>
+                <video class="col-sm-4" width="100%" controls>
+                    <source src="https://uploadserver.azurewebsites.net/img?fileName=<%= doDai[i] %>" type="video/mp4">
+                </video>
                 <% } %>
 
                 <% }} %>
@@ -400,14 +409,19 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                     <p id="thembinhluan<%= data.mabaiviet %>"></p>
                     <% var dsBinhLuanCuaBaiVietNay = getDSBinhLuan[data.mabaiviet]; %>
                     <% dsBinhLuanCuaBaiVietNay.forEach(function (dataDsBinhLuan) { %>
-                    <div id="box_binhluan<%=dataDsBinhLuan.mabinhluan%>" class="box_binhluan">
+                    <div id="box_binhluan<%= dataDsBinhLuan.mabinhluan %>" class="box_binhluan">
                         <div class="col-sm-1"><img style="width: 50px;height: 30px" class="col-sm-6"
                                                    src="<%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).hinhanh %>">
                         </div>
                         <div class="col-sm-11">
                             <a style=" color: #ff1a7d"
                                href="/account/profile?email=<%= dataDsBinhLuan.email %>"><%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).name %></a>
-                            <p><%= dataDsBinhLuan.noidung %> <a class="xoabinhluan" id="<%=dataDsBinhLuan.mabinhluan%>" style="float: right">Xóa</a></p>
+                            <p><%= dataDsBinhLuan.noidung %><%if(dataDsBinhLuan.email === User.email){%>
+                                <a class="xoabinhluan"
+                                   id="<%= dataDsBinhLuan.mabinhluan %>"
+                                   style="float: right">Xóa</a>
+                                <%}%>
+                            </p>
                         </div>
                     </div>
                     <% }); %>
