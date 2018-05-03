@@ -5,16 +5,50 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
     <script src="/public/jquery-3.2.1.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/public/assets/css/post.css">
+    <link rel="stylesheet" href="/public/assets/css/training.css">
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="/public/assets/js/menu.js"></script>
     <title><%= title %></title>
+    <script>
+        $(document).ready(function () {
+            $('#next').on('click', function () {
+                var dapan = $('#dapan').val().trim();
+                var dapandung = $('#dapandung').html().trim();
+                var macauhoi = $("#macauhoi").html().trim();
+
+                if (dapan !== dapandung) {
+                    window.location.href = '/training/thongbao?id=sai';
+                } else {
+                    $.ajax({
+                        url: '/training/next',
+                        data: {macauhoi: macauhoi},
+                        type: 'get',
+                        success: function (data) {
+                            var cauhoi = data.cauhoi;
+                            if (cauhoi === undefined) {
+                                window.location.href = '/training/thongbao?id=het';
+                            } else {
+                                var macauhoi = cauhoi.macauhoi;
+                                var hinhanh = cauhoi.hinhanh;
+                                var dapandung = cauhoi.dapandung;
+                                $('#dapandung').html(dapandung.trim());
+                                $("#macauhoi").html(macauhoi.trim());
+                                $('#hinhanhcauhoi').attr('src', hinhanh);
+                            }
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -30,7 +64,6 @@
             </button>
             <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
         </div>
-
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -41,60 +74,27 @@
                 <li><a href="/lienhe">Liên hệ</a></li>
                 <% } %>
             </ul>
-
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a><%= UserProfile.name %></a>
+                    <a><%= User.email %></a>
                 </li>
-
             </ul>
-
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
 <div class="container">
     <br><br><br><br><br>
-    <div class="col-lg-3">
-        <img width="100%" src="<%= UserProfile.hinhanh %>">
-        <b><%= UserProfile.name %></b>
-        <%if(UserProfile.email === User.email){%>
-        <p>
-            <button id="btnDangXuat" class="btn btn-danger">Đăng xuất</button>
-        </p>
-        <%}%>
-    </div>
-    <div style="background-color:white" class="col-lg-6">
-        <h3>Bài viết đã đăng</h3>
-        <% DsBaiVietCuaUS.forEach(function (data) { %>
-        <div style="border-spacing: 2px; ">
-            <p><%= data.noidung %></p>
-            <p><%= data.thoigian %></p>
-            <a href="/#id-status<%= data.mabaiviet %>">
-                <button class="btn btn-success">Xem chi tiết</button>
-            </a>
-        </div>
-        <hr>
-        <% }); %>
-    </div>
-    <div style="background-color:white" class="col-lg-3">
-        <h3>Tất cả tệp đã up</h3>
-        <% DsBaiVietCuaUS.forEach(function (data) { %>
-        <div style="border-spacing: 2px; ">
-            <%var tep = data.dinhkem;%>
-            <%if(tep!='' && tep !=undefined){%>
-                <%var dsTep = tep.split(':');%>
-                <%dsTep.forEach(function (data2) {%>
-                    <%var duongDanFull = 'https://uploadserver.azurewebsites.net/download?fileName='+data2;
-                      var tenT = data2.split('_'); var ten = data2.split('_')[tenT.length-1];
-                    %>
-                    <a href="<%=duongDanFull%>"><button class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> <%=ten%></button></a>
-            <hr>
-                <%});%>
-            <%}%>
-        </div>
-        <% }); %>
-    </div>
+    <p style="display: none" id="macauhoi"><%= cauhoi.macauhoi %></p>
+    <p style="display: none" id="dapandung"><%= cauhoi.dapandung %></p>
+    <img style="width:100% " src="<%= cauhoi.hinhanh %>" id="hinhanhcauhoi" alt="">
+    Chọn đáp án: <br>
+    <select name="" id="dapan">
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+    </select>
+    <button class="btn btn-success" id="next">Next</button>
 </div>
 </body>
 </html>

@@ -14,18 +14,6 @@ const pool = new Pool({
 });
 
 
-router.get('/livecodepage', function (req, res, next) {
-    // if (req.session.acc === undefined) {
-    //     res.redirect('/');
-    // } else {
-
-        res.render('livecodepage', {
-            User: req.session.acc,
-            TrangThai: req.session.trangthai
-        });
-    // }
-});
-
 router.get('/', function (req, res, next) {
         pool.query('SELECT * from account', (err, dataAcc) => {
             if (!req.session.acc) {

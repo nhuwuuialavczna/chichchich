@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+</head>
+<body>
+<% if(id === 'sai'){ %>
+<p>- Bạn vừa trả lời sai 1 câu hỏi nên sẽ dừng thử thách tại đây. Nếu có thắc mắc vui lòng liên hệ chúng tôi tại mục
+    liên hệ</p>
+<% }else{ %>
+<p>- Thư viện câu hỏi đã hết. Bạn thông cảm.</p>
+<p>- Bạn có thể <a href="/training/them">
+        <button class="btn btn-danger">thêm câu hỏi</button>
+    </a> mới cho hệ thống
+</p>
+<% } %>
+</body>
+</html>

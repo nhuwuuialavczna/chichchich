@@ -1,0 +1,138 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script src="/public/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/public/assets/css/training.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/public/assets/js/menu.js"></script>
+    <title><%= title %></title>
+
+    <script>
+        $(document).ready(function () {
+            $('#batdau').on('click', function () {
+                var loai = $('#loai').val();
+                var trungLap = $('#trunglap').val();
+                $('#thongbao').html('Đang xử lý...');
+                $.ajax({
+                    url: '/training/batdau',
+                    data: {loai: loai, trungLap: trungLap},
+                    type: 'get',
+                    success: function (data) {
+                        if (data.data === 'fail') {
+                            $('#thongbao').html('Có lỗi xảy ra. Mời bạn đang xuất hoặc reset');
+                        } else {
+                            $('#thongbao').html('Xử lý hoàn tất. Đang vào phòng thử thách');
+                            window.location.href = '/training/trainingpage';
+                        }
+
+
+                    },
+                    error: function (err) {
+                        $('#thongbao').html('Có lỗi xảy ra. Mời bạn đang xuất hoặc reset');
+                    }
+                });
+            });
+        });
+    </script>
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Trang chủ</a></li>
+                <% if(User !== undefined){ %>
+                <li><a href="/message">Chat công cộng</a></li>
+                <li><a href="/training">Training</a></li>
+                <li><a href="/lienhe">Liên hệ</a></li>
+                <% } %>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a><%= User.email %> - Hạng: <%= getHangOfUser(BangXepHang, User) %></a>
+                </li>
+
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+    <br><br><br><br><br>
+    <div class="col-sm-4">
+
+        Loại câu hỏi: <br>
+        <select class="form-control" name="" id="loai">
+            <option value="ctdl">Cấu trúc dữ liệu</option>
+            <option value="giaithuat">Giải thuật lập trình</option>
+            <option value="basic">Basic</option>
+            <option value="oop">OOP</option>
+            <option value="prolog">Programming Logic (Prolog)</option>
+        </select><br>
+
+        Khả năng trùng lập: <br>
+        <select class="form-control" id="trunglap">
+            <option value="yes">Cho phép</option>
+            <option value="no">Không cho phép</option>
+        </select><br>
+        <p id="thongbao"></p>
+        <button class="btn btn-success" id="batdau">Bắt đầu</button>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Bảng xếp hạng (10):</div>
+            <div class="panel-body">
+                <% BangXepHang.forEach(function (value, index) { %>
+                <p><span class="badge"><%= index %></span><%= value.email %></p>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <h3>Hướng dẫn:</h3>
+        <p>- Chọn 1 trong các loại câu hỏi mà bạn muốn thử sức. Hãy chắc chắn rằng bạn am hiểu về nó.</p>
+        <p>- Chọn cho phép trùng lập hay không. Nếu không thì các câu bạn sẽ làm rồi sẽ không được gặp lại. Nếu không
+            bạn sẽ gặp các câu hỏi ngẫu nhiên. </p>
+        <p>- Các câu bạn làm sẽ được ghi nhận lại dù đúng hoặc sai. Bạn có thể xóa hoặc xem các câu đó tại trang cá
+            nhân.</p>
+        <p>- Bạn có thể <a href="/training/them">
+                <button class="btn btn-danger">thêm câu hỏi</button>
+            </a> mới cho hệ thống
+        </p>
+        <p>- Sau khi nhấn bắt đầu. Hệ thống sẽ xác nhận và thiết lập. Sẽ trừ điểm của bạn đi 50 ngay lập tức. Mỗi câu
+            đúng sẽ lấy lại 10 điểm.</p>
+        <p>- Hãy báo sai lệch nếu cảm thấy câu hỏi và bộ câu trả lời bị sai.</p>
+        <p>- Bạn có thể gửi kiến nghị tại phần liên hệ</p>
+    </div>
+
+
+</div>
+</body>
+</html>

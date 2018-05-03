@@ -26,12 +26,13 @@ app.use(session({secret: "Shh, its a secret!"}));
 var indexRouter = require('./routes/index');
 var postRouter = require('./routes/post');
 var accountRouter = require('./routes/account');
-var liveCodeRouter = require('./routes/livecode');
+var trainingRouter = require('./routes/training');
 
 app.use('/', indexRouter);
 app.use('/post', postRouter);
 app.use('/account', accountRouter);
-app.use('/livecode',liveCodeRouter);
+app.use('/training', trainingRouter);
+
 
 app.use(function(req, res, next) {
     var oneof = false;
