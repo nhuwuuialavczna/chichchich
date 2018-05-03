@@ -38,7 +38,6 @@ router.get('/xoabaiviet', function (req, res, next) {
     var sql = "delete from baiviet where mabaiviet='" + mabaiviet + "'";
     pool.query(sql, (err, data) => {
         if (err) {
-            console.log(err);
             res.json({data: 'fail'});
             return;
         }
@@ -51,7 +50,6 @@ router.get('/xoabinhluan', function (req, res, next) {
     var sql = "delete from binhluanbaiviet where mabinhluan='" + mabinhluan + "'";
     pool.query(sql, (err, data) => {
         if (err) {
-            console.log(err);
             res.json({data: 'fail'});
             return;
         }
@@ -67,7 +65,21 @@ router.get('/baoxau', function (req, res, next) {
     var sql = "insert into phanhoi values('" + email + "','" + thoigian + "','" + noiDung + "')";
     pool.query(sql, (err, data) => {
         if (err) {
-            console.log(err);
+            res.json({data: 'fail'});
+            return;
+        }
+        res.json({data: 'ok'});
+    });
+});
+
+
+router.get('/themlienhe', function (req, res, next) {
+    var noiDung = req.query.noidung;
+    var thoigian = moment().format('L') + "  " + moment().format('LTS');
+    var email = req.session.acc.email;
+    var sql = "insert into phanhoi values('" + email + "','" + thoigian + "','" + noiDung + "')";
+    pool.query(sql, (err, data) => {
+        if (err) {
             res.json({data: 'fail'});
             return;
         }
@@ -86,7 +98,6 @@ router.get('/addbinhluan', function (req, res, next) {
 
     pool.query(sql, (err, data) => {
         if (err) {
-            console.log(err);
             res.json({data: 'fail'});
             return;
         }

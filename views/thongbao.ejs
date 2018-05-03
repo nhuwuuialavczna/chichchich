@@ -5,18 +5,71 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script src="/public/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/public/assets/css/training.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/public/assets/js/menu.js"></script>
     <title><%= title %></title>
 </head>
 <body>
-<% if(id === 'sai'){ %>
-<p>- Bạn vừa trả lời sai 1 câu hỏi nên sẽ dừng thử thách tại đây. Nếu có thắc mắc vui lòng liên hệ chúng tôi tại mục
-    liên hệ</p>
-<% }else{ %>
-<p>- Thư viện câu hỏi đã hết. Bạn thông cảm.</p>
-<p>- Bạn có thể <a href="/training/them">
-        <button class="btn btn-danger">thêm câu hỏi</button>
-    </a> mới cho hệ thống
-</p>
-<% } %>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Trang chủ</a></li>
+                <% if(User !== undefined){ %>
+                <li><a href="/message">Chat công cộng</a></li>
+                <li><a href="/training">Training</a></li>
+                <li><a href="/lienhe">Liên hệ</a></li>
+                <% } %>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a><%= User.email %></a>
+                </li>
+
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+    <br><br><br><br><br>
+    <% if(id === 'sai'){ %>
+    <p>- Bạn vừa trả lời sai 1 câu hỏi nên sẽ dừng thử thách tại đây. Nếu có thắc mắc vui lòng liên hệ chúng tôi tại mục
+        liên hệ</p>
+    <% }else{ %>
+    <p>- Thư viện câu hỏi đã hết. Bạn thông cảm.</p>
+    <p>- Bạn có thể <a href="/training/themcauhoi">
+            <button class="btn btn-danger">thêm câu hỏi</button>
+        </a> mới cho hệ thống
+    </p>
+    <% } %>
+
+    <% if(id === 'loinang'){ %>
+    <p>- Đã xảy ra lỗi trầm trọng. Mời bạn kiểm tra lại kết nối Internet</p>
+    <% } %>
+
+</div>
 </body>
 </html>

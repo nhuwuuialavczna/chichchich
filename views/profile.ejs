@@ -58,11 +58,11 @@
     <div class="col-lg-3">
         <img width="100%" src="<%= UserProfile.hinhanh %>">
         <b><%= UserProfile.name %></b>
-        <%if(UserProfile.email === User.email){%>
+        <% if(UserProfile.email === User.email){ %>
         <p>
             <button id="btnDangXuat" class="btn btn-danger">Đăng xuất</button>
         </p>
-        <%}%>
+        <% } %>
     </div>
     <div style="background-color:white" class="col-lg-6">
         <h3>Bài viết đã đăng</h3>
@@ -81,17 +81,20 @@
         <h3>Tất cả tệp đã up</h3>
         <% DsBaiVietCuaUS.forEach(function (data) { %>
         <div style="border-spacing: 2px; ">
-            <%var tep = data.dinhkem;%>
-            <%if(tep!='' && tep !=undefined){%>
-                <%var dsTep = tep.split(':');%>
-                <%dsTep.forEach(function (data2) {%>
-                    <%var duongDanFull = 'https://uploadserver.azurewebsites.net/download?fileName='+data2;
-                      var tenT = data2.split('_'); var ten = data2.split('_')[tenT.length-1];
-                    %>
-                    <a href="<%=duongDanFull%>"><button class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> <%=ten%></button></a>
+            <% var tep = data.dinhkem; %>
+            <% if(tep != '' && tep != undefined){ %>
+            <% var dsTep = tep.split(':'); %>
+            <% dsTep.forEach(function (data2) { %>
+            <% var duongDanFull = 'https://uploadserver.azurewebsites.net/download?fileName=' + data2;
+                var tenT = data2.split('_'); var ten = data2.split('_')[tenT.length - 1];
+            %>
+            <a href="<%= duongDanFull %>">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> <%= ten %>
+                </button>
+            </a>
             <hr>
-                <%});%>
-            <%}%>
+            <% }); %>
+            <% } %>
         </div>
         <% }); %>
     </div>

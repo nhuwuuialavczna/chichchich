@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const {Pool, Client} = require('pg');
 var nodemailer = require('nodemailer');
-
+var moment = require('moment');
 
 const pool = new Pool({
     user: 'jenhnltobjifnz',
@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
     if (req.session.acc === undefined) {
         res.redirect('/');
     } else {
-        pool.query("SELECT * from account ORDER BY diem DESC", (err, bangxephang) => {
+        pool.query("SELECT  *  from account ORDER BY diem DESC limit 10", (err, bangxephang) => {
             res.render('training', {
                 User: req.session.acc,
                 title: 'Luyen tap',
@@ -39,7 +39,6 @@ router.get('/batdau', function (req, res, next) {
         pool.query("SELECT * from cauhoi where loaicauhoi='" + loai + "'", (err, cauhoi) => {
             if (err) return res.send({data: 'fail'});
             req.session.listCauHoi = getListCauHoi(cauhoi.rows, us.caudalam, trungLap);
-            console.log(req.session.listCauHoi);
             res.send({data: 'ok'});
         });
     }
@@ -52,21 +51,81 @@ router.get('/trainingpage', function (req, res, next) {
         res.redirect('/');
     } else {
         let cauHoi = getCauHoiNganNhien(listCauHoi, req.session.caudalam, req.session.trungLap);
-
-        res.render('trainingpage', {
-            title: 'Training',
-            User: req.session.acc,
-            cauhoi: cauHoi
-        });
+        if (cauHoi === undefined) {
+            res.render('thongbao', {
+                User: req.session.acc,
+                title: 'Thông báo',
+                id: 'het'
+            });
+        } else {
+            res.render('trainingpage', {
+                title: 'Training',
+                User: req.session.acc,
+                cauhoi: cauHoi
+            });
+        }
     }
 });
 
 router.get('/thongbao', function (req, res, next) {
     let id = req.query.id;
-    res.render('thongbao', {
+    // tính điểm
+    var caudalam = req.session.caudalam;
+    // tính điểm
+    var diem = caudalam.length;
+
+    var us = req.session.acc;
+    var diemOld = us.diem;
+    var email = us.email;
+    var cauDalam = us.caudalam;
+    caudalam.forEach(function (data) {
+        cauDalam += ',' + data;
+    });
+
+    pool.query("update account set caudalam='" + cauDalam + "',diem='" + (parseInt(diem) + parseInt(diemOld)) + "' where email='" + us.email + "'", (err, zzz) => {
+        if (err) return res.send({data: 'fail o day'});
+        pool.query("SELECT * from account where email='" + email + "'", (err, data) => {
+            if (data === undefined) {
+                res.json({data: 'fail'});
+                return;
+            } else {
+                var rows = data.rows;
+                if (rows.length === 0) {
+                    res.render('thongbao', {
+                        User: req.session.acc,
+                        title: 'Thông báo',
+                        id: 'loinang'
+                    });
+                } else {
+                    req.session.acc = rows[0];
+                    res.render('thongbao', {
+                        User: req.session.acc,
+                        title: 'Thông báo',
+                        id: id
+                    });
+                }
+            }
+        });
+    });
+});
+
+router.get('/them', function (req, res, next) {
+    var macauhoi = req.query.macauhoi;
+    var duongDan = req.query.duongDan;
+    var dapandung = req.query.dapandung;
+    var loai = req.query.loai;
+    var email = req.session.acc.email;
+    var thoigian = moment().format('L') + "  " + moment().format('LTS');
+    pool.query("insert into cauhoi values('" + macauhoi + "','" + duongDan + "','" + email + "','" + thoigian + "','" + dapandung + "','" + loai + "')", (err, zzz) => {
+        if (err) return res.send({data: 'fail'});
+        res.send({data: 'ok'});
+    });
+});
+
+router.get('/themcauhoi', function (req, res, next) {
+    res.render('themcauhoi', {
+        title: 'Thêm câu hỏi',
         User: req.session.acc,
-        title: 'Thông báo',
-        id: id
     });
 });
 

@@ -16,6 +16,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="/public/assets/js/menu.js"></script>
     <title>Liên hệ</title>
+    <script>
+        $(document).ready(function () {
+            $('#themlienhe').on('click', function () {
+                var noiDung = $('#noidung').val();
+                $.ajax({
+                    url: '/post/themlienhe?noidung=' + noiDung,
+                    type: 'get',
+                    success: function (data) {
+                        if (data.data === 'ok') {
+                            $('#thongbao').html('Đã gửi liên hệ thành công');
+                        } else {
+                            $('#thongbao').html('GỬi không thành công');
+                        }
+                    },
+                    error: function (err) {
+                        $('#thongbao').html('GỬi không thành công bb');
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body style="background-color: white">
 <nav id="memucode" class="navbar navbar-default">
@@ -71,13 +92,12 @@
 <div class="container"><br><br><br><br><br>
     <div class="col-sm-4">
         <h3>Bạn muốn nhắn nhủ điều gì</h3>
-        <form action="/">
-            <div class="form-group">
-                <label for="email">Tin nhắn</label>
-                <input type="email" class="form-control" id="email">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </form>
+        <div class="form-group">
+            <label for="email">Tin nhắn</label>
+            <input type="text" class="form-control" id="noidung">
+        </div>
+        <p id="thongbao"></p>
+        <button id="themlienhe" class="btn btn-default">Thêm liên hệ</button>
 
         <p>- Bạn có thể liên hệ với tôi qua <a
                     href="https://www.facebook.com/profile.php?id=100009115420843">Facebook</a></p> nha: </p>

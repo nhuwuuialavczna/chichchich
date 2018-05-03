@@ -70,10 +70,9 @@
                 <li><a href="/lienhe">Liên hệ</a></li>
                 <% } %>
             </ul>
-
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a><%= User.email %> - Hạng: <%= getHangOfUser(BangXepHang, User) %></a>
+                    <a><%= User.email %></a>
                 </li>
 
             </ul>
@@ -109,7 +108,7 @@
             <div class="panel-heading">Bảng xếp hạng (10):</div>
             <div class="panel-body">
                 <% BangXepHang.forEach(function (value, index) { %>
-                <p><span class="badge"><%= index %></span><%= value.email %></p>
+                <p><span class="badge"><%= index + 1 %></span><%= value.email %></p>
                 <% }); %>
             </div>
         </div>
@@ -122,7 +121,7 @@
             bạn sẽ gặp các câu hỏi ngẫu nhiên. </p>
         <p>- Các câu bạn làm sẽ được ghi nhận lại dù đúng hoặc sai. Bạn có thể xóa hoặc xem các câu đó tại trang cá
             nhân.</p>
-        <p>- Bạn có thể <a href="/training/them">
+        <p>- Bạn có thể <a href="/training/themcauhoi">
                 <button class="btn btn-danger">thêm câu hỏi</button>
             </a> mới cho hệ thống
         </p>
@@ -130,9 +129,9 @@
             đúng sẽ lấy lại 10 điểm.</p>
         <p>- Hãy báo sai lệch nếu cảm thấy câu hỏi và bộ câu trả lời bị sai.</p>
         <p>- Bạn có thể gửi kiến nghị tại phần liên hệ</p>
+        <p>- Khi chọn chế độ không trùng lập. Hệ thống sẽ cho bạn làm lẩn quẩn hoài các câu trong hệ thống và không bao
+            giờ kết thúc. Nếu muốn kết thúc. Kết quả sẽ không được ghi nhận ở chế độ này</p>
     </div>
-
-
 </div>
 </body>
 </html>

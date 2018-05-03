@@ -38,7 +38,7 @@
                                 var dapandung = cauhoi.dapandung;
                                 $('#dapandung').html(dapandung.trim());
                                 $("#macauhoi").html(macauhoi.trim());
-                                $('#hinhanhcauhoi').attr('src', hinhanh);
+                                $('#hinhanhcauhoi').attr('src', 'https://uploadserver.azurewebsites.net/img?fileName='+hinhanh);
                             }
                         },
                         error: function (err) {
@@ -86,7 +86,7 @@
     <br><br><br><br><br>
     <p style="display: none" id="macauhoi"><%= cauhoi.macauhoi %></p>
     <p style="display: none" id="dapandung"><%= cauhoi.dapandung %></p>
-    <img style="width:100% " src="<%= cauhoi.hinhanh %>" id="hinhanhcauhoi" alt="">
+    <img style="width:100% " src="https://uploadserver.azurewebsites.net/img?fileName=<%= cauhoi.hinhanh %>" id="hinhanhcauhoi" alt="">
     Chọn đáp án: <br>
     <select name="" id="dapan">
         <option value="A">A</option>

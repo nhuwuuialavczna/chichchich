@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/public/jquery-3.2.1.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/public/assets/css/training.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/public/assets/js/menu.js"></script>
+    <title><%= title %></title>
+    <script>
+        $(document).ready(function () {
+            $('#them').attr('disabled', 'disabled');
+            $('#upload').on('change', function () {
+                var file_data = $("#upload").prop("files")[0];
+                var form_data = new FormData();
+                var fileName = Date.now() + file_data.name;
+                form_data.append('imgUploader', file_data);
+                $('#hienthi').attr('alt', 'Đang tải ảnh lên. Từ từ đã');
+                $.ajax({
+                    url: "https://uploadserver.azurewebsites.net/api/Upload/",
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    type: 'post',
+                    success: function (data) {
+                        $('#duongdan').val(data);
+                        $('#hienthi').attr('width', '300px');
+                        $('#hienthi').attr('src', 'https://uploadserver.azurewebsites.net/img?fileName=' + data);
+                        $('#macauhoi').html(data);
+                        $('#them').removeAttr('disabled');
+                    }, error: function (err) {
+                        $('#hienthi').attr('alt', 'Có lỗi xảy ra !');
+                    }
+                });
+            });
+
+            $('#them').on('click', function () {
+                var duongDan = $('#duongdan').val();
+                var maCauHoi = $('#macauhoi').html();
+                var dapAnDung = $('#dapandung').val();
+                var loai = $('#loai').val();
+                $.ajax({
+                    url: '/training/them?macauhoi=' + maCauHoi + '&duongDan=' + duongDan + '&dapandung=' + dapAnDung + '&loai=' + loai,
+                    type: 'get',
+                    success: function (data) {
+                        if (data.data === 'ok') {
+                            $('#thongbao').html('Thêm câu hỏi thành công. Xin cảm ơn bạn đã đóng góp cho cộng đồng !');
+                        } else {
+                            $('#thongbao').html('Thêm không thành công mời bạn kiểm tra lại mạng hoặc tiến hành đăng xuất và đăng nhập lại');
+                        }
+                    },
+                    error: function (err) {
+                        $('#thongbao').html('Đã xảy ra lỗi nghiêm trọng mời bạn kiểm tra lại mạng hoặc tiến hành đăng xuất và đăng nhập lại');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-left" href="/"><img style="padding-top: 4px" src="/public/assets/img/tool.png"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Trang chủ</a></li>
+                <% if(User !== undefined){ %>
+                <li><a href="/message">Chat công cộng</a></li>
+                <li><a href="/training">Training</a></li>
+                <li><a href="/lienhe">Liên hệ</a></li>
+                <% } %>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a><%= User.email %></a>
+                </li>
+
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+    <br><br><br><br><br>
+    <div class="col-sm-8"><p>Chọn 1 ảnh cho câu hỏi</p>
+        <input type="file" id="upload" value="Chọn ảnh cho câu hỏi">
+        <p style="display: none" id="duongdan"></p>
+        <img src="" id="hienthi">
+        <p>- Chọn đáp án đúng</p>
+        <select name="" id="dapandung">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+        </select>
+        <br>
+        <p>- Chọn loại câu hỏi</p>
+        <select class="form-control" name="" id="loai">
+            <option value="ctdl">Cấu trúc dữ liệu</option>
+            <option value="giaithuat">Giải thuật lập trình</option>
+            <option value="basic">Basic</option>
+            <option value="oop">OOP</option>
+            <option value="prolog">Programming Logic (Prolog)</option>
+        </select><br>
+        <p style="display: none" id="macauhoi"></p>
+        <p id="thongbao"></p>
+        <button id="them">Thêm</button>
+    </div>
+    <div class="col-sm-4">
+        <h3>Hướng dẫn</h3>
+        <p>- Bạn hãy chọn hình ảnh của câu hỏi. Ở hình ảnh đó các bạn thiết kế các câu trả lời trên hình ảnh đó luôn.
+            Như các câu mà bạn nhìn thấy từ hệ thống</p>
+        <p>- Kiểm tra kĩ lưỡng trước khi upload nha vì tài nguyên có giới hạn. Hãy vì dũ liệu chung của cộng đồng</p>
+        <p>- Cố gắng chọn đúng đáp án của câu hỏi. Nó có ảnh hưởng đến mọi người dùng trong hệ thống</p>
+        <p>- Hãy đóng góp cho cộng đồng nha các bạn. Xin cảm ơn</p>
+    </div>
+</div>
+</body>
+</html>
