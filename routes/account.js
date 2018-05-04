@@ -23,11 +23,11 @@ router.get('/destroy', function (req, res, next) {
     var email = req.session.acc.email;
     var sql = "delete from account where email='" + email + "'";
     pool.query(sql, (err, account) => {
-        if(err){
-            res.json({data:'fail'});
+        if (err) {
+            res.json({data: 'fail'});
         }
         req.session.acc = undefined;
-        res.json({data:'ok'});
+        res.json({data: 'ok'});
     });
 });
 
@@ -37,12 +37,49 @@ router.get('/changeimage', function (req, res, next) {
 
     var sql = "update account set hinhanh='" + imgNew + "' where email='" + email + "'";
     pool.query(sql, (err, account) => {
-       if(err){
-           res.json({data:'fail'});
-       }
-       res.json({data:'ok'});
+        if (err) {
+            res.json({data: 'fail'});
+        }
+        res.json({data: 'ok'});
     });
 });
+
+router.get('/doichedo', function (req, res, next) {
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var email = req.session.acc.email;
+        var chedo = req.query.chedo;
+        pool.query("update account set nguoixembaiviet='" + chedo + "' where email='" + email + "'", (err, account) => {
+            if (err) return res.send({data: 'fail'});
+            res.send({data: 'ok'});
+        });
+    }
+});
+
+router.get('/xoabanbe', function (req, res, next) {
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var banbeG = req.session.acc.banbe;
+        var email = req.session.acc.email;
+        var banbe = req.query.banbe;
+
+        var banbeNew = [];
+
+        for (let a of banbeG) {
+            if (a === email) {
+                banbeNew.push(a);
+            }
+        }
+
+        pool.query("update account set banbe='" + banbeNew.join(',') + "' where email='" + email + "'", (err, account) => {
+            if (err) return res.send({data: 'fail'});
+            res.send({data: 'ok'});
+        });
+    }
+});
+
 
 router.get('/profile', function (req, res, next) {
     if (req.session.acc === undefined) {

@@ -8,16 +8,18 @@
     <meta name="description" content="Node.js image upload using express, jQuery using ajax."/>
     <script src="/public/jquery-3.2.1.js"></script>
     <!--  SEO -->
-    <meta content='https://nguyentanhau.herokuapp.com/' property='og:url' />
-    <meta content='NGUYỄN TẤN HẬU' property='og:title' />
-    <meta content='Nguyễn Tấn Hậu | Chia sẽ tài liệu về Java,chia se tai lieu,chiasetailieu,chiase tailieu, chiasetailieunlu,nluchiasetailieu, JavaScript,C,C++,C#,Ruby,Python' property='og:description' />
-
-    <meta name="description" content="Nguyễn Tấn Hậu | Web chat gửi tài liệu dung lượng lớn qua mạng, Chia sẽ tài liệu lập trình về Java, ASP.NET,VB.NET, JavaScript, C/C++, C#, Lập trình mạng, AI" />
+    <meta content='https://nguyentanhau.herokuapp.com/' property='og:url'/>
+    <meta content='NGUYỄN TẤN HẬU' property='og:title'/>
+    <meta content='Nguyễn Tấn Hậu | Chia sẽ tài liệu về Java,chia se tai lieu,chiasetailieu,chiase tailieu, chiasetailieunlu,nluchiasetailieu, JavaScript,C,C++,C#,Ruby,Python'
+          property='og:description'/>
+    <link rel="icon" href="/public/favicon.ico" type="image/x-icon"/>
+    <meta name="description"
+          content="Nguyễn Tấn Hậu | Web chat gửi tài liệu dung lượng lớn qua mạng, Chia sẽ tài liệu lập trình về Java, ASP.NET,VB.NET, JavaScript, C/C++, C#, Lập trình mạng, AI"/>
     <meta name="keywords" content="Web chat gửi tài liệu dung lượng lớn qua mạng,
     IDE online, code java online, code javascript online, Web chia sẽ full tài liệu lập trình, Web chia sẽ tài liệu trí tuệ nhân tạo, trí tuệ nhân tạo, học máy, trí tuệ nhân tạo
     đại học nông lâm, chia sẽ code java, chia sẽ code trí tuệ nhân tạo, chia sẽ code javascript, chia sẽ code game caro, đăng nhập và đăng bài viết,
 nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, chat công cộng, livecode, phòng chat, gửi file trên 25MB, gửi file qua mạng, file online,
-đại học nông lâm, đại học, nlu, nông lâm, java, javascript nâng cao, lập trình hướng đối tượng, design pattern trong javascript" />
+đại học nông lâm, đại học, nlu, nông lâm, java, javascript nâng cao, lập trình hướng đối tượng, design pattern trong javascript"/>
     <!--  SEO -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -39,9 +41,9 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
 
         socket.on("server-send-danhsach-Users", function (data) {
             $("#boxContent").html("");
-            var current = $("#currentUser").html();
+            var current = '<%= User.email %>';
             data.forEach(function (i) {
-                if (current === i) {
+                if (i.indexOf(current) > -1) {
                     $("#boxContent").append("<div style='color: red' class='user'>" + i + "</div>");
                 } else {
                     $("#boxContent").append("<div class='user'>" + i + "</div>");
@@ -70,11 +72,13 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                     }
                 );
             }
-            var currentUser = $('#currentUser').html();
-            if (currentUser === data.un) {
+            var current = '<%= User.email %>';
+            if (data.un.indexOf(current) > -1) {
                 $("#listMessages").prepend("<div class='ms' style='text-align: right;color: red'>" + data.nd + ":" + data.un + "</div>");
+                $(".ms span#em").css('display', 'none');
             } else {
                 $("#listMessages").prepend("<div class='ms' style='text-align: left;color: blue'>" + data.un + ":" + data.nd + "</div>");
+                $(".ms span#em").css('display', 'none');
             }
 
         });
@@ -108,7 +112,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
             });
 
             // $("#btnRegister").click(function () {
-            socket.emit("client-send-Username", '<%= User.email %>');
+            socket.emit("client-send-Username", '<img style="width:15px" src="<%= User.hinhanh %>"></img>' + '<span id="em"><%= User.email %></span>');
             // });
 
             $("#btnLogout").click(function () {
@@ -205,7 +209,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                 <div id="right">
                     <div class="row">
                         <div class="col-md-12" align="right" id="sayHi">
-                            Hello <span id="currentUser"></span>
+                            <span id="currentUser"></span>
                             <input type="button" class="btn btn-danger" id="btnLogout" value="Ra khỏi chỗ này">
                         </div>
                     </div>

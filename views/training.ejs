@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+    <link rel="icon" href="/public/favicon.ico" type="image/x-icon"/>
     <script src="/public/jquery-3.2.1.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -108,7 +108,7 @@
             <div class="panel-heading">Bảng xếp hạng (10):</div>
             <div class="panel-body">
                 <% BangXepHang.forEach(function (value, index) { %>
-                <p><span class="badge"><%= index + 1 %></span><%= value.email %></p>
+                <p><%= value.email %><span style="float: right" class="badge"><%= value.diem%></span></p>
                 <% }); %>
             </div>
         </div>

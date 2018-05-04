@@ -15,7 +15,7 @@
     <meta content='NGUYỄN TẤN HẬU' property='og:title'/>
     <meta content='Nguyễn Tấn Hậu | Chia sẽ tài liệu về Java,chia se tai lieu,chiasetailieu,chiase tailieu, chiasetailieunlu,nluchiasetailieu, JavaScript,C,C++,C#,Ruby,Python'
           property='og:description'/>
-
+    <link rel="icon" href="/public/favicon.ico" type="image/x-icon"/>
     <meta name="description"
           content="Nguyễn Tấn Hậu | Web chat gửi tài liệu dung lượng lớn qua mạng, Chia sẽ tài liệu lập trình về Java, ASP.NET,VB.NET, JavaScript, C/C++, C#, Lập trình mạng, AI"/>
     <meta name="keywords" content="Web chat gửi tài liệu dung lượng lớn qua mạng,
@@ -300,13 +300,17 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
             </div>
             <div class="media-body">
                 <div class="col-sm-5">
-                    <h3 class="media-heading">Bạn muốn nói gì ?</h3>
+                    <h3 class="media-heading">Bạn muốn (<%if(User.nguoixembaiviet === 'all'){%>Mọi người<%}%>
+                        <%if(User.nguoixembaiviet === '1'){%>Riêng tôi<%}%>
+                        <%if(User.nguoixembaiviet === 'friend'){%>Bạn bè<%}%>)</h3>
                     <textarea name="noidung" style=" resize: none;" id="noidung" cols="30" rows="7"
                               onresize="return false" class="form-control"></textarea>
                     <input style="display: none" name="duongdan" id="duongdan">
                     <input style="display: none" name="dinhkem" id="dinhkem">
                     <hr>
                     <p id="thongbaodang" style="color:red;"></p>
+
+
                     <button type="submit" id="dang" class="btn btn-primary">Đăng</button>
                     <button type="reset" class="btn btn-primary">Hủy</button>
                 </div>
@@ -325,7 +329,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
     </div>
     <br>
 
-
+    <% if(User.thongbao != undefined && User.thongbao != ''){ %>
     <div class="box">
         <div class="status-box row">
             <div class="col-sm-12">
@@ -334,6 +338,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
         </div>
         <br>
     </div>
+    <% } %>
 
     <% Post.forEach(function (data, index) { %>
     <div id="id-status<%= data.mabaiviet %>" class="box">

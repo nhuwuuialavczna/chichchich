@@ -22,7 +22,7 @@ router.get('/add', function (req, res, next) {
     var dinhkem = queries.dinhkem; // tệp đính kèm
     var email = user.email;
     var noidung = queries.noidung;
-    var sql = "insert into baiviet values('" + mabaiviet + "','" + tenbaiviet + "','" + thoigian + "','" + danhgia + "','" + hinhanh + "','" + email + "','" + noidung + "','" + dinhkem + "')";
+    var sql = "insert into baiviet values('" + mabaiviet + "','" + tenbaiviet + "','" + thoigian + "'," + danhgia + ",'" + hinhanh + "','" + email + "','" + noidung + "','" + dinhkem + "')";
     pool.query(sql, (err, data) => {
         if (err) {
             res.json({data: 'fail'});
@@ -88,11 +88,12 @@ router.get('/themlienhe', function (req, res, next) {
 });
 
 router.get('/addbinhluan', function (req, res, next) {
-    var maBinhLuan = Date.now();
+    var email = req.session.acc.email;
+    var cheDo = req.query.chedo;
+    var maBinhLuan = Date.now() + "_" + cheDo + "_" + email;
     var noidung = req.query.noidung;
     var mabaiviet = req.query.mabaiviet;
     var date = new Date();
-    var email = req.session.acc.email;
     var thoiGian = date.getHours() + ":" + date.getMinutes() + " - " + date.getDay() + ":" + date.getMonth() + ":" + date.getYear();
     var sql = "insert into binhluanbaiviet values('" + maBinhLuan + "','" + noidung + "','" + mabaiviet + "','" + email + "','" + thoiGian + "')";
 
