@@ -15,8 +15,7 @@ const pool = new Pool({
 router.get('/logout', function (req, res, next) {
     req.session.acc = undefined;
     res.json({
-        data: 'ok',
-        TrangThai: req.session.trangthai
+        data: 'ok'
     });
 });
 
@@ -57,8 +56,7 @@ router.get('/profile', function (req, res, next) {
                     title: email,
                     User: req.session.acc,
                     UserProfile: account.rows[0],
-                    DsBaiVietCuaUS: baiviet.rows,
-                    TrangThai: req.session.trangthai
+                    DsBaiVietCuaUS: baiviet.rows
                 });
             });
         });

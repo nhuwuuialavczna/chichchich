@@ -329,13 +329,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
     <div class="box">
         <div class="status-box row">
             <div class="col-sm-12">
-                <% if(TrangThai !== undefined && TrangThai.thongbaotong !== '0'){ %>
-                <b><i class="fa fa-bell-o"></i> <%= TrangThai.thongbaotong %></b>
-                <% } %>
-                <br>
-                <% if(TrangThai !== undefined && TrangThai.thongbaorieng !== '0' && TrangThai.emailthongbaorieng.indexOf(User.email) > -1){ %>
-                <b><i class="fa fa-bell"></i> <%= TrangThai.thongbaorieng %></b>
-                <% } %>
+                <b><i class="fa fa-bell-o"></i> <%= User.thongbao %></b>
             </div>
         </div>
         <br>
@@ -415,11 +409,12 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                         <div class="col-sm-11">
                             <a style=" color: #ff1a7d"
                                href="/account/profile?email=<%= dataDsBinhLuan.email %>"><%= getUserOfBaiVietVaBinhLuan(listUser, dataDsBinhLuan.email).name %></a>
-                            <p><%= dataDsBinhLuan.noidung %><%if(dataDsBinhLuan.email === User.email){%>
+                            <p><%= dataDsBinhLuan.noidung %>
+                                <% if(dataDsBinhLuan.email === User.email){ %>
                                 <a class="xoabinhluan"
                                    id="<%= dataDsBinhLuan.mabinhluan %>"
                                    style="float: right">Xóa</a>
-                                <%}%>
+                                <% } %>
                             </p>
                         </div>
                     </div>

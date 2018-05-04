@@ -15,47 +15,38 @@ const pool = new Pool({
 
 
 router.get('/', function (req, res, next) {
-        pool.query('SELECT * from account', (err, dataAcc) => {
-            if (!req.session.acc) {
-                pool.query('SELECT * from trangthai', (err, data) => {
-                    if (data) {
-                        req.session.trangthai = data.rows[0];
-                    } else {
-                        req.session.trangthai = undefined;
-                    }
-                    res.render('index', {
-                        title: 'Trang chủ',
-                        listUser: dataAcc.rows,
-                        User: undefined,
-                        TrangThai: req.session.trangthai
-                    });
-                });
-
-            } else {
-                pool.query('SELECT * from baiviet ORDER BY mabaiviet DESC', (err, data) => {
-                    if (!req.session.acc) {
-                        res.render('index', {title: 'Trang chủ', listUser: data.rows, User: undefined});
-                    } else {
-                        pool.query('SELECT * from binhluanbaiviet  ORDER BY mabinhluan DESC', (err, dsBinhLuan) => {
-                            res.render('post', {
-                                title: 'Post',
-                                listUser: dataAcc.rows,
-                                User: req.session.acc,
-                                Post: data.rows,
-                                getUserOfBaiVietVaBinhLuan: getUserOfBaiVietVaBinhLuan,
-                                getDSBinhLuan: getDSBinhLuan(data.rows, dsBinhLuan.rows),
-                                TrangThai: req.session.trangthai,
-                                getPhanMoRong:getPhanMoRong
-                            });
+    pool.query('SELECT * from account', (err, dataAcc) => {
+        if (!req.session.acc) {
+            res.render('index', {
+                title: 'Trang chủ',
+                listUser: dataAcc.rows,
+                User: undefined
+            });
+        } else {
+            pool.query('SELECT * from baiviet ORDER BY mabaiviet DESC', (err, data) => {
+                if (!req.session.acc) {
+                    res.render('index', {title: 'Trang chủ', listUser: data.rows, User: undefined});
+                } else {
+                    pool.query('SELECT * from binhluanbaiviet  ORDER BY mabinhluan DESC', (err, dsBinhLuan) => {
+                        res.render('post', {
+                            title: 'Post',
+                            listUser: dataAcc.rows,
+                            User: req.session.acc,
+                            Post: data.rows,
+                            getUserOfBaiVietVaBinhLuan: getUserOfBaiVietVaBinhLuan,
+                            getDSBinhLuan: getDSBinhLuan(data.rows, dsBinhLuan.rows),
+                            getPhanMoRong: getPhanMoRong
                         });
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
+    });
 
 });
+
 function getPhanMoRong(fileName) {
-    if(fileName === undefined){
+    if (fileName === undefined) {
         return '';
     }
     var ext = fileName.split('.');
@@ -92,31 +83,32 @@ function getUserOfBaiVietVaBinhLuan(rowsAcc, email) {
 }
 
 router.get('/login', function (req, res, next) {
-        var email = req.query.email;
-        var ps = req.query.pass;
+    var email = req.query.email;
+    var ps = req.query.pass;
 
-        var acc = new account(email, ps, '', '', '', '', '', '', 0);
-        var isLogin = false;
+    var acc = new account(email, ps, '', '', '', '', '', '', 0);
+    var isLogin = false;
 
 
-        // tại đây kiểm tra trong database rồi trả về kết quả
-        pool.query('SELECT * from account', (err, data) => {
-            if (data === undefined) {
-                res.json({data: 'fail'});
-                return;
+    // tại đây kiểm tra trong database rồi trả về kết quả
+    pool.query('SELECT * from account', (err, data) => {
+        if (data === undefined) {
+            res.json({data: 'fail'});
+            return;
+        } else {
+            var rows = data.rows;
+            var check = checkaccout(rows, acc);
+            if (check !== -1) {
+                var taikhoan = rows[check];
+                req.session.acc = taikhoan;
+                res.json({data: 'ok', name: taikhoan.name});
             } else {
-                var rows = data.rows;
-                var check = checkaccout(rows, acc);
-                if (check !== -1) {
-                    var taikhoan = rows[check];
-                    req.session.acc = taikhoan;
-                    res.json({data: 'ok', name: taikhoan.name});
-                } else {
-                    res.json({data: 'fail'});
-                }
+                res.json({data: 'fail'});
             }
-        });
+        }
+    });
 });
+
 function account(email, password, name, ip, hinhanh, banbe, baiviet, filedaup, danhgia) {
     this.email = email;
     this.password = password;
@@ -158,22 +150,22 @@ function checkExist(list, account) {
 }
 
 router.get('/register', function (req, res, next) {
-        var email = req.query.email;
-        var name = req.query.name;
-        var duongDan = 'https://uploadserver.azurewebsites.net/img?fileName=' + req.query.duongdan;
-        var pass = req.query.password;
+    var email = req.query.email;
+    var name = req.query.name;
+    var duongDan = 'https://uploadserver.azurewebsites.net/img?fileName=' + req.query.duongdan;
+    var pass = req.query.password;
 
-        var acc = new account(email, pass, name, '', duongDan, '', '', '', 0);
-        var sql = "insert into account values('" + email + "','" + pass + "','" + name + "','127.0.0.1','" + duongDan + "','','','',0)";
-        pool.query(sql, (err, resxx) => {
-            if (err) {
-                res.json({data: 'fail'});
-                return;
-            }
-        });
-        req.session.acc = acc;
-        // tại đây thêm vào database và gửi mail về thông báo
-        res.json({data: 'ok', name: name});
+    var acc = new account(email, pass, name, '', duongDan, '', '', '', 0);
+    var sql = "insert into account values('" + email + "','" + pass + "','" + name + "','127.0.0.1','" + duongDan + "','','','',0)";
+    pool.query(sql, (err, resxx) => {
+        if (err) {
+            res.json({data: 'fail'});
+            return;
+        }
+    });
+    req.session.acc = acc;
+    // tại đây thêm vào database và gửi mail về thông báo
+    res.json({data: 'ok', name: name});
 });
 
 
