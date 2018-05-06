@@ -170,14 +170,18 @@ router.get('/register', function (req, res, next) {
 
 
 router.get('/forget', function (req, res, next) {
-    if (req.session.acc === undefined) {
-        res.redirect('/');
-    } else {
-        var us = req.query.email;
-        // tại đây gửi mail về bên kia cho người ta nhập pass
+    var username = req.query.username;
+    var mabaomat = req.query.mabaomat;
+    var sql = "select * from account where email='" + username + "' and ip='" + mabaomat + "'";
+    pool.query(sql, (err, resxx) => {
+        if (err || resxx.rows.length === 0) {
+            res.json({data: 'fail'});
+            return;
+        }
+        var a = resxx.rows;
+        res.json({data: 'ok', password: a[0].password});
 
-        res.json({data: 'ok'});
-    }
+    });
 });
 
 

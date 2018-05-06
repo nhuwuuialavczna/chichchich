@@ -61,20 +61,38 @@ router.get('/xoabanbe', function (req, res, next) {
     if (req.session.acc === undefined) {
         res.redirect('/');
     } else {
-        var banbeG = req.session.acc.banbe;
+        var banbeG = req.session.acc.banbe.split(',');
         var email = req.session.acc.email;
         var banbe = req.query.banbe;
 
         var banbeNew = [];
 
         for (let a of banbeG) {
-            if (a === email) {
+            if (a !== banbe) {
                 banbeNew.push(a);
             }
         }
-
-        pool.query("update account set banbe='" + banbeNew.join(',') + "' where email='" + email + "'", (err, account) => {
+        var dsBBNew = banbeNew.join(',');
+        pool.query("update account set banbe='" + dsBBNew + "' where email='" + email + "'", (err, account) => {
             if (err) return res.send({data: 'fail'});
+            req.session.acc.banbe = dsBBNew;
+            res.send({data: 'ok',dsBBNew:dsBBNew});
+        });
+    }
+});
+
+
+router.get('/changIP', function (req, res, next) {
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var email = req.session.acc.email;
+        var newIP = req.query.ip;
+
+
+        pool.query("update account set ip='" + newIP + "' where email='" + email + "'", (err, account) => {
+            if (err) return res.send({data: 'fail'});
+            req.session.acc.ip = newIP;
             res.send({data: 'ok'});
         });
     }
@@ -93,11 +111,57 @@ router.get('/profile', function (req, res, next) {
                     title: email,
                     User: req.session.acc,
                     UserProfile: account.rows[0],
-                    DsBaiVietCuaUS: baiviet.rows
+                    DsBaiVietCuaUS: baiviet.rows,
+                    tonTai: tonTai
                 });
             });
         });
     }
 });
+
+router.get('/xoacaudalam', function (req, res, next) {
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var email = req.session.acc.email;
+        pool.query("update account set caudalam='' where email='" + email + "'", (err, account) => {
+            if (err) return res.send({data: 'fail'});
+            res.send({data: 'ok'});
+        });
+    }
+});
+
+
+function tonTai(email, listEmail) {
+    let emailArr = listEmail.split(',');
+    if (emailArr.length === 0) {
+        console.log(3);
+        return undefined;
+    }
+    for (let e of emailArr) {
+        if (e === email) {
+            return e;
+        }
+    }
+
+    return undefined;
+}
+
+router.get('/themban', function (req, res, next) {
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var email = req.session.acc.email;
+        var emailF = req.query.email;
+
+        req.session.acc.banbe = `${req.session.acc.banbe},${emailF}`;
+
+        pool.query("update account set banbe='" + req.session.acc.banbe + "' where email='" + email + "'", (err, account) => {
+            if (err) return res.send({data: 'fail'});
+            res.send({data: 'ok'});
+        });
+    }
+});
+
 
 module.exports = router;

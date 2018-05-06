@@ -209,4 +209,23 @@ function getHangOfUser(bangxephang, email) {
     return -1;
 }
 
+router.get('/baosai', function (req, res, next) {
+    if (req.session.acc === undefined) {
+        res.redirect('/');
+    } else {
+        var macauhoi = req.query.macauhoi;
+        var noiDung = "Báo sai câu hỏi: " + macauhoi;
+        var thoigian = moment().format('L') + "  " + moment().format('LTS');
+        var email = req.session.acc.email;
+        var sql = "insert into phanhoi values('" + email + "','" + thoigian + "','" + noiDung + "')";
+        pool.query(sql, (err, data) => {
+            if (err) {
+                res.json({data: 'fail'});
+                return;
+            }
+            res.json({data: 'ok'});
+        });
+    }
+});
+
 module.exports = router;

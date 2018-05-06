@@ -39,7 +39,7 @@
                                 var dapandung = cauhoi.dapandung;
                                 $('#dapandung').html(dapandung.trim());
                                 $("#macauhoi").html(macauhoi.trim());
-                                $('#hinhanhcauhoi').attr('src', 'https://uploadserver.azurewebsites.net/img?fileName='+hinhanh);
+                                $('#hinhanhcauhoi').attr('src', 'https://uploadserver.azurewebsites.net/img?fileName=' + hinhanh);
                             }
                         },
                         error: function (err) {
@@ -48,6 +48,25 @@
                     });
                 }
             });
+
+            $('#baosai').on('click', function () {
+                var macauhoi = $("#macauhoi").html().trim();
+                $.ajax({
+                    url: '/training/baosai?macauhoi=' + macauhoi,
+                    type: 'get',
+                    success: function (data) {
+                        if (data.data === 'ok') {
+                            $('#tbBaoSai').html('Bạn đã báo sai thành công. Chúng tôi sẽ xem xét và gửi thông báo đến bạn sau.');
+                        } else {
+                            $('#tbBaoSai').html('Báo sai không thành công');
+                        }
+                    },
+                    error: function (err) {
+                        $('#tbBaoSai').html('Đã xảy ra lỗi nghiêm trọng !');
+                    }
+                });
+            });
+
         });
     </script>
 </head>
@@ -87,7 +106,8 @@
     <br><br><br><br><br>
     <p style="display: none" id="macauhoi"><%= cauhoi.macauhoi %></p>
     <p style="display: none" id="dapandung"><%= cauhoi.dapandung %></p>
-    <img style="width:100% " src="https://uploadserver.azurewebsites.net/img?fileName=<%= cauhoi.hinhanh %>" id="hinhanhcauhoi" alt="">
+    <img style="width:100% " src="https://uploadserver.azurewebsites.net/img?fileName=<%= cauhoi.hinhanh %>"
+         id="hinhanhcauhoi" alt="">
     Chọn đáp án: <br>
     <select name="" id="dapan">
         <option value="A">A</option>
@@ -96,6 +116,7 @@
         <option value="D">D</option>
     </select>
     <button class="btn btn-success" id="next">Next</button>
+    <p id="tbBaoSai"></p>
     <button class="btn btn-danger" id="baosai">Báo sai lệch</button>
 </div>
 </body>

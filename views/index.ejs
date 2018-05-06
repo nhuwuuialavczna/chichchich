@@ -10,16 +10,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!--  SEO -->
-    <meta content='https://nguyentanhau.herokuapp.com/' property='og:url' />
-    <meta content='NGUYỄN TẤN HẬU' property='og:title' />
-    <meta content='Nguyễn Tấn Hậu | Chia sẽ tài liệu về Java,chia se tai lieu,chiasetailieu,chiase tailieu, chiasetailieunlu,nluchiasetailieu, JavaScript,C,C++,C#,Ruby,Python' property='og:description' />
+    <meta content='https://nguyentanhau.herokuapp.com/' property='og:url'/>
+    <meta content='NGUYỄN TẤN HẬU' property='og:title'/>
+    <meta content='Nguyễn Tấn Hậu | Chia sẽ tài liệu về Java,chia se tai lieu,chiasetailieu,chiase tailieu, chiasetailieunlu,nluchiasetailieu, JavaScript,C,C++,C#,Ruby,Python'
+          property='og:description'/>
     <link rel="icon" href="/public/favicon.ico" type="image/x-icon"/>
-    <meta name="description" content="Nguyễn Tấn Hậu | Web chat gửi tài liệu dung lượng lớn qua mạng, Chia sẽ tài liệu lập trình về Java, ASP.NET,VB.NET, JavaScript, C/C++, C#, Lập trình mạng, AI" />
+    <meta name="description"
+          content="Nguyễn Tấn Hậu | Web chat gửi tài liệu dung lượng lớn qua mạng, Chia sẽ tài liệu lập trình về Java, ASP.NET,VB.NET, JavaScript, C/C++, C#, Lập trình mạng, AI"/>
     <meta name="keywords" content="Web chat gửi tài liệu dung lượng lớn qua mạng,
     IDE online, code java online, code javascript online, Web chia sẽ full tài liệu lập trình, Web chia sẽ tài liệu trí tuệ nhân tạo, trí tuệ nhân tạo, học máy, trí tuệ nhân tạo
     đại học nông lâm, chia sẽ code java, chia sẽ code trí tuệ nhân tạo, chia sẽ code javascript, chia sẽ code game caro, đăng nhập và đăng bài viết,
 nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, chat công cộng, livecode, phòng chat, gửi file trên 25MB, gửi file qua mạng, file online,
-đại học nông lâm, đại học, nlu, nông lâm, java, javascript nâng cao, lập trình hướng đối tượng, design pattern trong javascript" />
+đại học nông lâm, đại học, nlu, nông lâm, java, javascript nâng cao, lập trình hướng đối tượng, design pattern trong javascript"/>
     <!--  SEO -->
     <!--<script src="/socket.io/socket.io.js"></script>-->
     <!--<script src="/public/xuly.js"></script>-->
@@ -87,7 +89,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                     thongBaoDangKi.html('Hãy chọn tên ngắn lại, tên đừng quá 20 kí tự');
                     return;
                 }
-                if(email.length> 16){
+                if (email.length > 16) {
                     thongBaoDangKi.html('Username không được vượt quá 16 kí tự');
                     return;
                 }
@@ -125,7 +127,7 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
                     type: 'post',
                     success: function (data) {
                         $('#duongdan').val(data);
-                        $('#hienthi').attr('width','300px');
+                        $('#hienthi').attr('width', '300px');
                         $('#hienthi').attr('src', 'https://uploadserver.azurewebsites.net/img?fileName=' + data);
                     }, error: function (err) {
                         $('#hienthi').attr('alt', 'Có lỗi xảy ra !');
@@ -134,20 +136,25 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
             });
 
 
-            $("#btnForget").on('click', function () {
-//                var email = $("#email").val();
-//                $.ajax({
-//                    url: '/forget?email=' + email,
-//                    type: 'get',
-//                    success: function (data) {
-//                        alert(data);
-//                    },
-//                    error: function (err) {
-//                        alert(err.message + "");
-//                    }
-//                })
-                alert('Đang được triển khai. Cập nhật ở lần sau. Mệt rồi khi nào rảnh làm tiếp');
+            $("#layMK").on('click', function () {
+                $('#layMatKhau').html('Đang lấy mật khẩu của bạn');
+                var username = $('#username').val();
+                var mabaomat = $('#mabaomat').val();
+                $.ajax({
+                    url: '/forget?username=' + username + '&mabaomat=' + mabaomat,
+                    type: 'get',
+                    success: function (data) {
+                        if (data.data !== 'fail') {
+                            $('#layMatKhau').html('Mật khẩu của bạn là: ' + data.password);
+                        } else {
+                            $('#layMatKhau').html('Lấy lại mật khẩu không thành công. Kiểm tra lại dữ liệu đã nhập ở trên');
+                        }
+                    },
+                    error: function (err) {
+                        $('#layMatKhau').html('Xảy ra lỗi nghiêm trọng !');
+                    }
 
+                });
             });
 
 
@@ -192,14 +199,15 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
     <div class="col-lg-6">
         <input type="email" class="form-control" id="emailLG" placeholder="Username" required><br>
         <input type="password" class="form-control" id="pass" placeholder="Mật khẩu" required><br>
-        <p style="color: red" id="thongbaodangnhap"></p><hr>
+        <p style="color: red" id="thongbaodangnhap"></p>
+        <hr>
         <button id="btnLogin" class="btn btn-success">Đăng nhập</button>
     </div>
 
 
     <div class="col-lg-6">
-        <input type="text" class="form-control" id="emailRG" placeholder="Username"  required><br>
-        <input type="password" class="form-control" placeholder="Mật khẩu"  id="p" required><br>
+        <input type="text" class="form-control" id="emailRG" placeholder="Username" required><br>
+        <input type="password" class="form-control" placeholder="Mật khẩu" id="p" required><br>
         <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" id="rep" required><br>
         <input type="text" class="form-control" id="name" placeholder="Tên của bạn" required><br>
         <p>Chọn 1 ảnh đại diện</p>
@@ -209,7 +217,31 @@ nguyen tan hau, nguyễn tấn hậu, nguyen tan, hau nguyen, hậu nguyễn, ch
         <hr>
         <p style="color: red" id="thongbaodangki"></p>
         <button class="btn btn-primary" id="btnRegister">Đăng kí</button>
-        <button class="btn btn-default" id="btnForget">Quên mật khẩu</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Quên mật khẩu</button>
+    </div>
+</div>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Lấy lại mật khẩu</h4>
+            </div>
+            <div class="modal-body">
+                <p>Hãy nhập Username và mã bảo mật của bạn.</p>
+                <input type="text" id="username" class="form-control"><br>
+                <input type="text" id="mabaomat" class="form-control"><br>
+                <p id="layMatKhau"></p>
+                <button class="btn btn-default" id="layMK">Lấy lại mật khẩu</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
     </div>
 </div>
 </body>

@@ -44,9 +44,10 @@
                     url: '/account/xoabanbe?banbe=' + ban,
                     type: 'get',
                     success: function (data) {
-                        if(data.data==='ok'){
+                        if (data.data === 'ok') {
+                            $('#dsBanBe').html(data.dsBBNew);
                             $('#tb_xoaban').html('Xóa thành công');
-                        }else{
+                        } else {
                             $('#tb_xoaban').html('Xóa không thành công');
                         }
                     },
@@ -55,7 +56,60 @@
                     }
                 });
             });
+            $('#changIP').on('click', function () {
+                $("#thongdoidoimabaomat").html("Đang thay đổi mã bảo mật");
+                var newIP = $('#newIP').val();
+                $.ajax({
+                    url: '/account/changIP?ip=' + newIP,
+                    type: 'get',
+                    success: function (data) {
+                        if (data.data === 'ok') {
+                            $("#thongdoidoimabaomat").html("Thay đổi mã bảo mật thành công !");
+                        } else {
+                            $("#thongdoidoimabaomat").html("Thay đổi mã bảo mật không thành công !");
+                        }
+                    },
+                    error: function (err) {
+                        $("#thongdoidoimabaomat").html("Xảy ra lỗi ngiêm trọng !");
+                    }
 
+                });
+
+            });
+            $('#xoacaudalam').on('click', function () {
+                $.ajax({
+                    url: '/account/xoacaudalam',
+                    type: 'get',
+                    success: function (daaa) {
+                        if (daaa.data === 'ok') {
+                            $('#tbXoaCauDaLam').html('Xóa thành công.');
+                            $('#caudalam').html('');
+                        } else {
+                            $('#tbXoaCauDaLam').html('Xóa không thành công.');
+                        }
+                    },
+                    error: function (err) {
+                        $('#tbXoaCauDaLam').html('Xảy ra lỗi trầm trọng.');
+                    }
+                });
+            });
+            $('#themBan').on('click', function () {
+                $.ajax({
+                    url: '/account/themban?email=<%= UserProfile.email %>',
+                    type: 'get',
+                    success: function (data) {
+                        if (data.data === 'ok') {
+                            $('#themBan').hide();
+                            $('#tbThemBan').html('Thêm thành công.');
+                        } else {
+                            $('#tbThemBan').html('Thêm không thành công.');
+                        }
+                    },
+                    error: function (err) {
+                        $('#tbThemBan').html('Xảy ra lỗi trầm trọng.');
+                    }
+                });
+            });
         });
     </script>
 </head>
@@ -101,12 +155,18 @@
         <img width="100%" src="<%= UserProfile.hinhanh %>">
         <b><%= UserProfile.name %></b>
         <p>
-            <button id="btnDangXuat" class="btn btn-danger">Đăng xuất</button>
+            <% if(UserProfile.email !== User.email){ %>
+            <% if(tonTai(UserProfile.email, User.banbe) === undefined && UserProfile.email !== User.email){ %>
+        <p id="tbThemBan"></p>
+        <button class="btn btn-default" id="themBan">Thêm bạn</button>
+        <% } %>
+        <% } %>
+        <button id="btnDangXuat" class="btn btn-danger">Đăng xuất</button>
         </p>
         <hr>
         <% if(UserProfile.email === User.email){ %>
         <p>- Phạm vi xem bài viết của bạn</p>
-        <select name="" id="chedo">
+        <select class="form-control" name="" id="chedo">
             <option value="1">Riêng tôi</option>
             <option value="friend">Bạn bè</option>
             <option value="all">Tất cả</option>
@@ -114,25 +174,26 @@
         <p id="tb_chedo"></p>
         <hr>
         <p>- Các câu hỏi đã làm</p>
-        <% if(UserProfile.caudalam === '' || UserProfile.caudalam === undefined || UserProfile.caudalam === null){ %>
+        <% if(User.caudalam === '' || User.caudalam === undefined || User.caudalam === null){ %>
         Không có
         <% }else{ %>
-        <%= UserProfile.caudalam %>
-        <button id="xoacaudalam">Xóa bộ nhớ</button>
+        <p id="caudalam"><%= User.caudalam %></p>
+        <p id="tbXoaCauDaLam"></p>
+        <button class="btn btn-default" id="xoacaudalam">Xóa bộ nhớ</button>
         <% } %>
         <hr>
         <p>- Các câu hỏi đã thêm</p>
-        <% if(UserProfile.caudathem === '' || UserProfile.caudathem === undefined || UserProfile.caudathem === null){ %>
+        <% if(User.caudathem === '' || User.caudathem === undefined || User.caudathem === null){ %>
         Không có
         <% }else{ %>
-        <%= UserProfile.caudathem %>
+        <%= User.caudathem %>
         <% } %>
         <hr>
         <p>- Bạn bè</p>
-        <% if(UserProfile.banbe === '' || UserProfile.banbe === undefined || UserProfile.banbe === null){ %>
+        <% if(User.banbe === '' || User.banbe === undefined || User.banbe === null){ %>
         Không có
         <% }else{ %>
-        <%= UserProfile.banbe %>
+        <p id="dsBanBe"><%= User.banbe %></p>
         <div class="input-group">
             <input type="text" class="form-control" id="banbe" placeholder="Xóa bạn bè (chỉ 1)">
             <span class="input-group-btn">
@@ -144,7 +205,13 @@
         <hr>
 
         <p>- Điểm của bạn</p>
-        <%= UserProfile.diem %>
+        <%= User.diem %>
+        <hr>
+
+        <p>- Mã bảo mật dùng lấy lại mật khẩu</p>
+        <input type="text" class="form-control" id="newIP" value="<%= User.ip %>" placeholder="Nhập mã bảo mật mới"><br><br>
+        <button id="changIP" class="btn btn-success">Thay đổi</button>
+        <p id="thongdoidoimabaomat"></p>
         <hr>
 
         <% } %>

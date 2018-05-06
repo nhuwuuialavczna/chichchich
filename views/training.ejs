@@ -108,7 +108,7 @@
             <div class="panel-heading">Bảng xếp hạng (10):</div>
             <div class="panel-body">
                 <% BangXepHang.forEach(function (value, index) { %>
-                <p><%= value.email %><span style="float: right" class="badge"><%= value.diem%></span></p>
+                <p><a href="/account/profile?email=<%= value.email %>"><%= value.email %></a><span style="float: right" class="badge"><%= value.diem%></span></p>
                 <% }); %>
             </div>
         </div>
